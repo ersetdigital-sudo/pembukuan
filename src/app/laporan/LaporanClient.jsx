@@ -798,7 +798,7 @@ export default function LaporanPage() {
                             >
                               {mp.slice(0, 3).toUpperCase()}
                             </span>
-                            <span className="text-ink">{mp}</span>
+                            <span className="text-muted-foreground">{mp}</span>
                           </div>
                         </TableCell>
                         <TableCell className="text-center">
@@ -809,7 +809,7 @@ export default function LaporanPage() {
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex flex-col items-end leading-tight">
-                            <span className="font-display font-bold tabular-nums text-ink">
+                            <span className="font-display font-bold tabular-nums text-muted-foreground">
                               {formatRupiah(v.profit)}
                             </span>
                             {share > 0 && (
@@ -825,24 +825,24 @@ export default function LaporanPage() {
                 </TableBody>
                 {/* Footer total — pinned at the bottom, visually separated */}
                 <tfoot>
-                  <tr className="border-t-2 border-primary/15 bg-primary/5">
-                    <td className="px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-primary">
+                  <TableRow className="border-t-2 border-primary/15 bg-primary/5 hover:bg-primary/5">
+                    <TableCell className="text-[11px] font-bold uppercase tracking-widest text-primary">
                       Total
-                    </td>
-                    <td className="px-4 py-3 text-center">
-                      <span className="font-display font-bold tabular-nums text-ink">
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <span className="font-display font-bold tabular-nums text-muted-foreground">
                         {formatNumber(mpTotals.qty)}
                       </span>
-                    </td>
-                    <td className="px-4 py-3 text-right font-bold tabular-nums text-secondary">
+                    </TableCell>
+                    <TableCell className="text-right font-bold tabular-nums text-secondary whitespace-nowrap">
                       {formatRupiah(mpTotals.fee)}
-                    </td>
-                    <td className="px-4 py-3 text-right">
+                    </TableCell>
+                    <TableCell className="text-right whitespace-nowrap">
                       <span className="font-display text-base font-extrabold tabular-nums text-primary">
                         {formatRupiah(mpTotals.profit)}
                       </span>
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 </tfoot>
               </Table>
             )}
