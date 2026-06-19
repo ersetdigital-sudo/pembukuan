@@ -27,7 +27,6 @@ const NAV = [
       { href: "/penjualan", label: "Penjualan", icon: ShoppingCart },
       { href: "/pembelian", label: "Pembelian", icon: ShoppingBag },
       { href: "/biaya", label: "Biaya", icon: Receipt },
-      { href: "/pemasukan", label: "Pemasukan", icon: Wallet },
     ],
   },
   {

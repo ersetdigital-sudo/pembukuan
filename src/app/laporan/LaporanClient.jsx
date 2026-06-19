@@ -5,7 +5,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend,
 } from "recharts";
-import { Download, TrendingUp, Wallet, Receipt, DollarSign, Plus, Pencil, Trash2, Megaphone } from "lucide-react";
+import { Download, TrendingUp, Wallet, Receipt, DollarSign, Plus, Pencil, Trash2, Megaphone, Package } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 
 // Force dynamic rendering (uses URL search params)
@@ -26,7 +26,7 @@ import { useSupabaseData, invalidateCache } from "@/hooks/useSupabaseData";
 import { fetchTable, insertRow, updateRow, deleteRow } from "@/lib/supabase/api";
 import { formatRupiah, formatRupiahShort, formatNumber } from "@/lib/utils/format";
 import { MONTHS, MARKETPLACES, CHART_COLORS, MP_BADGE } from "@/lib/constants";
-import { makeProfitBersihFn, aggregateByMarketplace, aggregateByProduct, computeProfitSharing } from "@/lib/utils/sale";
+import { makeProfitBersihFn, getSaleTotals, getSaleProducts, aggregateByMarketplace, aggregateByProduct, computeProfitSharing } from "@/lib/utils/sale";
 
 export default function LaporanPage() {
   const params = useSearchParams();
@@ -104,6 +104,7 @@ export default function LaporanPage() {
     .filter((e) => e.kategori !== "Fee Marketplace")
     .reduce((sum, e) => sum + (e.jumlah || 0), 0);
   const totalPemasukanLain = periodIncomes.reduce((sum, i) => sum + (i.jumlah || 0), 0);
+  const totalHPP = periodSales.reduce((sum, s) => sum + getSaleTotals(s).totalBeli, 0);
   const netProfit = totalLaba + totalPemasukanLain;
 
   // Biaya iklan (period-filtered, per-kategori)
@@ -349,9 +350,9 @@ export default function LaporanPage() {
           tone="emerald"
         />
         <KpiCard
-          title="Pemasukan Lain"
-          value={formatRupiah(totalPemasukanLain)}
-          icon={Wallet}
+          title="Total HPP"
+          value={formatRupiah(totalHPP)}
+          icon={Package}
           tone="sky"
         />
         <KpiCard
@@ -743,75 +744,84 @@ export default function LaporanPage() {
         </Card>
       </section>
 
-      {/* Pemasukan Tambahan */}
+      {/* Ringkasan HPP (Modal Terjual) */}
       <section className="mb-6">
-        <div className="mb-3 flex items-start justify-between gap-3">
-          <div>
-            <h2 className="font-display text-base font-bold text-ink">Pemasukan Tambahan</h2>
-            <p className="text-xs text-muted mt-0.5">
-              Pemasukan di luar penjualan marketplace
-            </p>
-          </div>
-          <Button variant="plugin" size="sm" onClick={() => alert("Tambah Pemasukan Tambahan (stub)")}>
-            <Plus className="h-4 w-4" /> Tambah
-          </Button>
+        <div className="mb-3">
+          <h2 className="font-display text-base font-bold text-ink flex items-center gap-2">
+            <Package className="h-4 w-4 text-secondary" /> Total HPP Produk
+          </h2>
+          <p className="text-xs text-muted mt-0.5">
+            Total modal (harga beli × qty) untuk semua produk terjual di periode ini
+          </p>
         </div>
-        <Card>
-          {periodIncomes.length === 0 ? (
-            <EmptyState message="Belum ada pemasukan tambahan" />
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-36">Tanggal</TableHead>
-                  <TableHead>Keterangan</TableHead>
-                  <TableHead className="text-right">Jumlah</TableHead>
-                  <TableHead className="w-20 text-right">Aksi</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {periodIncomes.map((i) => (
-                  <TableRow key={i.id}>
-                    <TableCell className="text-muted">{formatDateId(i.tanggal)}</TableCell>
-                    <TableCell className="font-medium">{i.keterangan}</TableCell>
-                    <TableCell className="text-right font-bold text-primary">
-                      {formatRupiah(i.jumlah)}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center justify-end gap-1.5 text-muted">
-                        <button
-                          type="button"
-                          aria-label="Edit"
-                          onClick={() => alert("Edit (stub)")}
-                          className="grid h-7 w-7 place-items-center rounded hover:bg-surface-2 hover:text-ink"
-                        >
-                          <Pencil className="h-3.5 w-3.5" />
-                        </button>
-                        <button
-                          type="button"
-                          aria-label="Hapus"
-                          onClick={() => alert("Hapus (stub)")}
-                          className="grid h-7 w-7 place-items-center rounded hover:bg-danger/10 hover:text-danger"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-                <TableRow className="bg-plugin-soft/40 hover:bg-plugin-soft/40">
-                  <TableCell colSpan={2} className="font-bold text-plugin">
-                    Total Pemasukan Tambahan
-                  </TableCell>
-                  <TableCell className="text-right font-bold text-plugin">
-                    {formatRupiah(totalPemasukanLain)}
-                  </TableCell>
-                  <TableCell />
-                </TableRow>
-              </TableBody>
-            </Table>
-          )}
-        </Card>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <Card className="md:col-span-2">
+            <CardContent className="flex flex-col justify-center gap-6 py-8">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-muted">
+                    Total HPP
+                  </p>
+                  <p className="mt-1 font-display text-3xl font-extrabold tabular-nums text-ink">
+                    {formatRupiah(totalHPP)}
+                  </p>
+                </div>
+                <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-secondary/10 text-secondary">
+                  <Package className="h-6 w-6" />
+                </div>
+              </div>
+              <div className="h-px bg-border" />
+              <div className="flex items-center justify-between text-sm">
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-muted">Total Penjualan</p>
+                  <p className="mt-0.5 font-display text-base font-bold tabular-nums text-ink">
+                    {formatRupiah(periodSales.reduce((s, x) => s + getSaleTotals(x).totalJual, 0))}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-muted">Margin Kotor</p>
+                  <p className="mt-0.5 font-display text-base font-bold tabular-nums text-success">
+                    {(() => {
+                      const revenue = periodSales.reduce((s, x) => s + getSaleTotals(x).totalJual, 0);
+                      return revenue > 0 ? `${(((revenue - totalHPP) / revenue) * 100).toFixed(1).replace('.', ',')}%` : "0%";
+                    })()}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="py-5 space-y-3">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-muted">
+                Rincian per Kategori
+              </p>
+              {["Plugin", "Jasa"].map((k) => {
+                const catHPP = periodSales.reduce((sum, s) => {
+                  const prod = getSaleProducts(s);
+                  return sum + prod
+                    .filter((p) => (p.kategori_produk || "").toLowerCase() === k.toLowerCase())
+                    .reduce((s2, p) => s2 + p.harga_beli * p.qty, 0);
+                }, 0);
+                return (
+                  <div key={k} className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-ink">{k}</span>
+                    <span className="font-mono text-xs font-bold tabular-nums text-ink">
+                      {formatRupiah(catHPP)}
+                    </span>
+                  </div>
+                );
+              })}
+              <div className="h-px bg-border" />
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-muted">Total</span>
+                <span className="font-display text-sm font-extrabold tabular-nums text-ink">
+                  {formatRupiah(totalHPP)}
+                </span>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </section>
 
       {/* Marketplace detail + Top products */}

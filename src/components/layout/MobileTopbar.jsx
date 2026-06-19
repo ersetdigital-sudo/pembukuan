@@ -9,7 +9,6 @@ const PAGE_TITLES = {
   "/penjualan": "Penjualan",
   "/pembelian": "Pembelian",
   "/biaya": "Biaya",
-  "/pemasukan": "Pemasukan",
   "/laporan": "Laporan",
   "/stok": "Stok",
 };
