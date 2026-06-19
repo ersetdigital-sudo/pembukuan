@@ -130,7 +130,7 @@ export default function Sidebar({ open = false, onClose = () => {} }) {
         </div>
 
         {/* Nav */}
-        <nav className="scroll-thin flex-1 space-y-5 overflow-y-auto px-3 py-4">
+        <nav className="scroll-thin-dark flex-1 space-y-5 overflow-y-auto px-3 py-4">
           {NAV.map((section) => (
             <div key={section.group}>
               <div className="mb-1.5 px-3 text-[10px] font-bold uppercase tracking-[0.18em] text-primary-foreground/40">
