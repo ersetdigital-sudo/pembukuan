@@ -1029,8 +1029,6 @@ function ProfitCard({ tone, kicker, totalLabel, total, buckets }) {
 
   return (
     <div className={`overflow-hidden rounded-2xl border border-slate-100 bg-white ${t.shadow}`}>
-      {/* Top gradient accent bar — desktop only (hidden on mobile for a calmer look) */}
-      <div className={`hidden sm:block h-1.5 w-full ${t.bar}`} />
 
       {/* Header */}
       <div className="px-4 sm:px-6 pt-4 sm:pt-5 pb-3 sm:pb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
@@ -1101,7 +1099,6 @@ function TransferCard({ name, initials, total, details }) {
 
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_20px_40px_-12px_rgba(99,102,241,0.15)]">
-      <div className="hidden sm:block h-1.5 w-full bg-gradient-to-r from-plugin to-indigo-400" />
 
       {/* Header — icon chip + name */}
       <div className="px-4 sm:px-6 pt-4 sm:pt-5 pb-3 sm:pb-4 flex items-center justify-between gap-3">
