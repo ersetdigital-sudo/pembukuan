@@ -272,13 +272,22 @@ export default function LaporanPage() {
 
   const performIklanDelete = async () => {
     if (!iklanDeleteId) return;
+
+    // Optimistic local remove
+    setIklans((prev) => prev.filter((i) => i.id !== iklanDeleteId));
+
     const { error } = await deleteRow("iklans", iklanDeleteId);
     if (!error) {
       invalidateCache();
       const fresh = await fetchTable("iklans");
-      setIklans(fresh);
+      setIklans(fresh.filter((i) => i.id !== iklanDeleteId));
     } else {
-      setIklans((prev) => prev.filter((i) => i.id !== iklanDeleteId));
+      toast({
+        title: "Gagal menghapus dari server",
+        description:
+          error.message || "Data terhapus di tampilan lokal, coba refresh halaman.",
+        variant: "destructive",
+      });
     }
     setIklanDeleteId(null);
     toast.success("Biaya iklan berhasil dihapus");

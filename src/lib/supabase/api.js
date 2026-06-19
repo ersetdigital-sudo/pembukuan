@@ -14,8 +14,7 @@ export async function fetchTable(table) {
     console.warn(`[Supabase] fetch ${table} error:`, error.message);
     return getMockData()[table];
   }
-  if (!data || data.length === 0) return getMockData()[table];
-  return data;
+  return data || [];
 }
 
 /** Insert a row and return the inserted record. */

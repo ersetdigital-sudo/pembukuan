@@ -146,13 +146,23 @@ export default function PenjualanClient() {
   const performDelete = async () => {
     if (!confirmDelete) return;
     const deleted = confirmDelete;
+
+    // Optimistic local remove agar UI langsung update
+    setSales((prev) => prev.filter((s) => s.id !== deleted.id));
+
     const { error } = await deleteRow("sales", deleted.id);
     if (!error) {
       invalidateCache();
       const fresh = await fetchTable("sales");
-      setSales(fresh);
+      // Pastikan baris yang dihapus tidak balik karena mock fallback
+      setSales(fresh.filter((s) => s.id !== deleted.id));
     } else {
-      setSales((prev) => prev.filter((s) => s.id !== deleted.id));
+      toast({
+        title: "Gagal menghapus dari server",
+        description:
+          error.message || "Data terhapus di tampilan lokal, coba refresh halaman.",
+        variant: "destructive",
+      });
     }
     setConfirmDelete(null);
     gooeyToast.success({

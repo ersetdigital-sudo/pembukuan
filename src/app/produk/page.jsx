@@ -122,13 +122,22 @@ export default function ProdukPage() {
 
   const handleConfirmDelete = async () => {
     if (!deleteId) return;
+
+    // Optimistic local remove
+    setProducts((prev) => prev.filter((p) => p.id !== deleteId));
+
     const { error } = await deleteRow("stocks", deleteId);
     if (!error) {
       invalidateCache();
       const fresh = await fetchTable("stocks");
-      setProducts(fresh);
+      setProducts(fresh.filter((p) => p.id !== deleteId));
     } else {
-      setProducts((prev) => prev.filter((p) => p.id !== deleteId));
+      toast({
+        title: "Gagal menghapus dari server",
+        description:
+          error.message || "Data terhapus di tampilan lokal, coba refresh halaman.",
+        variant: "destructive",
+      });
     }
     setDeleteId(null);
     toast.success("Produk berhasil dihapus");
