@@ -23,6 +23,7 @@ import { formatRupiah, formatNumber, formatPercent } from "@/lib/utils/format";
 import { MONTHS } from "@/lib/constants";
 import {
   getSaleTotals,
+  getSaleProducts,
   makeProfitBersihFn,
   aggregateByMarketplace,
   aggregateByProduct,
@@ -150,12 +151,18 @@ export default function DashboardPage() {
       pct: totalProfit > 0 ? Math.round((v.profit / totalProfit) * 100) : 0,
     }));
 
-  // Kategori produk breakdown
+  // Kategori produk breakdown — using per-product categorization
   const catMap = useMemo(() => {
     const map = { Plugin: 0, Jasa: 0 };
     periodSales.forEach((s) => {
-      const k = (s.kategori_produk || "").toLowerCase() === "jasa" ? "Jasa" : "Plugin";
-      map[k] += profitFn(s);
+      const produk = getSaleProducts(s);
+      const saleProfit = profitFn(s);
+      const totalQty = produk.reduce((sum, p) => sum + p.qty, 0);
+      const perUnitProfit = totalQty > 0 ? saleProfit / totalQty : 0;
+      produk.forEach((p) => {
+        const k = (p.kategori_produk || "").toLowerCase() === "jasa" ? "Jasa" : "Plugin";
+        map[k] += perUnitProfit * p.qty;
+      });
     });
     return map;
   }, [periodSales, profitFn]);

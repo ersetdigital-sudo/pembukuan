@@ -147,12 +147,25 @@ export function aggregateByCustomer(sales, profitFn) {
  *                            profit bucket BEFORE the Andri/Asrud/Modal split.
  */
 export function computeProfitSharing(sales, profitFn, iklans = []) {
-  const profitPluginRaw = sales
-    .filter((s) => (s.kategori_produk || "").toLowerCase() === "plugin")
-    .reduce((sum, s) => sum + profitFn(s), 0);
-  const profitJasaRaw = sales
-    .filter((s) => (s.kategori_produk || "").toLowerCase() === "jasa")
-    .reduce((sum, s) => sum + profitFn(s), 0);
+  let profitPluginRaw = 0;
+  let profitJasaRaw = 0;
+
+  sales.forEach((s) => {
+    const produk = getSaleProducts(s);
+    const saleProfit = profitFn(s);
+    const totalQty = produk.reduce((sum, p) => sum + p.qty, 0);
+    const perUnitProfit = totalQty > 0 ? saleProfit / totalQty : 0;
+
+    produk.forEach((p) => {
+      const productProfit = perUnitProfit * p.qty;
+      const kategori = (p.kategori_produk || "").toLowerCase();
+      if (kategori === "plugin") {
+        profitPluginRaw += productProfit;
+      } else if (kategori === "jasa") {
+        profitJasaRaw += productProfit;
+      }
+    });
+  });
 
   // Iklan reduction: matched to the corresponding profit bucket
   const iklanPlugin = iklans
