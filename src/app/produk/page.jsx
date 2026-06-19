@@ -95,8 +95,14 @@ export default function ProdukPage() {
         setProducts((prev) =>
           prev.map((p) => (p.id === editData.id ? { ...p, ...form, id: editData.id } : p))
         );
+        toast({
+          title: "Gagal memperbarui di server",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast.success("Produk berhasil diperbarui");
       }
-      toast.success("Produk berhasil diperbarui");
     } else {
       const newProduct = {
         id: `pr-${Date.now()}`,
@@ -107,8 +113,14 @@ export default function ProdukPage() {
       error = res.error;
       if (error) {
         setProducts((prev) => [...prev, newProduct]);
+        toast({
+          title: "Gagal menambahkan ke server",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast.success("Produk berhasil ditambahkan");
       }
-      toast.success("Produk berhasil ditambahkan");
     }
     if (!error) {
       invalidateCache();

@@ -245,8 +245,14 @@ export default function LaporanPage() {
         setIklans((prev) =>
           prev.map((i) => (i.id === iklanEditData.id ? { ...i, ...data, id: iklanEditData.id } : i))
         );
+        toast({
+          title: "Gagal memperbarui di server",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast.success("Biaya iklan berhasil diperbarui");
       }
-      toast.success("Biaya iklan berhasil diperbarui");
     } else {
       const newIklan = {
         id: `ikl-${Date.now()}`,
@@ -257,8 +263,14 @@ export default function LaporanPage() {
       error = res.error;
       if (error) {
         setIklans((prev) => [newIklan, ...prev]);
+        toast({
+          title: "Gagal menambahkan ke server",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast.success("Biaya iklan berhasil ditambahkan");
       }
-      toast.success("Biaya iklan berhasil ditambahkan");
     }
     if (!error) {
       invalidateCache();

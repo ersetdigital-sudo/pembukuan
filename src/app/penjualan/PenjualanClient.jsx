@@ -105,7 +105,6 @@ export default function PenjualanClient() {
       const res = await updateRow("sales", editData.id, data);
       error = res.error;
       if (error) {
-        // Fallback: update local state only
         setSales((prev) =>
           prev.map((s) =>
             s.id === editData.id
@@ -113,8 +112,14 @@ export default function PenjualanClient() {
               : s
           )
         );
+        toast({
+          title: "Gagal memperbarui di server",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        gooeyToast.success({ title: `Transaksi ${editData.invoice} berhasil diperbarui` });
       }
-      gooeyToast.success({ title: `Transaksi ${editData.invoice} berhasil diperbarui` });
     } else {
       const newSale = {
         id: `sale-${Date.now()}`,
@@ -125,8 +130,14 @@ export default function PenjualanClient() {
       error = res.error;
       if (error) {
         setSales((prev) => [newSale, ...prev]);
+        toast({
+          title: "Gagal menambahkan ke server",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        gooeyToast.success({ title: `Transaksi ${newSale.invoice} berhasil ditambahkan` });
       }
-      gooeyToast.success({ title: `Transaksi ${newSale.invoice} berhasil ditambahkan` });
     }
     if (!error) {
       invalidateCache();
