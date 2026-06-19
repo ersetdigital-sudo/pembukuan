@@ -10,12 +10,12 @@ import { Badge } from "@/components/ui/Badge";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/Table";
 import { formatRupiah, formatNumber } from "@/lib/utils/format";
 import { KATEGORI } from "@/lib/constants";
-import { getMockData } from "@/lib/data/mock";
+import { useSupabaseData } from "@/hooks/useSupabaseData";
 
 export default function StokPage() {
   const [search, setSearch] = useState("");
   const [kategori, setKategori] = useState("all");
-  const { stocks } = getMockData();
+  const { stocks } = useSupabaseData();
   const sorted = useMemo(
     () => [...stocks].sort((a, b) => a.nama_produk.localeCompare(b.nama_produk)),
     [stocks]

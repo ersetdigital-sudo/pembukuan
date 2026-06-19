@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Search,
   Plus,
@@ -27,16 +27,22 @@ import {
 } from "@/components/ui/Table";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import { useToast } from "@/components/ui/Toast";
-import { getMockData } from "@/lib/data/mock";
+import { useSupabaseData, invalidateCache } from "@/hooks/useSupabaseData";
+import { fetchTable, insertRow, updateRow, deleteRow } from "@/lib/supabase/api";
 import { formatRupiah, formatNumber } from "@/lib/utils/format";
 import { KATEGORI } from "@/lib/constants";
 import ProdukFormDialog from "./ProdukFormDialog";
 
 export default function ProdukPage() {
   const { toast } = useToast();
-  const [products, setProducts] = useState(() => [...getMockData().stocks]);
+  const { stocks: dbStocks } = useSupabaseData();
+  const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [kategori, setKategori] = useState("all");
+
+  useEffect(() => {
+    setProducts(dbStocks);
+  }, [dbStocks]);
 
   // Dialog state
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -81,14 +87,15 @@ export default function ProdukPage() {
 
   const handleSave = async (form) => {
     setIsSaving(true);
-    // Simulate network delay
-    await new Promise((r) => setTimeout(r, 300));
+    let error = null;
     if (editData) {
-      setProducts((prev) =>
-        prev.map((p) =>
-          p.id === editData.id ? { ...p, ...form, id: editData.id } : p
-        )
-      );
+      const res = await updateRow("stocks", editData.id, form);
+      error = res.error;
+      if (error) {
+        setProducts((prev) =>
+          prev.map((p) => (p.id === editData.id ? { ...p, ...form, id: editData.id } : p))
+        );
+      }
       toast.success("Produk berhasil diperbarui");
     } else {
       const newProduct = {
@@ -96,17 +103,33 @@ export default function ProdukPage() {
         ...form,
         created_by: "demo@oosshop.id",
       };
-      setProducts((prev) => [...prev, newProduct]);
+      const res = await insertRow("stocks", newProduct);
+      error = res.error;
+      if (error) {
+        setProducts((prev) => [...prev, newProduct]);
+      }
       toast.success("Produk berhasil ditambahkan");
+    }
+    if (!error) {
+      invalidateCache();
+      const fresh = await fetchTable("stocks");
+      setProducts(fresh);
     }
     setIsSaving(false);
     setDialogOpen(false);
     setEditData(null);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (!deleteId) return;
-    setProducts((prev) => prev.filter((p) => p.id !== deleteId));
+    const { error } = await deleteRow("stocks", deleteId);
+    if (!error) {
+      invalidateCache();
+      const fresh = await fetchTable("stocks");
+      setProducts(fresh);
+    } else {
+      setProducts((prev) => prev.filter((p) => p.id !== deleteId));
+    }
     setDeleteId(null);
     toast.success("Produk berhasil dihapus");
   };

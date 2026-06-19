@@ -18,7 +18,7 @@ import TopCustomers from "@/components/dashboard/TopCustomers";
 import RecentTransactions from "@/components/dashboard/RecentTransactions";
 import ProfitSharingCard from "@/components/dashboard/ProfitSharingCard";
 
-import { getMockData } from "@/lib/data/mock";
+import { useSupabaseData } from "@/hooks/useSupabaseData";
 import { formatRupiah, formatNumber, formatPercent } from "@/lib/utils/format";
 import { MONTHS } from "@/lib/constants";
 import {
@@ -35,7 +35,7 @@ export default function DashboardPage() {
   const month = params?.get("m") ?? "all";
   const year = params?.get("y") ?? String(new Date().getFullYear());
 
-  const data = getMockData();
+  const data = useSupabaseData();
   const { sales, expenses, incomes } = data;
 
   // Filtered sales & expenses for the selected period

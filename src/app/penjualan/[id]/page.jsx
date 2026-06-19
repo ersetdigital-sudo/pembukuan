@@ -1,7 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { getMockData } from "@/lib/data/mock";
+import { useSupabaseData } from "@/hooks/useSupabaseData";
 import { getSaleTotals, getSaleProducts } from "@/lib/utils/sale";
 import PageHeader from "@/components/layout/PageHeader";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
@@ -11,7 +13,7 @@ import { formatRupiah, formatDate } from "@/lib/utils/format";
 import { MP_BADGE } from "@/lib/constants";
 
 export default function SaleDetailPage({ params }) {
-  const { sales } = getMockData();
+  const { sales } = useSupabaseData();
   const sale = sales.find((s) => s.id === params.id);
   if (!sale) notFound();
 

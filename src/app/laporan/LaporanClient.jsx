@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, useEffect } from "react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend,
@@ -22,7 +22,8 @@ import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import { useToast } from "@/components/ui/Toast";
 import IklanFormDialog from "@/components/laporan/IklanFormDialog";
 
-import { getMockData } from "@/lib/data/mock";
+import { useSupabaseData, invalidateCache } from "@/hooks/useSupabaseData";
+import { fetchTable, insertRow, updateRow, deleteRow } from "@/lib/supabase/api";
 import { formatRupiah, formatRupiahShort, formatNumber } from "@/lib/utils/format";
 import { MONTHS, MARKETPLACES, CHART_COLORS, MP_BADGE } from "@/lib/constants";
 import { makeProfitBersihFn, aggregateByMarketplace, aggregateByProduct, computeProfitSharing } from "@/lib/utils/sale";
@@ -33,10 +34,16 @@ export default function LaporanPage() {
   const year = params?.get("y") ?? String(new Date().getFullYear());
   const { toast } = useToast();
 
-  const { sales, expenses, incomes, iklans: initialIklans } = getMockData();
+  const {
+    sales,
+    expenses,
+    incomes,
+    iklans: dbIklans,
+  } = useSupabaseData();
 
   // Local state for iklans (allows add/edit/delete in this session)
-  const [iklans, setIklans] = useState(() => initialIklans);
+  const [iklans, setIklans] = useState([]);
+  useEffect(() => { setIklans(dbIklans); }, [dbIklans]);
 
   // Iklan dialog state
   const [iklanDialogOpen, setIklanDialogOpen] = useState(false);
@@ -230,14 +237,15 @@ export default function LaporanPage() {
 
   const handleIklanSave = async (data) => {
     setIklanSaving(true);
-    // Simulate network delay
-    await new Promise((r) => setTimeout(r, 300));
+    let error = null;
     if (iklanEditData) {
-      setIklans((prev) =>
-        prev.map((i) =>
-          i.id === iklanEditData.id ? { ...i, ...data, id: iklanEditData.id } : i
-        )
-      );
+      const res = await updateRow("iklans", iklanEditData.id, data);
+      error = res.error;
+      if (error) {
+        setIklans((prev) =>
+          prev.map((i) => (i.id === iklanEditData.id ? { ...i, ...data, id: iklanEditData.id } : i))
+        );
+      }
       toast.success("Biaya iklan berhasil diperbarui");
     } else {
       const newIklan = {
@@ -245,17 +253,33 @@ export default function LaporanPage() {
         ...data,
         created_by: "demo@oosshop.id",
       };
-      setIklans((prev) => [newIklan, ...prev]);
+      const res = await insertRow("iklans", newIklan);
+      error = res.error;
+      if (error) {
+        setIklans((prev) => [newIklan, ...prev]);
+      }
       toast.success("Biaya iklan berhasil ditambahkan");
+    }
+    if (!error) {
+      invalidateCache();
+      const fresh = await fetchTable("iklans");
+      setIklans(fresh);
     }
     setIklanSaving(false);
     setIklanDialogOpen(false);
     setIklanEditData(null);
   };
 
-  const performIklanDelete = () => {
+  const performIklanDelete = async () => {
     if (!iklanDeleteId) return;
-    setIklans((prev) => prev.filter((i) => i.id !== iklanDeleteId));
+    const { error } = await deleteRow("iklans", iklanDeleteId);
+    if (!error) {
+      invalidateCache();
+      const fresh = await fetchTable("iklans");
+      setIklans(fresh);
+    } else {
+      setIklans((prev) => prev.filter((i) => i.id !== iklanDeleteId));
+    }
     setIklanDeleteId(null);
     toast.success("Biaya iklan berhasil dihapus");
   };

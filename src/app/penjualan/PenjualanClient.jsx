@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { Eye, Pencil, Trash2, Wallet, Tag, Star, TrendingUp, Plus, Search } from "lucide-react";
 import { toast as gooeyToast } from "gooey-toast";
-import { getMockData } from "@/lib/data/mock";
+import { useSupabaseData, invalidateCache } from "@/hooks/useSupabaseData";
+import { fetchTable, insertRow, updateRow, deleteRow } from "@/lib/supabase/api";
 import { getSaleTotals, getSaleProducts } from "@/lib/utils/sale";
 import PageHeader from "@/components/layout/PageHeader";
 import EmptyState from "@/components/ui/EmptyState";
@@ -25,12 +26,15 @@ export default function PenjualanClient() {
   const year = searchParams?.get("y") ?? String(new Date().getFullYear());
   const { toast } = useToast();
 
-  // Load mock data once
-  const mock = useMemo(() => getMockData(), []);
+  // Supabase data with fallback
+  const { sales: dbSales, stocks: dbStocks } = useSupabaseData();
 
   // Local state for sales (allows adding new ones this session)
-  const [sales, setSales] = useState(() => mock.sales);
-  const stocks = mock.stocks;
+  const [sales, setSales] = useState([]);
+  const [stocks, setStocks] = useState([]);
+
+  useEffect(() => { setSales(dbSales); }, [dbSales]);
+  useEffect(() => { setStocks(dbStocks); }, [dbStocks]);
 
   // Dialog state
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -96,27 +100,38 @@ export default function PenjualanClient() {
 
   const handleSave = async (data) => {
     setIsSaving(true);
-    // Simulate network delay
-    await new Promise((r) => setTimeout(r, 350));
+    let error = null;
     if (editData) {
-      // Update existing
-      setSales((prev) =>
-        prev.map((s) =>
-          s.id === editData.id
-            ? { ...s, ...data, id: editData.id, invoice: s.invoice }
-            : s
-        )
-      );
+      const res = await updateRow("sales", editData.id, data);
+      error = res.error;
+      if (error) {
+        // Fallback: update local state only
+        setSales((prev) =>
+          prev.map((s) =>
+            s.id === editData.id
+              ? { ...s, ...data, id: editData.id, invoice: s.invoice }
+              : s
+          )
+        );
+      }
       gooeyToast.success({ title: `Transaksi ${editData.invoice} berhasil diperbarui` });
     } else {
-      // Add new
       const newSale = {
         id: `sale-${Date.now()}`,
         invoice: data.invoice || nextInvoice(),
         ...data,
       };
-      setSales((prev) => [newSale, ...prev]);
+      const res = await insertRow("sales", newSale);
+      error = res.error;
+      if (error) {
+        setSales((prev) => [newSale, ...prev]);
+      }
       gooeyToast.success({ title: `Transaksi ${newSale.invoice} berhasil ditambahkan` });
+    }
+    if (!error) {
+      invalidateCache();
+      const fresh = await fetchTable("sales");
+      setSales(fresh);
     }
     setIsSaving(false);
     setDialogOpen(false);
@@ -124,15 +139,21 @@ export default function PenjualanClient() {
   };
 
   const handleDelete = (sale) => {
-    // Tutup detail modal (kalau terbuka) supaya confirm tampil sendirian
     setDetailSale(null);
     setConfirmDelete(sale);
   };
 
-  const performDelete = () => {
+  const performDelete = async () => {
     if (!confirmDelete) return;
     const deleted = confirmDelete;
-    setSales((prev) => prev.filter((s) => s.id !== deleted.id));
+    const { error } = await deleteRow("sales", deleted.id);
+    if (!error) {
+      invalidateCache();
+      const fresh = await fetchTable("sales");
+      setSales(fresh);
+    } else {
+      setSales((prev) => prev.filter((s) => s.id !== deleted.id));
+    }
     setConfirmDelete(null);
     gooeyToast.success({
       title: `Transaksi ${deleted.invoice} berhasil dihapus`,

@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/Table";
 import { formatRupiah, formatDate } from "@/lib/utils/format";
 import { KATEGORI_BIAYA } from "@/lib/constants";
-import { getMockData } from "@/lib/data/mock";
+import { useSupabaseData } from "@/hooks/useSupabaseData";
 
 const KAT_COLORS = {
   "Fee Marketplace": "bg-secondary/15 text-secondary border-secondary/30",
@@ -27,7 +27,7 @@ export default function BiayaPage() {
   const [search, setSearch] = useState("");
   const [kategori, setKategori] = useState("all");
 
-  const { expenses } = getMockData();
+  const { expenses } = useSupabaseData();
   const sorted = useMemo(
     () => [...expenses].sort((a, b) => b.tanggal.localeCompare(a.tanggal)),
     [expenses]

@@ -8,11 +8,11 @@ import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/Table";
 import { formatRupiah, formatDate } from "@/lib/utils/format";
-import { getMockData } from "@/lib/data/mock";
+import { useSupabaseData } from "@/hooks/useSupabaseData";
 
 export default function PemasukanPage() {
   const [search, setSearch] = useState("");
-  const { incomes } = getMockData();
+  const { incomes } = useSupabaseData();
   const sorted = useMemo(
     () => [...incomes].sort((a, b) => b.tanggal.localeCompare(a.tanggal)),
     [incomes]

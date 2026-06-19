@@ -8,11 +8,11 @@ import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/Table";
 import { formatRupiah, formatDate, formatNumber } from "@/lib/utils/format";
-import { getMockData } from "@/lib/data/mock";
+import { useSupabaseData } from "@/hooks/useSupabaseData";
 
 export default function PembelianPage() {
   const [search, setSearch] = useState("");
-  const { purchases } = getMockData();
+  const { purchases } = useSupabaseData();
   const sorted = useMemo(
     () => [...purchases].sort((a, b) => b.tanggal.localeCompare(a.tanggal)),
     [purchases]
