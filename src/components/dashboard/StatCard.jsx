@@ -41,7 +41,7 @@ export default function StatCard({
           {value}
         </p>
         {sub && (
-          <p className="hidden sm:block text-[10px] text-muted mt-0.5 leading-tight truncate">
+          <p className="text-[10px] text-muted mt-0.5 leading-tight truncate">
             {sub}
           </p>
         )}
