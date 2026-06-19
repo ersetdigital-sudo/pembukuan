@@ -94,3 +94,13 @@ body {
   from { width: 100%; }
   to { width: 0%; }
 }
+
+/* Profit-card progress bar — fills from 0 to target width on mount (1x) */
+@keyframes bar-fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.animate-bar-fill {
+  transform-origin: left;
+  animation: bar-fill 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}

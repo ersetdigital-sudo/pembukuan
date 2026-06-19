@@ -390,9 +390,9 @@ export default function LaporanPage() {
           totalLabel="Total Profit Bersih"
           total={sharing.profitPlugin}
           buckets={[
-            { pct: 40, label: "Andri", value: sharing.pluginAndri },
-            { pct: 40, label: "Asrud", value: sharing.pluginAsrud },
-            { pct: 20, label: "Modal & Dev", value: sharing.pluginModal },
+            { pct: 40, initials: "A", label: "Andri", value: sharing.pluginAndri },
+            { pct: 40, initials: "As", label: "Asrud", value: sharing.pluginAsrud },
+            { pct: 20, initials: "M", label: "Modal & Dev", value: sharing.pluginModal },
           ]}
         />
         <ProfitCard
@@ -401,8 +401,8 @@ export default function LaporanPage() {
           totalLabel="Total Profit Bersih"
           total={sharing.profitJasa}
           buckets={[
-            { pct: 40, label: "Andri", value: sharing.jasaAndri },
-            { pct: 60, label: "Asrud", value: sharing.jasaAsrud },
+            { pct: 40, initials: "A", label: "Andri", value: sharing.jasaAndri },
+            { pct: 60, initials: "As", label: "Asrud", value: sharing.jasaAsrud },
           ]}
         />
       </div>
@@ -418,6 +418,7 @@ export default function LaporanPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <TransferCard
             name="Andri"
+            initials="A"
             total={sharing.transferAndri}
             details={[
               { label: "Plugin (40%)", value: sharing.pluginAndri },
@@ -426,6 +427,7 @@ export default function LaporanPage() {
           />
           <TransferCard
             name="Asrud"
+            initials="As"
             total={sharing.transferAsrud}
             details={[
               { label: "Plugin (40%)", value: sharing.pluginAsrud },
@@ -1004,69 +1006,88 @@ function KpiCard({ title, value, icon: Icon, tone = "emerald" }) {
 
 function ProfitCard({ tone, kicker, totalLabel, total, buckets }) {
   const isPlugin = tone === "plugin";
-  const cols = buckets.length === 3 ? "grid-cols-3" : "grid-cols-2";
 
   const toneMap = {
     plugin: {
       bar: "bg-gradient-to-r from-plugin to-indigo-400",
       shadow: "shadow-[0_20px_40px_-12px_rgba(99,102,241,0.25)]",
       pct: "text-plugin",
-      tint: "bg-plugin-soft",
-      top: "bg-plugin",
+      rowBar: "from-plugin to-indigo-400",
+      avatar: "bg-plugin/10 text-plugin",
+      divider: "divide-plugin/10",
     },
     success: {
       bar: "bg-gradient-to-r from-success to-emerald-400",
       shadow: "shadow-[0_20px_40px_-12px_rgba(16,185,129,0.25)]",
       pct: "text-success",
-      tint: "bg-success/10",
-      top: "bg-success",
+      rowBar: "from-success to-emerald-400",
+      avatar: "bg-success/10 text-success",
+      divider: "divide-success/10",
     },
   };
   const t = isPlugin ? toneMap.plugin : toneMap.success;
 
   return (
     <div className={`overflow-hidden rounded-2xl border border-slate-100 bg-white ${t.shadow}`}>
-      {/* Top gradient accent bar */}
-      <div className={`h-1.5 w-full ${t.bar}`} />
+      {/* Top gradient accent bar — desktop only (hidden on mobile for a calmer look) */}
+      <div className={`hidden sm:block h-1.5 w-full ${t.bar}`} />
 
       {/* Header */}
-      <div className="px-6 pt-5 pb-4 flex items-start justify-between gap-4">
-        <div>
+      <div className="px-4 sm:px-6 pt-4 sm:pt-5 pb-3 sm:pb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+        <div className="min-w-0">
           <p className="text-[10px] font-bold uppercase tracking-widest text-muted">
             {kicker}
           </p>
-          <h3 className="mt-1 font-display text-xl font-bold text-ink">
+          <h3 className="mt-1 font-display text-lg sm:text-xl font-bold text-ink">
             Pembagian Profit
           </h3>
         </div>
-        <div className="text-right shrink-0">
+        <div className="text-left sm:text-right shrink-0 w-full sm:w-auto">
           <p className="text-[10px] text-muted">{totalLabel}</p>
-          <p className={`mt-0.5 font-display text-xl font-extrabold ${total < 0 ? "text-danger" : "text-ink"}`}>
+          <p className={`mt-0.5 font-display text-lg sm:text-xl font-extrabold tabular-nums ${total < 0 ? "text-danger" : "text-ink"}`}>
             {formatRupiah(total)}
           </p>
         </div>
       </div>
 
-      {/* Body — buckets */}
-      <div className={`px-5 pb-5 grid ${cols} gap-3`}>
+      {/* Body — list rows */}
+      <div className={`px-2 sm:px-3 pb-3 sm:pb-4 divide-y ${t.divider}`}>
         {buckets.map((b) => (
-          <Bucket key={b.label} pct={b.pct} label={b.label} value={b.value} tone={t} />
+          <ProfitRow key={b.label} pct={b.pct} label={b.label} initials={b.initials} value={b.value} tone={t} />
         ))}
       </div>
     </div>
   );
 }
 
-function Bucket({ pct, label, value, tone }) {
+function ProfitRow({ pct, label, initials, value, tone }) {
   const positive = value >= 0;
+  const barColor = positive ? tone.rowBar : "from-danger to-red-400";
+  const pctColor = positive ? tone.pct : "text-danger";
   return (
-    <div className={`relative overflow-hidden rounded-xl border border-slate-100 ${tone.tint} p-4 text-center transition-all duration-200 hover:-translate-y-1 hover:shadow-md`}>
-      {/* Colored top strip */}
-      <div className={`h-1 w-full absolute top-0 left-0 ${tone.top}`} />
-      <p className={`font-display text-3xl font-black leading-none ${tone.pct}`}>{pct}%</p>
-      <p className="mt-2.5 text-sm font-bold text-ink">{label}</p>
-      <div className="mt-2 inline-flex items-center rounded-full bg-white px-2.5 py-1 shadow-sm border border-slate-100">
-        <span className={`font-mono text-xs font-semibold ${positive ? "text-ink" : "text-danger"}`}>
+    <div className="flex items-center gap-2.5 sm:gap-3 px-2 sm:px-3 py-2.5 sm:py-3 transition-colors hover:bg-slate-50/60">
+      {/* Avatar */}
+      <div className={`grid h-8 w-8 sm:h-9 sm:w-9 shrink-0 place-items-center rounded-full font-display text-xs font-bold ${tone.avatar}`}>
+        {initials}
+      </div>
+
+      {/* Name + bar */}
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center justify-between gap-2">
+          <p className="truncate text-xs sm:text-sm font-bold text-ink">{label}</p>
+          <span className={`shrink-0 font-display text-xs sm:text-sm font-extrabold tabular-nums ${pctColor}`}>{pct}%</span>
+        </div>
+        <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+          <div
+            className={`h-full rounded-full bg-gradient-to-r ${barColor} animate-bar-fill`}
+            style={{ width: `${Math.min(Math.max(pct, 0), 100)}%` }}
+          />
+        </div>
+      </div>
+
+      {/* Value */}
+      <div className="shrink-0 text-right">
+        <span className={`block font-mono text-xs sm:text-sm font-bold tabular-nums ${positive ? "text-ink" : "text-danger"}`}>
           {formatRupiah(value)}
         </span>
       </div>
@@ -1074,36 +1095,74 @@ function Bucket({ pct, label, value, tone }) {
   );
 }
 
-function TransferCard({ name, total, details }) {
+function TransferCard({ name, initials, total, details }) {
+  const sum = details.reduce((s, d) => s + (d.value || 0), 0);
+  const hasShare = sum > 0;
+
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_20px_40px_-12px_rgba(99,102,241,0.15)]">
-      <div className="h-1.5 w-full bg-gradient-to-r from-plugin to-indigo-400" />
+      <div className="hidden sm:block h-1.5 w-full bg-gradient-to-r from-plugin to-indigo-400" />
 
-      <div className="px-6 pt-5 pb-4 flex items-center justify-between gap-3">
-        <div>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-muted">
-            Transfer ke
-          </p>
-          <h3 className="mt-1 font-display text-xl font-bold text-ink">
-            {name}
-          </h3>
+      {/* Header — icon chip + name */}
+      <div className="px-4 sm:px-6 pt-4 sm:pt-5 pb-3 sm:pb-4 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <div className="grid h-9 w-9 sm:h-10 sm:w-10 shrink-0 place-items-center rounded-full bg-plugin/10 text-plugin">
+            <Wallet className="h-[18px] w-[18px]" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-muted">
+              Transfer ke
+            </p>
+            <h3 className="mt-0.5 font-display text-lg sm:text-xl font-bold text-ink truncate">
+              {name}
+            </h3>
+          </div>
         </div>
-        <p className="font-display text-2xl font-extrabold shrink-0 text-ink">
-          {formatRupiah(total)}
-        </p>
+        <div className="text-right shrink-0">
+          <span className="inline-flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-plugin/10 font-display text-[11px] sm:text-xs font-bold text-plugin">
+            {initials}
+          </span>
+        </div>
       </div>
-      <ul className="px-5 pb-5 space-y-2">
-        {details.map((d) => (
-          <li key={d.label} className="flex justify-between items-center text-sm">
-            <span className="text-muted">{d.label}</span>
-            <span className="font-mono font-semibold text-ink">{formatRupiah(d.value)}</span>
-          </li>
-        ))}
-        <li className="flex justify-between items-center text-sm font-bold pt-2 border-t border-slate-100">
-          <span>Total</span>
-          <span className="font-mono text-ink">{formatRupiah(total)}</span>
-        </li>
+
+      {/* Composition — each source as a row with mini progress bar + % contribution */}
+      <ul className="px-3 sm:px-4 pb-3 sm:pb-4 space-y-2.5">
+        {details.map((d) => {
+          const pct = hasShare ? (d.value / sum) * 100 : 0;
+          const positive = d.value >= 0;
+          return (
+            <li key={d.label} className="px-2 sm:px-3 py-2 rounded-lg hover:bg-slate-50/60 transition-colors">
+              <div className="flex items-center justify-between gap-2">
+                <span className="truncate text-xs sm:text-sm text-muted">{d.label}</span>
+                <span className="shrink-0 font-mono text-xs sm:text-sm font-bold tabular-nums text-ink">
+                  {formatRupiah(d.value)}
+                </span>
+              </div>
+              <div className="mt-1.5 flex items-center gap-2">
+                <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-100">
+                  <div
+                    className={`h-full rounded-full bg-gradient-to-r ${positive ? "from-plugin to-indigo-400" : "from-danger to-red-400"} animate-bar-fill`}
+                    style={{ width: `${Math.min(Math.max(pct, 0), 100)}%` }}
+                  />
+                </div>
+                <span className="shrink-0 w-10 text-right font-display text-[11px] font-bold tabular-nums text-plugin">
+                  {pct.toFixed(0)}%
+                </span>
+              </div>
+            </li>
+          );
+        })}
       </ul>
+
+      {/* Hero total */}
+      <div className="mx-3 sm:mx-4 mb-3 sm:mb-4 rounded-xl bg-plugin-soft/50 px-3 sm:px-4 py-3 flex items-center justify-between gap-2">
+        <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-plugin">
+          Total Transfer
+        </span>
+        <span className="font-display text-base sm:text-lg font-extrabold tabular-nums text-plugin">
+          {formatRupiah(total)}
+        </span>
+      </div>
     </div>
   );
 }
