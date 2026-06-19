@@ -19,28 +19,32 @@ export default function StatCard({
   valueClass = "",
 }) {
   return (
-    <Card className="p-3 flex items-center gap-2.5">
+    <Card className="p-2 sm:p-3 flex items-center gap-2">
       <div
         className={cn(
-          "h-9 w-9 rounded-md grid place-items-center shrink-0",
+          "h-7 w-7 sm:h-9 sm:w-9 rounded-md grid place-items-center shrink-0",
           ICON_BG[color] || ICON_BG.primary
         )}
       >
-        {Icon && <Icon className="h-4 w-4" />}
+        {Icon && <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />}
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-[10px] uppercase tracking-wider font-semibold text-muted leading-none">
+        <p className="text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold text-muted leading-none truncate">
           {title}
         </p>
         <p
           className={cn(
-            "font-display text-lg font-bold mt-1 leading-tight break-words",
+            "font-display text-sm sm:text-lg font-bold mt-0.5 sm:mt-1 leading-tight break-words",
             valueClass || "text-ink"
           )}
         >
           {value}
         </p>
-        {sub && <p className="text-[10px] text-muted mt-0.5 leading-tight truncate">{sub}</p>}
+        {sub && (
+          <p className="hidden sm:block text-[10px] text-muted mt-0.5 leading-tight truncate">
+            {sub}
+          </p>
+        )}
       </div>
     </Card>
   );

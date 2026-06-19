@@ -221,7 +221,7 @@ export default function DashboardPage() {
       </PageHeader>
 
       {/* KPIs */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 mb-3">
+      <div className="grid grid-cols-3 gap-2 mb-3">
         <StatCard
           title="Total Penjualan"
           value={formatRupiah(totalPenjualan)}
