@@ -107,7 +107,6 @@ export default function ProdukPage() {
       const newProduct = {
         id: `pr-${Date.now()}`,
         ...form,
-        created_by: "demo@oosshop.id",
       };
       const res = await insertRow("stocks", newProduct);
       error = res.error;
