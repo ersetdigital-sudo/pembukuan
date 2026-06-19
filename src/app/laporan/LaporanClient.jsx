@@ -997,70 +997,88 @@ function KpiCard({ title, value, icon: Icon, tone = "emerald" }) {
 }
 
 function ProfitCard({ tone, kicker, totalLabel, total, buckets }) {
-  // tone: "plugin" → indigo accent bar, anything else → emerald accent bar
-  // Text is black (ink/muted) for readability; only the top accent bar carries color identity
   const isPlugin = tone === "plugin";
-  const accentBar = isPlugin ? "bg-plugin" : "bg-success";
   const cols = buckets.length === 3 ? "grid-cols-3" : "grid-cols-2";
-  return (
-    <div className="overflow-hidden rounded-card border border-border bg-surface-2 shadow-card">
-      {/* Top accent bar — colored "header background" identity */}
-      <div className={`h-1 w-full ${accentBar}`} />
 
-      {/* Header — white card, black text */}
-      <div className="px-5 py-4 flex items-start justify-between gap-3">
+  const toneMap = {
+    plugin: {
+      bar: "bg-gradient-to-r from-plugin to-indigo-400",
+      shadow: "shadow-[0_20px_40px_-12px_rgba(99,102,241,0.25)]",
+      pct: "text-plugin",
+      tint: "bg-plugin-soft",
+      top: "bg-plugin",
+    },
+    success: {
+      bar: "bg-gradient-to-r from-success to-emerald-400",
+      shadow: "shadow-[0_20px_40px_-12px_rgba(16,185,129,0.25)]",
+      pct: "text-success",
+      tint: "bg-success/10",
+      top: "bg-success",
+    },
+  };
+  const t = isPlugin ? toneMap.plugin : toneMap.success;
+
+  return (
+    <div className={`overflow-hidden rounded-2xl border border-slate-100 bg-white ${t.shadow}`}>
+      {/* Top gradient accent bar */}
+      <div className={`h-1.5 w-full ${t.bar}`} />
+
+      {/* Header */}
+      <div className="px-6 pt-5 pb-4 flex items-start justify-between gap-4">
         <div>
           <p className="text-[10px] font-bold uppercase tracking-widest text-muted">
             {kicker}
           </p>
-          <h3 className="mt-0.5 font-display text-lg font-bold text-ink">
+          <h3 className="mt-1 font-display text-xl font-bold text-ink">
             Pembagian Profit
           </h3>
         </div>
         <div className="text-right shrink-0">
           <p className="text-[10px] text-muted">{totalLabel}</p>
-          <p className="font-display text-lg font-extrabold text-ink">
+          <p className={`mt-0.5 font-display text-xl font-extrabold ${total < 0 ? "text-danger" : "text-ink"}`}>
             {formatRupiah(total)}
           </p>
         </div>
       </div>
-      {/* Body — buckets on neutral bg, black pct + value */}
-      <div className={`p-4 grid ${cols} gap-3`}>
+
+      {/* Body — buckets */}
+      <div className={`px-5 pb-5 grid ${cols} gap-3`}>
         {buckets.map((b) => (
-          <Bucket key={b.label} pct={b.pct} label={b.label} value={b.value} />
+          <Bucket key={b.label} pct={b.pct} label={b.label} value={b.value} tone={t} />
         ))}
       </div>
     </div>
   );
 }
 
-function Bucket({ pct, label, value }) {
+function Bucket({ pct, label, value, tone }) {
+  const positive = value >= 0;
   return (
-    <div className="relative overflow-hidden rounded-lg border border-border bg-[#F7F6F2] p-3 text-center transition-transform duration-200 hover:-translate-y-0.5">
-      <p className="font-display text-3xl font-black leading-none text-ink">{pct}%</p>
-      <p className="mt-2 text-xs font-bold text-ink">{label}</p>
-      <p className="mt-1 text-[10px] text-muted">Bagian</p>
-      <p className="mt-0.5 font-mono text-xs font-bold break-all text-ink">
-        {formatRupiah(value)}
-      </p>
+    <div className={`relative overflow-hidden rounded-xl border border-slate-100 ${tone.tint} p-4 text-center transition-all duration-200 hover:-translate-y-1 hover:shadow-md`}>
+      {/* Colored top strip */}
+      <div className={`h-1 w-full absolute top-0 left-0 ${tone.top}`} />
+      <p className={`font-display text-3xl font-black leading-none ${tone.pct}`}>{pct}%</p>
+      <p className="mt-2.5 text-sm font-bold text-ink">{label}</p>
+      <div className="mt-2 inline-flex items-center rounded-full bg-white px-2.5 py-1 shadow-sm border border-slate-100">
+        <span className={`font-mono text-xs font-semibold ${positive ? "text-ink" : "text-danger"}`}>
+          {formatRupiah(value)}
+        </span>
+      </div>
     </div>
   );
 }
 
 function TransferCard({ name, total, details }) {
-  // Rekap Transfer follows Plugin color (indigo) for the accent bar; text is black
   return (
-    <div className="overflow-hidden rounded-card border-2 border-plugin/30 bg-surface-2 shadow-card">
-      {/* Top accent bar — colored "transfer header background" */}
-      <div className="h-1 w-full bg-plugin" />
+    <div className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_20px_40px_-12px_rgba(99,102,241,0.15)]">
+      <div className="h-1.5 w-full bg-gradient-to-r from-plugin to-indigo-400" />
 
-      {/* Transfer header — white bg, black text */}
-      <div className="px-5 py-4 flex items-center justify-between gap-3">
+      <div className="px-6 pt-5 pb-4 flex items-center justify-between gap-3">
         <div>
           <p className="text-[10px] font-bold uppercase tracking-widest text-muted">
             Transfer ke
           </p>
-          <h3 className="mt-0.5 font-display text-lg font-bold text-ink">
+          <h3 className="mt-1 font-display text-xl font-bold text-ink">
             {name}
           </h3>
         </div>
@@ -1068,14 +1086,14 @@ function TransferCard({ name, total, details }) {
           {formatRupiah(total)}
         </p>
       </div>
-      <ul className="p-4 space-y-2 bg-surface-2">
+      <ul className="px-5 pb-5 space-y-2">
         {details.map((d) => (
           <li key={d.label} className="flex justify-between items-center text-sm">
             <span className="text-muted">{d.label}</span>
             <span className="font-mono font-semibold text-ink">{formatRupiah(d.value)}</span>
           </li>
         ))}
-        <li className="flex justify-between items-center text-sm font-bold pt-2 border-t border-border">
+        <li className="flex justify-between items-center text-sm font-bold pt-2 border-t border-slate-100">
           <span>Total</span>
           <span className="font-mono text-ink">{formatRupiah(total)}</span>
         </li>
