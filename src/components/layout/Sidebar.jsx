@@ -13,6 +13,7 @@ import {
   ShoppingBag,
   Receipt,
   Wallet,
+  Package,
 } from "lucide-react";
 
 const NAV = [
@@ -27,6 +28,12 @@ const NAV = [
       { href: "/pembelian", label: "Pembelian", icon: ShoppingBag },
       { href: "/biaya", label: "Biaya", icon: Receipt },
       { href: "/pemasukan", label: "Pemasukan", icon: Wallet },
+    ],
+  },
+  {
+    group: "Master",
+    items: [
+      { href: "/produk", label: "Produk", icon: Package },
     ],
   },
   {
