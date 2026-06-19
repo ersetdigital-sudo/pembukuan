@@ -115,7 +115,7 @@ export default function DashboardPage() {
   const prevBiaya = totalBiaya; // approximation: same period expenses
   const prevNet = prevProfit;
 
-  // Monthly bar chart data â€” for the selected year, all 12 months
+  // Monthly bar chart data — for the selected year, all 12 months
   const monthlyData = useMemo(() => {
     return MONTHS.map((name, idx) => {
       const ms = sales.filter((s) => {
@@ -208,7 +208,7 @@ export default function DashboardPage() {
     <div>
       <PageHeader
         title="Sales Recap"
-        subtitle={`Ringkasan bisnis OOS SHOP â€” ${periodLabel}`}
+        subtitle={`Ringkasan bisnis OOS SHOP — ${periodLabel}`}
       >
         <MonthPicker month={month} year={year} />
       </PageHeader>
