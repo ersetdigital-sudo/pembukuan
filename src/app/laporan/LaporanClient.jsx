@@ -238,20 +238,28 @@ export default function LaporanPage() {
   const handleIklanSave = async (data) => {
     setIklanSaving(true);
     let error = null;
+
     if (iklanEditData) {
       const res = await updateRow("iklans", iklanEditData.id, data);
       error = res.error;
-      if (error) {
+      if (!error && res.data) {
         setIklans((prev) =>
-          prev.map((i) => (i.id === iklanEditData.id ? { ...i, ...data, id: iklanEditData.id } : i))
+          prev.map((i) => (i.id === iklanEditData.id ? res.data : i))
+        );
+        toast.success("Biaya iklan berhasil diperbarui");
+      } else {
+        setIklans((prev) =>
+          prev.map((i) =>
+            i.id === iklanEditData.id
+              ? { ...i, ...data, id: iklanEditData.id }
+              : i
+          )
         );
         toast({
           title: "Gagal memperbarui di server",
-          description: error.message,
+          description: error?.message || "Terjadi kesalahan",
           variant: "destructive",
         });
-      } else {
-        toast.success("Biaya iklan berhasil diperbarui");
       }
     } else {
       const newIklan = {
@@ -261,21 +269,21 @@ export default function LaporanPage() {
       };
       const res = await insertRow("iklans", newIklan);
       error = res.error;
-      if (error) {
+      if (!error && res.data) {
+        setIklans((prev) => [res.data, ...prev]);
+        toast.success("Biaya iklan berhasil ditambahkan");
+      } else {
         setIklans((prev) => [newIklan, ...prev]);
         toast({
           title: "Gagal menambahkan ke server",
-          description: error.message,
+          description: error?.message || "Terjadi kesalahan",
           variant: "destructive",
         });
-      } else {
-        toast.success("Biaya iklan berhasil ditambahkan");
       }
     }
+
     if (!error) {
       invalidateCache();
-      const fresh = await fetchTable("iklans");
-      setIklans(fresh);
     }
     setIklanSaving(false);
     setIklanDialogOpen(false);
@@ -291,8 +299,7 @@ export default function LaporanPage() {
     const { error } = await deleteRow("iklans", iklanDeleteId);
     if (!error) {
       invalidateCache();
-      const fresh = await fetchTable("iklans");
-      setIklans(fresh.filter((i) => i.id !== iklanDeleteId));
+      toast.success("Biaya iklan berhasil dihapus");
     } else {
       toast({
         title: "Gagal menghapus dari server",
@@ -302,7 +309,6 @@ export default function LaporanPage() {
       });
     }
     setIklanDeleteId(null);
-    toast.success("Biaya iklan berhasil dihapus");
   };
 
   return (

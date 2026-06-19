@@ -91,17 +91,20 @@ export default function ProdukPage() {
     if (editData) {
       const res = await updateRow("stocks", editData.id, form);
       error = res.error;
-      if (error) {
+      if (!error && res.data) {
+        setProducts((prev) =>
+          prev.map((p) => (p.id === editData.id ? res.data : p))
+        );
+        toast.success("Produk berhasil diperbarui");
+      } else {
         setProducts((prev) =>
           prev.map((p) => (p.id === editData.id ? { ...p, ...form, id: editData.id } : p))
         );
         toast({
           title: "Gagal memperbarui di server",
-          description: error.message,
+          description: error?.message || "Terjadi kesalahan",
           variant: "destructive",
         });
-      } else {
-        toast.success("Produk berhasil diperbarui");
       }
     } else {
       const newProduct = {
@@ -110,21 +113,20 @@ export default function ProdukPage() {
       };
       const res = await insertRow("stocks", newProduct);
       error = res.error;
-      if (error) {
+      if (!error && res.data) {
+        setProducts((prev) => [...prev, res.data]);
+        toast.success("Produk berhasil ditambahkan");
+      } else {
         setProducts((prev) => [...prev, newProduct]);
         toast({
           title: "Gagal menambahkan ke server",
-          description: error.message,
+          description: error?.message || "Terjadi kesalahan",
           variant: "destructive",
         });
-      } else {
-        toast.success("Produk berhasil ditambahkan");
       }
     }
     if (!error) {
       invalidateCache();
-      const fresh = await fetchTable("stocks");
-      setProducts(fresh);
     }
     setIsSaving(false);
     setDialogOpen(false);
@@ -140,8 +142,7 @@ export default function ProdukPage() {
     const { error } = await deleteRow("stocks", deleteId);
     if (!error) {
       invalidateCache();
-      const fresh = await fetchTable("stocks");
-      setProducts(fresh.filter((p) => p.id !== deleteId));
+      toast.success("Produk berhasil dihapus");
     } else {
       toast({
         title: "Gagal menghapus dari server",
@@ -151,7 +152,6 @@ export default function ProdukPage() {
       });
     }
     setDeleteId(null);
-    toast.success("Produk berhasil dihapus");
   };
 
   return (

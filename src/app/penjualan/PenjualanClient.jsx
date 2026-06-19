@@ -101,10 +101,18 @@ export default function PenjualanClient() {
   const handleSave = async (data) => {
     setIsSaving(true);
     let error = null;
+
     if (editData) {
       const res = await updateRow("sales", editData.id, data);
       error = res.error;
-      if (error) {
+      if (!error && res.data) {
+        // Langsung pakai row hasil update dari Supabase (tanpa fetch ulang)
+        setSales((prev) =>
+          prev.map((s) => (s.id === editData.id ? res.data : s))
+        );
+        gooeyToast.success({ title: `Transaksi ${editData.invoice} berhasil diperbarui` });
+      } else {
+        // Fallback ke optimistic kalau server gagal
         setSales((prev) =>
           prev.map((s) =>
             s.id === editData.id
@@ -114,11 +122,9 @@ export default function PenjualanClient() {
         );
         toast({
           title: "Gagal memperbarui di server",
-          description: error.message,
+          description: error?.message || "Terjadi kesalahan",
           variant: "destructive",
         });
-      } else {
-        gooeyToast.success({ title: `Transaksi ${editData.invoice} berhasil diperbarui` });
       }
     } else {
       const newSale = {
@@ -128,22 +134,23 @@ export default function PenjualanClient() {
       };
       const res = await insertRow("sales", newSale);
       error = res.error;
-      if (error) {
+      if (!error && res.data) {
+        setSales((prev) => [res.data, ...prev]);
+        gooeyToast.success({ title: `Transaksi ${newSale.invoice} berhasil ditambahkan` });
+      } else {
         setSales((prev) => [newSale, ...prev]);
         toast({
           title: "Gagal menambahkan ke server",
-          description: error.message,
+          description: error?.message || "Terjadi kesalahan",
           variant: "destructive",
         });
-      } else {
-        gooeyToast.success({ title: `Transaksi ${newSale.invoice} berhasil ditambahkan` });
       }
     }
+
     if (!error) {
       invalidateCache();
-      const fresh = await fetchTable("sales");
-      setSales(fresh);
     }
+
     setIsSaving(false);
     setDialogOpen(false);
     setEditData(null);
@@ -164,9 +171,9 @@ export default function PenjualanClient() {
     const { error } = await deleteRow("sales", deleted.id);
     if (!error) {
       invalidateCache();
-      const fresh = await fetchTable("sales");
-      // Pastikan baris yang dihapus tidak balik karena mock fallback
-      setSales(fresh.filter((s) => s.id !== deleted.id));
+      gooeyToast.success({
+        title: `Transaksi ${deleted.invoice} berhasil dihapus`,
+      });
     } else {
       toast({
         title: "Gagal menghapus dari server",
@@ -176,9 +183,6 @@ export default function PenjualanClient() {
       });
     }
     setConfirmDelete(null);
-    gooeyToast.success({
-      title: `Transaksi ${deleted.invoice} berhasil dihapus`,
-    });
   };
 
   return (
