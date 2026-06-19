@@ -38,8 +38,6 @@ export default function ProdukFormDialog({
   isSaving = false,
 }) {
   const [form, setForm] = useState(defaultForm);
-  const [editBeli, setEditBeli] = useState(false);
-  const [editJual, setEditJual] = useState(false);
 
   const fmtRp = (val) => {
     if (val === "" || val === null || val === undefined) return "";
@@ -61,8 +59,6 @@ export default function ProdukFormDialog({
     } else {
       setForm({ ...defaultForm });
     }
-    setEditBeli(false);
-    setEditJual(false);
   }, [editData, open]);
 
   const setField = (key, val) => setForm((prev) => ({ ...prev, [key]: val }));
@@ -129,9 +125,7 @@ export default function ProdukFormDialog({
                 type="text"
                 inputMode="numeric"
                 placeholder="Rp 0"
-                value={editBeli ? form.harga_beli : fmtRp(form.harga_beli)}
-                onFocus={() => setEditBeli(true)}
-                onBlur={() => setEditBeli(false)}
+                value={fmtRp(form.harga_beli)}
                 onChange={(e) => setField("harga_beli", e.target.value.replace(/\D/g, ""))}
                 required
               />
@@ -142,9 +136,7 @@ export default function ProdukFormDialog({
                 type="text"
                 inputMode="numeric"
                 placeholder="Rp 0"
-                value={editJual ? form.harga_jual : fmtRp(form.harga_jual)}
-                onFocus={() => setEditJual(true)}
-                onBlur={() => setEditJual(false)}
+                value={fmtRp(form.harga_jual)}
                 onChange={(e) => setField("harga_jual", e.target.value.replace(/\D/g, ""))}
                 required
               />
