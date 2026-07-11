@@ -167,7 +167,7 @@ export default function ProdukPage() {
       </PageHeader>
 
       {/* Stat cards — samain style dengan dashboard */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 mb-4 sm:mb-5">
+      <div className="grid grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 mb-4 sm:mb-5">
         <StatCard
           title="Total Produk"
           value={formatNumber(totalProducts)}
@@ -191,6 +191,7 @@ export default function ProdukPage() {
           value={formatRupiah(potensiProfit)}
           icon={TrendingUp}
           color="emerald"
+          className="col-span-3 lg:col-span-1"
         />
       </div>
 
