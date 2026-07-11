@@ -1111,49 +1111,36 @@ export default function LaporanPage() {
 function ProfitCard({ tone, kicker, totalLabel, total, buckets }) {
   const isPlugin = tone === "plugin";
 
+  // Flat black & white chrome sesuai design system "" tone cuma dipakai buat
+  // aksen kecil (persen & bar), bukan gradient atau colored shadow.
   const toneMap = {
-    plugin: {
-      bar: "bg-gradient-to-r from-plugin to-indigo-400",
-      shadow: "shadow-[0_20px_40px_-12px_rgba(99,102,241,0.25)]",
-      pct: "text-secondary",
-      rowBar: "from-plugin to-indigo-400",
-      avatar: "bg-secondary/10 text-secondary",
-      divider: "divide-plugin/10",
-    },
-    success: {
-      bar: "bg-gradient-to-r from-success to-emerald-400",
-      shadow: "shadow-[0_20px_40px_-12px_rgba(16,185,129,0.25)]",
-      pct: "text-success",
-      rowBar: "from-success to-emerald-400",
-      avatar: "bg-success/10 text-success",
-      divider: "divide-success/10",
-    },
+    plugin: { pct: "text-ink", bar: "bg-ink", avatar: "bg-secondary text-ash" },
+    success: { pct: "text-success", bar: "bg-success", avatar: "bg-success/10 text-success" },
   };
   const t = isPlugin ? toneMap.plugin : toneMap.success;
 
   return (
-    <div className={`overflow-hidden rounded-2xl border border-slate-100 bg-white ${t.shadow}`}>
-
+    <div className="overflow-hidden rounded-sm bg-surface-card shadow-card hover:shadow-card-hover transition-shadow">
       {/* Header */}
-      <div className="px-4 sm:px-6 pt-4 sm:pt-5 pb-3 sm:pb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+      <div className="px-4 sm:px-5 pt-4 sm:pt-5 pb-3 sm:pb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-hairline">
         <div className="min-w-0">
           <p className="text-[10px] font-bold uppercase tracking-widest text-ash">
             {kicker}
           </p>
-          <h3 className="mt-1 text-lg sm:text-xl font-bold text-ink">
+          <h3 className="mt-1 text-base sm:text-lg font-bold text-ink">
             Pembagian Profit
           </h3>
         </div>
         <div className="text-left sm:text-right shrink-0 w-full sm:w-auto">
           <p className="text-[10px] text-ash">{totalLabel}</p>
-          <p className={`mt-0.5 text-lg sm:text-xl font-extrabold tabular-nums ${total < 0 ? "text-danger" : "text-ink"}`}>
+          <p className={`mt-0.5 text-lg sm:text-xl font-bold tabular-nums ${total < 0 ? "text-danger" : "text-ink"}`}>
             {formatRupiah(total)}
           </p>
         </div>
       </div>
 
       {/* Body "" list rows */}
-      <div className={`px-2 sm:px-3 pb-3 sm:pb-4 divide-y ${t.divider}`}>
+      <div className="px-2 sm:px-3 py-1 divide-y divide-hairline">
         {buckets.map((b) => (
           <ProfitRow key={b.label} pct={b.pct} label={b.label} initials={b.initials} value={b.value} tone={t} />
         ))}
@@ -1164,10 +1151,10 @@ function ProfitCard({ tone, kicker, totalLabel, total, buckets }) {
 
 function ProfitRow({ pct, label, initials, value, tone }) {
   const positive = value >= 0;
-  const barColor = positive ? tone.rowBar : "from-danger to-red-400";
+  const barColor = positive ? tone.bar : "bg-danger";
   const pctColor = positive ? tone.pct : "text-danger";
   return (
-    <div className="flex items-center gap-2.5 sm:gap-3 px-2 sm:px-3 py-2.5 sm:py-3 transition-colors hover:bg-slate-50/60">
+    <div className="flex items-center gap-2.5 sm:gap-3 px-2 sm:px-3 py-2.5 sm:py-3">
       {/* Avatar */}
       <div className={`grid h-8 w-8 sm:h-9 sm:w-9 shrink-0 place-items-center rounded-full text-xs font-bold ${tone.avatar}`}>
         {initials}
@@ -1177,11 +1164,11 @@ function ProfitRow({ pct, label, initials, value, tone }) {
       <div className="min-w-0 flex-1">
         <div className="flex items-center justify-between gap-2">
           <p className="truncate text-xs sm:text-sm font-bold text-ink">{label}</p>
-          <span className={`shrink-0 text-xs sm:text-sm font-extrabold tabular-nums ${pctColor}`}>{pct}%</span>
+          <span className={`shrink-0 text-xs sm:text-sm font-bold tabular-nums ${pctColor}`}>{pct}%</span>
         </div>
-        <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+        <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
           <div
-            className={`h-full rounded-full bg-gradient-to-r ${barColor} animate-bar-fill`}
+            className={`h-full rounded-full ${barColor} animate-bar-fill`}
             style={{ width: `${Math.min(Math.max(pct, 0), 100)}%` }}
           />
         </div>
@@ -1202,37 +1189,36 @@ function TransferCard({ name, initials, total, details }) {
   const hasShare = sum > 0;
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_20px_40px_-12px_rgba(99,102,241,0.15)]">
-
+    <div className="overflow-hidden rounded-sm bg-surface-card shadow-card hover:shadow-card-hover transition-shadow">
       {/* Header "" icon chip + name */}
-      <div className="px-4 sm:px-6 pt-4 sm:pt-5 pb-3 sm:pb-4 flex items-center justify-between gap-3">
+      <div className="px-4 sm:px-5 pt-4 sm:pt-5 pb-3 sm:pb-4 flex items-center justify-between gap-3 border-b border-hairline">
         <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-          <div className="grid h-9 w-9 sm:h-10 sm:w-10 shrink-0 place-items-center rounded-full bg-secondary/10 text-secondary">
+          <div className="grid h-9 w-9 sm:h-10 sm:w-10 shrink-0 place-items-center rounded-sm bg-primary text-on-primary">
             <Wallet className="h-[18px] w-[18px]" />
           </div>
           <div className="min-w-0">
             <p className="text-[10px] font-bold uppercase tracking-widest text-ash">
               Transfer ke
             </p>
-            <h3 className="mt-0.5 text-lg sm:text-xl font-bold text-ink truncate">
+            <h3 className="mt-0.5 text-base sm:text-lg font-bold text-ink truncate">
               {name}
             </h3>
           </div>
         </div>
         <div className="text-right shrink-0">
-          <span className="inline-flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-secondary/10 text-[11px] sm:text-xs font-bold text-secondary">
+          <span className="inline-flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-secondary text-[11px] sm:text-xs font-bold text-ash">
             {initials}
           </span>
         </div>
       </div>
 
       {/* Composition "" each source as a row with mini progress bar + % contribution */}
-      <ul className="px-3 sm:px-4 pb-3 sm:pb-4 space-y-2.5">
+      <ul className="px-3 sm:px-4 pt-3 pb-1 space-y-2.5">
         {details.map((d) => {
           const pct = hasShare ? (d.value / sum) * 100 : 0;
           const positive = d.value >= 0;
           return (
-            <li key={d.label} className="px-2 sm:px-3 py-2 rounded-lg hover:bg-slate-50/60 transition-colors">
+            <li key={d.label} className="px-2 sm:px-3 py-2 rounded-sm">
               <div className="flex items-center justify-between gap-2">
                 <span className="truncate text-xs sm:text-sm text-ash">{d.label}</span>
                 <span className="shrink-0 font-mono text-xs sm:text-sm font-bold tabular-nums text-ink">
@@ -1240,13 +1226,13 @@ function TransferCard({ name, initials, total, details }) {
                 </span>
               </div>
               <div className="mt-1.5 flex items-center gap-2">
-                <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-100">
+                <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-secondary">
                   <div
-                    className={`h-full rounded-full bg-gradient-to-r ${positive ? "from-plugin to-indigo-400" : "from-danger to-red-400"} animate-bar-fill`}
+                    className={`h-full rounded-full ${positive ? "bg-ink" : "bg-danger"} animate-bar-fill`}
                     style={{ width: `${Math.min(Math.max(pct, 0), 100)}%` }}
                   />
                 </div>
-                <span className="shrink-0 w-10 text-right text-[11px] font-bold tabular-nums text-secondary">
+                <span className="shrink-0 w-10 text-right text-[11px] font-bold tabular-nums text-ash">
                   {pct.toFixed(0)}%
                 </span>
               </div>
@@ -1255,12 +1241,12 @@ function TransferCard({ name, initials, total, details }) {
         })}
       </ul>
 
-      {/* Hero total */}
-      <div className="mx-3 sm:mx-4 mb-3 sm:mb-4 rounded-xl bg-secondary/10/50 px-3 sm:px-4 py-3 flex items-center justify-between gap-2">
-        <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-secondary">
+      {/* Total */}
+      <div className="mx-3 sm:mx-4 mb-3 sm:mb-4 mt-2 rounded-sm bg-primary/5 px-3 sm:px-4 py-3 flex items-center justify-between gap-2">
+        <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-ink">
           Total Transfer
         </span>
-        <span className="text-base sm:text-lg font-extrabold tabular-nums text-secondary">
+        <span className="text-base sm:text-lg font-bold tabular-nums text-ink">
           {formatRupiah(total)}
         </span>
       </div>
