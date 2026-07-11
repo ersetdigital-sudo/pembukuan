@@ -13,7 +13,7 @@ export default function TopCustomers({ items, limit = 5 }) {
       </CardHeader>
       <CardContent>
         {top.length === 0 ? (
-          <p className="text-sm text-muted text-center py-8">Belum ada data</p>
+          <p className="text-sm text-ash text-center py-8">Belum ada data</p>
         ) : (
           <ul className="space-y-2">
             {top.map(([nama, data], i) => (
@@ -23,7 +23,7 @@ export default function TopCustomers({ items, limit = 5 }) {
                 </span>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-medium truncate">{nama}</p>
-                  <p className="text-[10px] text-muted">{data.count} transaksi</p>
+                  <p className="text-[10px] text-ash">{data.count} transaksi</p>
                   <div className="h-1 bg-muted rounded-full mt-1 overflow-hidden">
                     <div
                       className="h-full bg-secondary rounded-full transition-all"

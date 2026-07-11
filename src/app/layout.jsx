@@ -1,41 +1,34 @@
 import "./globals.css";
 import "gooey-toast/styles.css";
-import { Ubuntu, Oswald, Ubuntu_Mono } from "next/font/google";
+import { Space_Grotesk, IBM_Plex_Mono } from "next/font/google";
 import LayoutShell from "@/components/layout/LayoutShell";
 import { ToastProvider } from "@/components/ui/Toast";
 
-const ubuntu = Ubuntu({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "700"],
-  variable: "--font-ubuntu",
-  display: "swap",
-});
-
-const oswald = Oswald({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-oswald",
+  variable: "--font-space-grotesk",
   display: "swap",
 });
 
-const ubuntuMono = Ubuntu_Mono({
+const ibmPlexMono = IBM_Plex_Mono({
   subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-ubuntu-mono",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-ibm-plex-mono",
   display: "swap",
 });
 
 export const metadata = {
   title: "OOS SHOP — Sales Recap",
   description:
-    "Enterprise sales recap dashboard — OOS SHOP X ASRUD 2026. Built on the Enterprise design system.",
+    "Sales recap dashboard — OOS SHOP X ASRUD 2026. Built on the Sanity design system.",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html
       lang="id"
-      className={`${ubuntu.variable} ${oswald.variable} ${ubuntuMono.variable}`}
+      className={`${spaceGrotesk.variable} ${ibmPlexMono.variable}`}
     >
       <body className="font-sans">
         <ToastProvider>

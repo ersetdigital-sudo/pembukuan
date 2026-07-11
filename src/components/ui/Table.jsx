@@ -8,7 +8,7 @@ export function Table({ className = "", children }) {
   );
 }
 export function TableHeader({ className = "", children }) {
-  return <thead className={cn("bg-surface/50 border-b border-border", className)}>{children}</thead>;
+  return <thead className={cn("bg-surface/50 border-b border-hairline", className)}>{children}</thead>;
 }
 export function TableBody({ className = "", children }) {
   return <tbody className={cn("divide-y divide-border", className)}>{children}</tbody>;
@@ -24,7 +24,7 @@ export function TableHead({ className = "", children, ...props }) {
   return (
     <th
       className={cn(
-        "text-left px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground",
+        "text-left px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-ash",
         className
       )}
       {...props}

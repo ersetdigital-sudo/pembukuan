@@ -52,10 +52,10 @@ function NavItem({ href, label, icon: Icon, onNavigate }) {
       href={href}
       onClick={onNavigate}
       className={cn(
-        "group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+        "group flex items-center gap-3 rounded-sm px-3 py-2 text-sm font-medium transition-colors",
         active
-          ? "bg-secondary text-secondary-foreground"
-          : "text-primary-foreground/70 hover:bg-primary-foreground/10 hover:text-primary-foreground"
+          ? "bg-secondary text-on-primary"
+          : "text-on-dark-mute hover:bg-on-dark/10 hover:text-on-dark"
       )}
     >
       <Icon className="h-[18px] w-[18px] shrink-0" />
@@ -65,7 +65,6 @@ function NavItem({ href, label, icon: Icon, onNavigate }) {
 }
 
 export default function Sidebar({ open = false, onClose = () => {} }) {
-  // Lock body scroll + ESC-to-close while the drawer is open.
   useEffect(() => {
     if (!open) return;
     const prevOverflow = document.body.style.overflow;
@@ -82,12 +81,12 @@ export default function Sidebar({ open = false, onClose = () => {} }) {
 
   return (
     <>
-      {/* Backdrop — only on mobile, fades in/out */}
+      {/* Backdrop — only on mobile */}
       <div
         onClick={onClose}
         aria-hidden="true"
         className={cn(
-          "fixed inset-0 z-40 bg-ink/50 backdrop-blur-sm transition-opacity duration-200 lg:hidden",
+          "fixed inset-0 z-40 bg-surface-deep/60 backdrop-blur-sm transition-opacity duration-200 lg:hidden",
           open ? "opacity-100" : "pointer-events-none opacity-0"
         )}
       />
@@ -95,25 +94,23 @@ export default function Sidebar({ open = false, onClose = () => {} }) {
       <aside
         aria-label="Primary navigation"
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-primary text-primary-foreground",
+          "fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-surface-dark text-on-dark",
           "transition-transform duration-200 ease-out will-change-transform",
-          // Mobile: hidden off-canvas by default, slide in when open
           open ? "translate-x-0" : "-translate-x-full",
-          // Desktop: always visible (overrides the mobile transform)
           "lg:translate-x-0"
         )}
       >
-        {/* Brand + mobile close button */}
-        <div className="flex items-center justify-between gap-2 border-b border-primary-foreground/10 px-5 py-5">
+        {/* Brand + mobile close */}
+        <div className="flex items-center justify-between gap-2 border-b border-hairline-strong/20 px-5 py-5">
           <div className="flex min-w-0 items-center gap-2.5">
-            <div className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-secondary font-display text-lg font-bold text-primary">
+            <div className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-primary text-lg font-bold text-on-primary">
               O
             </div>
             <div className="min-w-0 leading-tight">
-              <div className="truncate font-display text-base font-bold tracking-wide">
+              <div className="truncate text-base font-bold tracking-tight">
                 OOS SHOP
               </div>
-              <div className="truncate text-[10px] uppercase tracking-[0.2em] text-primary-foreground/60">
+              <div className="truncate text-[10px] font-mono uppercase tracking-[0.5px] text-on-dark-mute">
                 Sales Recap · 2026
               </div>
             </div>
@@ -122,7 +119,7 @@ export default function Sidebar({ open = false, onClose = () => {} }) {
             type="button"
             onClick={onClose}
             aria-label="Tutup menu"
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-md text-primary-foreground/80 hover:bg-primary-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/30 lg:hidden"
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-sm text-on-dark-mute hover:bg-on-dark/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/30 lg:hidden"
           >
             <X className="h-5 w-5" />
           </button>
@@ -132,7 +129,7 @@ export default function Sidebar({ open = false, onClose = () => {} }) {
         <nav className="scroll-thin-dark flex-1 space-y-5 overflow-y-auto px-3 py-4">
           {NAV.map((section) => (
             <div key={section.group}>
-              <div className="mb-1.5 px-3 text-[10px] font-bold uppercase tracking-[0.18em] text-primary-foreground/40">
+              <div className="mb-1.5 px-3 text-button-sm font-mono uppercase tracking-[0.5px] text-on-dark-mute/60">
                 {section.group}
               </div>
               <ul className="space-y-0.5">
@@ -147,8 +144,8 @@ export default function Sidebar({ open = false, onClose = () => {} }) {
         </nav>
 
         {/* Footer */}
-        <div className="border-t border-primary-foreground/10 px-5 py-3 text-[10px] text-primary-foreground/50">
-          Enterprise design · v1.0
+        <div className="border-t border-hairline-strong/20 px-5 py-3 text-[10px] text-on-dark-mute/50">
+          Sanity design · v1.0
         </div>
       </aside>
     </>

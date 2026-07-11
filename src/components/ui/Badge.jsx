@@ -1,13 +1,14 @@
 import { cn } from "@/lib/utils/cn";
 
 const variants = {
-  default: "bg-surface text-ink border border-border",
-  primary: "bg-primary text-primary-foreground",
-  secondary: "bg-secondary text-secondary-foreground",
+  default: "bg-background-bone text-surface-dark border border-hairline",
+  primary: "bg-primary text-on-primary",
+  secondary: "bg-secondary text-on-secondary",
   success: "bg-success/15 text-success border border-success/30",
   warning: "bg-warning/15 text-warning border border-warning/30",
   danger: "bg-danger/15 text-danger border border-danger/30",
-  outline: "border border-border text-ink bg-transparent",
+  info: "bg-info/15 text-info border border-info/30",
+  outline: "border border-hairline text-ink bg-transparent",
 };
 
 export function Badge({ variant = "default", className = "", children }) {

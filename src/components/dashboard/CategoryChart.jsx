@@ -9,10 +9,10 @@ const DonutTooltip = ({ active, payload }) => {
   if (!active || !payload?.length) return null;
   const { name, value, payload: inner } = payload[0];
   return (
-    <div className="bg-surface-2 border border-border rounded-md shadow-lg px-3 py-2 text-xs">
+    <div className="bg-surface-card border border-hairline rounded-md px-3 py-2 text-xs">
       <p className="font-semibold">{name}</p>
       <p className="text-primary font-bold">{formatRupiah(value)}</p>
-      <p className="text-muted">{inner.pct}% dari total</p>
+      <p className="text-ash">{inner.pct}% dari total</p>
     </div>
   );
 };
@@ -26,7 +26,7 @@ export default function CategoryChart({ data, title = "Distribusi", subtitle }) 
       </CardHeader>
       <CardContent>
         {data.length === 0 ? (
-          <p className="text-sm text-muted text-center py-12">Belum ada data</p>
+          <p className="text-sm text-ash text-center py-12">Belum ada data</p>
         ) : (
           <>
             <div className="h-44">
@@ -52,7 +52,7 @@ export default function CategoryChart({ data, title = "Distribusi", subtitle }) 
                     <span className="font-medium text-ink">{d.name}</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-muted">{d.pct}%</span>
+                    <span className="text-ash">{d.pct}%</span>
                     <span className="font-bold text-primary w-28 text-right">{formatRupiah(d.value)}</span>
                   </div>
                 </li>

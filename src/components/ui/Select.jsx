@@ -23,13 +23,13 @@ export function SelectTrigger({ className = "", children }) {
       onClick={() => ctx.setOpen(!ctx.open)}
       onBlur={() => setTimeout(() => ctx.setOpen(false), 150)}
       className={cn(
-        "h-10 w-full rounded-md border border-input bg-surface-2 px-3 text-sm text-ink inline-flex items-center justify-between gap-2",
+        "h-10 w-full rounded-md border border-input bg-surface-card px-3 text-sm text-ink inline-flex items-center justify-between gap-2",
         "focus:border-primary focus:outline-none focus:ring-0",
         className
       )}
     >
       {children}
-      <ChevronDown className="h-4 w-4 text-muted shrink-0" />
+      <ChevronDown className="h-4 w-4 text-ash shrink-0" />
     </button>
   );
 }
@@ -42,7 +42,7 @@ export function SelectValue({ placeholder = "Pilih…", children }) {
     return <span className="truncate text-ink">{children}</span>;
   }
   return (
-    <span className={ctx.value ? "text-ink" : "text-muted"}>
+    <span className={ctx.value ? "text-ink" : "text-ash"}>
       {ctx.value || placeholder}
     </span>
   );
@@ -54,7 +54,7 @@ export function SelectContent({ className = "", children }) {
   return (
     <div
       className={cn(
-        "absolute z-50 mt-1 w-full max-h-60 overflow-auto rounded-md border border-border bg-surface-2 shadow-card-hover",
+        "absolute z-50 mt-1 w-full max-h-60 overflow-auto rounded-md border border-hairline bg-surface-card ",
         className
       )}
     >

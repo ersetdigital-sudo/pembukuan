@@ -10,7 +10,7 @@ export default function LayoutShell({ children }) {
   const closeNav = useCallback(() => setNavOpen(false), []);
 
   return (
-    <div className="min-h-screen bg-surface text-ink">
+    <div className="min-h-screen bg-background text-ink">
       <MobileTopbar onOpen={openNav} />
       <Sidebar open={navOpen} onClose={closeNav} />
       <main className="lg:pl-64 min-h-screen">

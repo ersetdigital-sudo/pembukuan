@@ -20,7 +20,7 @@ const KAT_COLORS = {
   "Alat Kantor": "bg-amber-100 text-amber-700 border-amber-200",
   Transport: "bg-indigo-100 text-indigo-700 border-indigo-200",
   Konsumsi: "bg-emerald-100 text-emerald-700 border-emerald-200",
-  "Lain-lain": "bg-muted text-muted-foreground border-border",
+  "Lain-lain": "bg-muted text-ash border-hairline",
 };
 
 export default function BiayaPage() {
@@ -62,7 +62,7 @@ export default function BiayaPage() {
 
       <div className="flex flex-col sm:flex-row gap-2 mb-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ash" />
           <Input
             placeholder="Cari keterangan…"
             value={search}
@@ -73,7 +73,7 @@ export default function BiayaPage() {
         <select
           value={kategori}
           onChange={(e) => setKategori(e.target.value)}
-          className="h-10 px-3 rounded-md border border-input bg-surface-2 text-sm"
+          className="h-10 px-3 rounded-md border border-input bg-surface-card text-sm"
         >
           <option value="all">Semua Kategori</option>
           {KATEGORI_BIAYA.map((k) => (
@@ -83,7 +83,7 @@ export default function BiayaPage() {
       </div>
 
       <Card>
-        <div className="px-4 py-2 border-b border-border bg-surface/30 text-xs flex justify-between text-muted">
+        <div className="px-4 py-2 border-b border-hairline bg-surface/30 text-xs flex justify-between text-ash">
           <span>Menampilkan {filtered.length} dari {sorted.length} entri</span>
           <span className="font-mono font-semibold text-foreground">Total: {formatRupiah(totalFiltered)}</span>
         </div>
@@ -102,7 +102,7 @@ export default function BiayaPage() {
             <TableBody>
               {filtered.map((e) => (
                 <TableRow key={e.id}>
-                  <TableCell className="text-muted">{formatDate(e.tanggal)}</TableCell>
+                  <TableCell className="text-ash">{formatDate(e.tanggal)}</TableCell>
                   <TableCell>
                     <Badge className={KAT_COLORS[e.kategori] || ""}>{e.kategori}</Badge>
                   </TableCell>
@@ -122,9 +122,9 @@ export default function BiayaPage() {
 
 function Stat({ label, value, color = "text-ink" }) {
   return (
-    <div className="rounded-card border border-border bg-surface-2 p-3">
-      <p className="text-[10px] uppercase tracking-wider font-semibold text-muted">{label}</p>
-      <p className={`font-display text-lg font-bold mt-1 ${color}`}>{value}</p>
+    <div className="rounded-md border border-hairline bg-surface-card p-3">
+      <p className="text-[10px] uppercase tracking-wider font-semibold text-ash">{label}</p>
+      <p className={`text-lg font-bold mt-1 ${color}`}>{value}</p>
     </div>
   );
 }

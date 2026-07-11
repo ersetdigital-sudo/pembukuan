@@ -38,14 +38,14 @@ export default function SaleDetailPage({ params }) {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <Card className="md:col-span-1 p-5">
-          <h3 className="text-xs uppercase tracking-wider font-semibold text-muted mb-3">Info Pembeli</h3>
+          <h3 className="text-xs uppercase tracking-wider font-semibold text-ash mb-3">Info Pembeli</h3>
           <Row label="Tanggal" value={formatDate(sale.tanggal)} />
           <Row label="Nama" value={sale.nama_pembeli} />
           <Row label="No HP" value={sale.no_hp || "-"} />
           <Row label="Domain" value={sale.username_domain || "-"} />
         </Card>
         <Card className="md:col-span-2 p-5">
-          <h3 className="text-xs uppercase tracking-wider font-semibold text-muted mb-3">Ringkasan Finansial</h3>
+          <h3 className="text-xs uppercase tracking-wider font-semibold text-ash mb-3">Ringkasan Finansial</h3>
           <Row label="Total Penjualan" value={formatRupiah(totals.totalJual)} valueClass="text-primary font-bold" />
           <Row label="Total Modal" value={formatRupiah(totals.totalBeli)} />
           <Row label="Fee Marketplace" value={formatRupiah(totals.fee)} valueClass="text-secondary font-semibold" />
@@ -59,7 +59,7 @@ export default function SaleDetailPage({ params }) {
           <CardTitle>Produk</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          <ul className="divide-y divide-border">
+          <ul className="divide-y divide-hairline">
             {produk.map((p, i) => (
               <li key={i} className="p-4 flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-bold inline-flex items-center justify-center shrink-0">
@@ -77,7 +77,7 @@ export default function SaleDetailPage({ params }) {
                       <Badge variant="outline">{p.masa_aktif}</Badge>
                     )}
                   </div>
-                  <p className="text-xs text-muted mt-1">
+                  <p className="text-xs text-ash mt-1">
                     {p.qty} × {formatRupiah(p.harga_jual)} (modal {formatRupiah(p.harga_beli)})
                   </p>
                 </div>
@@ -98,8 +98,8 @@ export default function SaleDetailPage({ params }) {
 
 function Row({ label, value, valueClass = "" }) {
   return (
-    <div className="flex justify-between items-center py-1.5 border-b border-border last:border-0">
-      <span className="text-xs text-muted">{label}</span>
+    <div className="flex justify-between items-center py-1.5 border-b border-hairline last:border-0">
+      <span className="text-xs text-ash">{label}</span>
       <span className={`text-sm font-medium text-right break-all ${valueClass}`}>{value}</span>
     </div>
   );

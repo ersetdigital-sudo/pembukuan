@@ -154,7 +154,7 @@ export default function ProdukFormDialog({
               required
             />
             {form.kategori === "Jasa" && (
-              <p className="text-[10px] text-muted">
+              <p className="text-[10px] text-ash">
                 Untuk jasa, stok biasanya diisi besar (mis. 999) karena unlimited.
               </p>
             )}

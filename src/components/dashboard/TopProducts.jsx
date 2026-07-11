@@ -15,7 +15,7 @@ export default function TopProducts({ items, limit = 5 }) {
       </CardHeader>
       <CardContent>
         {top.length === 0 ? (
-          <p className="text-sm text-muted text-center py-8">Belum ada data</p>
+          <p className="text-sm text-ash text-center py-8">Belum ada data</p>
         ) : (
           <ul className="space-y-2">
             {top.map(([nama, data], i) => (

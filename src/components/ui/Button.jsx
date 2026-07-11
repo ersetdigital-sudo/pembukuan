@@ -2,23 +2,23 @@ import { cn } from "@/lib/utils/cn";
 
 const variants = {
   primary:
-    "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm",
+    "bg-primary text-on-primary hover:bg-secondary rounded-full",
   secondary:
-    "bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-sm",
+    "bg-surface-dark text-on-dark-mute hover:bg-secondary hover:text-on-primary rounded-full",
   plugin:
-    "bg-plugin text-plugin-foreground hover:bg-plugin/90 shadow-sm",
+    "bg-secondary text-on-secondary hover:bg-secondary/90 rounded-full",
   outline:
-    "border border-border bg-surface-2 text-ink hover:bg-surface",
-  ghost: "text-ink hover:bg-surface",
+    "border border-hairline bg-background-bone text-ink hover:bg-secondary hover:text-on-primary rounded-full",
+  ghost: "text-ink hover:bg-secondary/10 rounded-sm",
   danger:
-    "bg-danger text-danger-foreground hover:bg-danger/90 shadow-sm",
+    "bg-danger text-on-primary hover:bg-danger/90 rounded-full",
 };
 
 const sizes = {
   sm: "h-8 px-3 text-xs",
-  md: "h-10 px-4 text-sm",
+  md: "h-[44px] px-4 text-button-md",
   lg: "h-12 px-6 text-base",
-  icon: "h-10 w-10 p-0",
+  icon: "h-[44px] w-[44px] p-0",
 };
 
 export function Button({
@@ -32,7 +32,7 @@ export function Button({
     <button
       type={type}
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-md font-semibold transition-colors disabled:opacity-50 disabled:pointer-events-none",
+        "inline-flex items-center justify-center gap-2 font-semibold transition-colors disabled:opacity-40 disabled:pointer-events-none",
         variants[variant],
         sizes[size],
         className

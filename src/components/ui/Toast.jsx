@@ -75,7 +75,7 @@ function Toaster({ toasts, remove }) {
             key={t.id}
             role={t.type === "error" ? "alert" : "status"}
             className={cn(
-              "pointer-events-auto relative flex items-start gap-3 rounded-card border border-border bg-surface-2 p-3 shadow-card-hover animate-slide-from-right",
+              "pointer-events-auto relative flex items-start gap-3 rounded-md border border-hairline bg-surface-card p-3  animate-slide-from-right",
               "min-w-0 overflow-hidden"
             )}
           >
@@ -109,7 +109,7 @@ function Toaster({ toasts, remove }) {
               type="button"
               onClick={() => remove(t.id)}
               aria-label="Tutup"
-              className="p-1 text-muted-foreground hover:text-ink hover:bg-surface rounded transition-colors shrink-0 -mr-1 -mt-1"
+              className="p-1 text-ash hover:text-ink hover:bg-surface rounded transition-colors shrink-0 -mr-1 -mt-1"
             >
               <X className="h-3.5 w-3.5" />
             </button>
@@ -128,7 +128,7 @@ function Toaster({ toasts, remove }) {
                       ? "#DC2626"
                       : t.type === "warning"
                       ? "#EAB308"
-                      : "#FF5F03",
+                      : "#f36458",
                 }}
               />
             )}

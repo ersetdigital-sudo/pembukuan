@@ -370,7 +370,7 @@ export default function LaporanPage() {
       </div>
 
       {/* Fee breakdown */}
-      <div className="mb-6 text-xs text-muted bg-surface-2 rounded-md border border-border px-4 py-2.5 flex flex-wrap gap-x-4 gap-y-1">
+      <div className="mb-6 text-xs text-ash bg-surface-card rounded-md border border-hairline px-4 py-2.5 flex flex-wrap gap-x-4 gap-y-1">
         <span>
           Biaya:{" "}
           <span className="text-secondary font-semibold">
@@ -411,8 +411,8 @@ export default function LaporanPage() {
       {/* Rekap Transfer */}
       <div className="mb-6">
         <div className="mb-3">
-          <h2 className="font-display text-base font-bold text-ink">Rekap Transfer</h2>
-          <p className="text-xs text-muted mt-0.5">
+          <h2 className="text-base font-bold text-ink">Rekap Transfer</h2>
+          <p className="text-xs text-ash mt-0.5">
             Ringkasan jumlah yang harus ditransfer ke masing-masing orang
           </p>
         </div>
@@ -450,7 +450,7 @@ export default function LaporanPage() {
                     ? `Grafik Bulanan (${year})`
                     : `Grafik Harian — ${MONTHS[Number(month)]} ${year}`}
                 </CardTitle>
-                <p className="mt-0.5 text-xs text-muted">
+                <p className="mt-0.5 text-xs text-ash">
                   {visibleCount === 1 && activeSeries.laba && `Total Profit ${formatRupiahShort(sumLaba)}`}
                   {visibleCount === 1 && activeSeries.pemasukan && `Total Pemasukan ${formatRupiahShort(sumPemasukan)}`}
                   {visibleCount === 1 && activeSeries.biaya && `Total Biaya ${formatRupiahShort(sumBiaya)}`}
@@ -565,7 +565,7 @@ export default function LaporanPage() {
           </CardHeader>
           <CardContent>
             {mpPieData.length === 0 ? (
-              <p className="text-sm text-muted text-center py-12">Belum ada data</p>
+              <p className="text-sm text-ash text-center py-12">Belum ada data</p>
             ) : (
               <>
                 <div className="relative h-52">
@@ -595,13 +595,13 @@ export default function LaporanPage() {
                   </ResponsiveContainer>
                   {/* Center label overlay */}
                   <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-[9px] font-bold uppercase tracking-widest text-muted">
+                    <span className="text-[9px] font-bold uppercase tracking-widest text-ash">
                       Total
                     </span>
-                    <span className="font-display text-sm font-extrabold text-ink leading-tight">
+                    <span className="text-sm font-extrabold text-ink leading-tight">
                       {formatRupiahShort(mpPieTotal)}
                     </span>
-                    <span className="mt-0.5 text-[10px] text-muted">
+                    <span className="mt-0.5 text-[10px] text-ash">
                       {mpPieNamed.length} marketplace
                     </span>
                   </div>
@@ -610,7 +610,7 @@ export default function LaporanPage() {
                   {mpPieNamed.map((d) => (
                     <li
                       key={d.name}
-                      className="flex items-center justify-between gap-2 rounded-md px-2 py-1 transition-colors hover:bg-surface-2"
+                      className="flex items-center justify-between gap-2 rounded-md px-2 py-1 transition-colors hover:bg-surface-card"
                     >
                       <div className="flex min-w-0 items-center gap-2">
                         <span
@@ -620,7 +620,7 @@ export default function LaporanPage() {
                         <span className="truncate text-xs font-semibold text-ink">{d.name}</span>
                       </div>
                       <div className="flex shrink-0 items-center gap-2">
-                        <span className="text-[10px] font-bold tabular-nums text-muted">
+                        <span className="text-[10px] font-bold tabular-nums text-ash">
                           {d.pct.toFixed(1)}%
                         </span>
                         <span className="w-20 text-right font-mono text-xs font-bold tabular-nums text-ink">
@@ -640,10 +640,10 @@ export default function LaporanPage() {
       <section className="mb-6">
         <div className="mb-3 flex items-start justify-between gap-3">
           <div>
-            <h2 className="font-display text-base font-bold text-ink flex items-center gap-2">
-              <Megaphone className="h-4 w-4 text-plugin" /> Biaya Iklan
+            <h2 className="text-base font-bold text-ink flex items-center gap-2">
+              <Megaphone className="h-4 w-4 text-secondary" /> Biaya Iklan
             </h2>
-            <p className="text-xs text-muted mt-0.5">
+            <p className="text-xs text-ash mt-0.5">
               Mengurangi profit bersih kategori sebelum dibagi ke partner
             </p>
           </div>
@@ -655,15 +655,15 @@ export default function LaporanPage() {
         {/* Per-kategori breakdown badges (hanya muncul kalau ada iklan di periode ini) */}
         {totalIklan > 0 && (
           <div className="mb-3 flex flex-wrap gap-2">
-            <div className="flex items-center gap-2 rounded-md border border-plugin/20 bg-plugin-soft/40 px-3 py-1.5 text-xs">
-              <span className="text-muted">Iklan Plugin</span>
-              <span className="font-display font-bold tabular-nums text-plugin">
+            <div className="flex items-center gap-2 rounded-md border border-secondary/20 bg-secondary/10/40 px-3 py-1.5 text-xs">
+              <span className="text-ash">Iklan Plugin</span>
+              <span className="font-bold tabular-nums text-secondary">
                 {formatRupiah(sharing.iklanPlugin)}
               </span>
             </div>
             <div className="flex items-center gap-2 rounded-md border border-success/20 bg-success/5 px-3 py-1.5 text-xs">
-              <span className="text-muted">Iklan Jasa</span>
-              <span className="font-display font-bold tabular-nums text-success">
+              <span className="text-ash">Iklan Jasa</span>
+              <span className="font-bold tabular-nums text-success">
                 {formatRupiah(sharing.iklanJasa)}
               </span>
             </div>
@@ -687,24 +687,24 @@ export default function LaporanPage() {
               <TableBody>
                 {periodIklans.map((e) => (
                   <TableRow key={e.id}>
-                    <TableCell className="text-muted whitespace-nowrap">
+                    <TableCell className="text-ash whitespace-nowrap">
                       {formatDateId(e.tanggal)}
                     </TableCell>
                     <TableCell>
                       <Badge
                         className={
                           e.kategori === "Plugin"
-                            ? "bg-plugin-soft text-plugin border border-plugin/20"
+                            ? "bg-secondary/10 text-secondary border border-secondary/20"
                             : "bg-success/15 text-success border border-success/30"
                         }
                       >
                         {e.kategori}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-xs text-muted truncate max-w-[200px]">
+                    <TableCell className="text-xs text-ash truncate max-w-[200px]">
                       {e.keterangan || "—"}
                     </TableCell>
-                    <TableCell className="text-right font-display font-bold text-secondary tabular-nums">
+                    <TableCell className="text-right font-bold text-secondary tabular-nums">
                       {formatRupiah(e.jumlah)}
                     </TableCell>
                     <TableCell>
@@ -713,7 +713,7 @@ export default function LaporanPage() {
                           type="button"
                           aria-label="Edit iklan"
                           onClick={() => openIklanEdit(e)}
-                          className="grid h-7 w-7 place-items-center rounded text-muted-foreground hover:bg-surface hover:text-ink transition-colors"
+                          className="grid h-7 w-7 place-items-center rounded text-ash hover:bg-surface hover:text-ink transition-colors"
                         >
                           <Pencil className="h-3.5 w-3.5" />
                         </button>
@@ -721,7 +721,7 @@ export default function LaporanPage() {
                           type="button"
                           aria-label="Hapus iklan"
                           onClick={() => setIklanDeleteId(e.id)}
-                          className="grid h-7 w-7 place-items-center rounded text-muted-foreground hover:bg-danger/10 hover:text-danger transition-colors"
+                          className="grid h-7 w-7 place-items-center rounded text-ash hover:bg-danger/10 hover:text-danger transition-colors"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
                         </button>
@@ -733,7 +733,7 @@ export default function LaporanPage() {
                   <TableCell colSpan={3} className="font-bold text-secondary text-xs uppercase tracking-wider">
                     Total Biaya Iklan
                   </TableCell>
-                  <TableCell className="text-right font-display font-extrabold text-secondary tabular-nums">
+                  <TableCell className="text-right font-extrabold text-secondary tabular-nums">
                     {formatRupiah(totalIklan)}
                   </TableCell>
                   <TableCell />
@@ -747,10 +747,10 @@ export default function LaporanPage() {
       {/* Ringkasan HPP (Modal Terjual) */}
       <section className="mb-6">
         <div className="mb-3">
-          <h2 className="font-display text-base font-bold text-ink flex items-center gap-2">
+          <h2 className="text-base font-bold text-ink flex items-center gap-2">
             <Package className="h-4 w-4 text-secondary" /> Total HPP Produk
           </h2>
-          <p className="text-xs text-muted mt-0.5">
+          <p className="text-xs text-ash mt-0.5">
             Total modal (harga beli × qty) untuk semua produk terjual di periode ini
           </p>
         </div>
@@ -759,10 +759,10 @@ export default function LaporanPage() {
             <CardContent className="flex flex-col justify-center gap-6 py-8">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-muted">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-ash">
                     Total HPP
                   </p>
-                  <p className="mt-1 font-display text-3xl font-extrabold tabular-nums text-ink">
+                  <p className="mt-1 text-3xl font-extrabold tabular-nums text-ink">
                     {formatRupiah(totalHPP)}
                   </p>
                 </div>
@@ -773,14 +773,14 @@ export default function LaporanPage() {
               <div className="h-px bg-border" />
               <div className="flex items-center justify-between text-sm">
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-muted">Total Penjualan</p>
-                  <p className="mt-0.5 font-display text-base font-bold tabular-nums text-ink">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-ash">Total Penjualan</p>
+                  <p className="mt-0.5 text-base font-bold tabular-nums text-ink">
                     {formatRupiah(periodSales.reduce((s, x) => s + getSaleTotals(x).totalJual, 0))}
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-muted">Margin Kotor</p>
-                  <p className="mt-0.5 font-display text-base font-bold tabular-nums text-success">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-ash">Margin Kotor</p>
+                  <p className="mt-0.5 text-base font-bold tabular-nums text-success">
                     {(() => {
                       const revenue = periodSales.reduce((s, x) => s + getSaleTotals(x).totalJual, 0);
                       return revenue > 0 ? `${(((revenue - totalHPP) / revenue) * 100).toFixed(1).replace('.', ',')}%` : "0%";
@@ -793,7 +793,7 @@ export default function LaporanPage() {
 
           <Card>
             <CardContent className="py-5 space-y-3">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-muted">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-ash">
                 Rincian per Kategori
               </p>
               {["Plugin", "Jasa"].map((k) => {
@@ -814,8 +814,8 @@ export default function LaporanPage() {
               })}
               <div className="h-px bg-border" />
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-muted">Total</span>
-                <span className="font-display text-sm font-extrabold tabular-nums text-ink">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-ash">Total</span>
+                <span className="text-sm font-extrabold tabular-nums text-ink">
                   {formatRupiah(totalHPP)}
                 </span>
               </div>
@@ -830,7 +830,7 @@ export default function LaporanPage() {
           <CardHeader>
             <div className="flex items-baseline justify-between gap-3">
               <CardTitle>Detail per Marketplace</CardTitle>
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-muted">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-ash">
                 {activeMarketplaces.length} aktif
               </span>
             </div>
@@ -857,11 +857,11 @@ export default function LaporanPage() {
                         <TableCell className="font-medium">
                           <div className="flex items-center gap-2.5">
                             <span
-                              className={`inline-flex h-6 items-center rounded-md px-1.5 text-[10px] font-bold ${MP_BADGE[mp] || "bg-muted/20 text-muted"}`}
+                              className={`inline-flex h-6 items-center rounded-md px-1.5 text-[10px] font-bold ${MP_BADGE[mp] || "bg-muted/20 text-ash"}`}
                             >
                               {mp.slice(0, 3).toUpperCase()}
                             </span>
-                            <span className="text-muted-foreground">{mp}</span>
+                            <span className="text-ash">{mp}</span>
                           </div>
                         </TableCell>
                         <TableCell className="text-center">
@@ -872,11 +872,11 @@ export default function LaporanPage() {
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex flex-col items-end leading-tight">
-                            <span className="font-display font-bold tabular-nums text-muted-foreground">
+                            <span className="font-bold tabular-nums text-ash">
                               {formatRupiah(v.profit)}
                             </span>
                             {share > 0 && (
-                              <span className="text-[10px] font-semibold tabular-nums text-muted">
+                              <span className="text-[10px] font-semibold tabular-nums text-ash">
                                 {share.toFixed(1)}%
                               </span>
                             )}
@@ -893,7 +893,7 @@ export default function LaporanPage() {
                       Total
                     </TableCell>
                     <TableCell className="text-center">
-                      <span className="font-display font-bold tabular-nums text-muted-foreground">
+                      <span className="font-bold tabular-nums text-ash">
                         {formatNumber(mpTotals.qty)}
                       </span>
                     </TableCell>
@@ -901,7 +901,7 @@ export default function LaporanPage() {
                       {formatRupiah(mpTotals.fee)}
                     </TableCell>
                     <TableCell className="text-right whitespace-nowrap">
-                      <span className="font-display text-base font-extrabold tabular-nums text-primary">
+                      <span className="text-base font-extrabold tabular-nums text-primary">
                         {formatRupiah(mpTotals.profit)}
                       </span>
                     </TableCell>
@@ -990,11 +990,11 @@ function KpiCard({ title, value, icon: Icon, tone = "emerald" }) {
     sky: "bg-sky-100 text-sky-600",
     secondary: "bg-secondary/10 text-secondary",
     primary: "bg-primary/10 text-primary",
-    plugin: "bg-plugin/10 text-plugin",
+    plugin: "bg-secondary/10 text-secondary",
   };
   const t = toneMap[tone] || toneMap.primary;
   return (
-    <div className="group relative overflow-hidden rounded-card border border-border bg-surface-2 px-3 py-2.5 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-ink/20 hover:shadow-card-hover">
+    <div className="group relative overflow-hidden rounded-md border border-hairline bg-surface-card px-3 py-2.5  transition-all duration-200 hover:-translate-y-0.5 hover:border-ink/20 hover:">
       <div className="flex items-center gap-2.5">
         <div
           className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${t}`}
@@ -1002,10 +1002,10 @@ function KpiCard({ title, value, icon: Icon, tone = "emerald" }) {
           {Icon && <Icon className="h-[18px] w-[18px]" />}
         </div>
         <div className="min-w-0 flex-1">
-          <p className="truncate text-[10px] font-semibold uppercase tracking-wider text-muted leading-tight">
+          <p className="truncate text-[10px] font-semibold uppercase tracking-wider text-ash leading-tight">
             {title}
           </p>
-          <p className="mt-0.5 truncate font-display text-[15px] font-bold text-ink leading-tight">
+          <p className="mt-0.5 truncate text-[15px] font-bold text-ink leading-tight">
             {value}
           </p>
         </div>
@@ -1021,9 +1021,9 @@ function ProfitCard({ tone, kicker, totalLabel, total, buckets }) {
     plugin: {
       bar: "bg-gradient-to-r from-plugin to-indigo-400",
       shadow: "shadow-[0_20px_40px_-12px_rgba(99,102,241,0.25)]",
-      pct: "text-plugin",
+      pct: "text-secondary",
       rowBar: "from-plugin to-indigo-400",
-      avatar: "bg-plugin/10 text-plugin",
+      avatar: "bg-secondary/10 text-secondary",
       divider: "divide-plugin/10",
     },
     success: {
@@ -1043,16 +1043,16 @@ function ProfitCard({ tone, kicker, totalLabel, total, buckets }) {
       {/* Header */}
       <div className="px-4 sm:px-6 pt-4 sm:pt-5 pb-3 sm:pb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
         <div className="min-w-0">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-muted">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-ash">
             {kicker}
           </p>
-          <h3 className="mt-1 font-display text-lg sm:text-xl font-bold text-ink">
+          <h3 className="mt-1 text-lg sm:text-xl font-bold text-ink">
             Pembagian Profit
           </h3>
         </div>
         <div className="text-left sm:text-right shrink-0 w-full sm:w-auto">
-          <p className="text-[10px] text-muted">{totalLabel}</p>
-          <p className={`mt-0.5 font-display text-lg sm:text-xl font-extrabold tabular-nums ${total < 0 ? "text-danger" : "text-ink"}`}>
+          <p className="text-[10px] text-ash">{totalLabel}</p>
+          <p className={`mt-0.5 text-lg sm:text-xl font-extrabold tabular-nums ${total < 0 ? "text-danger" : "text-ink"}`}>
             {formatRupiah(total)}
           </p>
         </div>
@@ -1075,7 +1075,7 @@ function ProfitRow({ pct, label, initials, value, tone }) {
   return (
     <div className="flex items-center gap-2.5 sm:gap-3 px-2 sm:px-3 py-2.5 sm:py-3 transition-colors hover:bg-slate-50/60">
       {/* Avatar */}
-      <div className={`grid h-8 w-8 sm:h-9 sm:w-9 shrink-0 place-items-center rounded-full font-display text-xs font-bold ${tone.avatar}`}>
+      <div className={`grid h-8 w-8 sm:h-9 sm:w-9 shrink-0 place-items-center rounded-full text-xs font-bold ${tone.avatar}`}>
         {initials}
       </div>
 
@@ -1083,7 +1083,7 @@ function ProfitRow({ pct, label, initials, value, tone }) {
       <div className="min-w-0 flex-1">
         <div className="flex items-center justify-between gap-2">
           <p className="truncate text-xs sm:text-sm font-bold text-ink">{label}</p>
-          <span className={`shrink-0 font-display text-xs sm:text-sm font-extrabold tabular-nums ${pctColor}`}>{pct}%</span>
+          <span className={`shrink-0 text-xs sm:text-sm font-extrabold tabular-nums ${pctColor}`}>{pct}%</span>
         </div>
         <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
           <div
@@ -1113,20 +1113,20 @@ function TransferCard({ name, initials, total, details }) {
       {/* Header — icon chip + name */}
       <div className="px-4 sm:px-6 pt-4 sm:pt-5 pb-3 sm:pb-4 flex items-center justify-between gap-3">
         <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-          <div className="grid h-9 w-9 sm:h-10 sm:w-10 shrink-0 place-items-center rounded-full bg-plugin/10 text-plugin">
+          <div className="grid h-9 w-9 sm:h-10 sm:w-10 shrink-0 place-items-center rounded-full bg-secondary/10 text-secondary">
             <Wallet className="h-[18px] w-[18px]" />
           </div>
           <div className="min-w-0">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-muted">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-ash">
               Transfer ke
             </p>
-            <h3 className="mt-0.5 font-display text-lg sm:text-xl font-bold text-ink truncate">
+            <h3 className="mt-0.5 text-lg sm:text-xl font-bold text-ink truncate">
               {name}
             </h3>
           </div>
         </div>
         <div className="text-right shrink-0">
-          <span className="inline-flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-plugin/10 font-display text-[11px] sm:text-xs font-bold text-plugin">
+          <span className="inline-flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-secondary/10 text-[11px] sm:text-xs font-bold text-secondary">
             {initials}
           </span>
         </div>
@@ -1140,7 +1140,7 @@ function TransferCard({ name, initials, total, details }) {
           return (
             <li key={d.label} className="px-2 sm:px-3 py-2 rounded-lg hover:bg-slate-50/60 transition-colors">
               <div className="flex items-center justify-between gap-2">
-                <span className="truncate text-xs sm:text-sm text-muted">{d.label}</span>
+                <span className="truncate text-xs sm:text-sm text-ash">{d.label}</span>
                 <span className="shrink-0 font-mono text-xs sm:text-sm font-bold tabular-nums text-ink">
                   {formatRupiah(d.value)}
                 </span>
@@ -1152,7 +1152,7 @@ function TransferCard({ name, initials, total, details }) {
                     style={{ width: `${Math.min(Math.max(pct, 0), 100)}%` }}
                   />
                 </div>
-                <span className="shrink-0 w-10 text-right font-display text-[11px] font-bold tabular-nums text-plugin">
+                <span className="shrink-0 w-10 text-right text-[11px] font-bold tabular-nums text-secondary">
                   {pct.toFixed(0)}%
                 </span>
               </div>
@@ -1162,11 +1162,11 @@ function TransferCard({ name, initials, total, details }) {
       </ul>
 
       {/* Hero total */}
-      <div className="mx-3 sm:mx-4 mb-3 sm:mb-4 rounded-xl bg-plugin-soft/50 px-3 sm:px-4 py-3 flex items-center justify-between gap-2">
-        <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-plugin">
+      <div className="mx-3 sm:mx-4 mb-3 sm:mb-4 rounded-xl bg-secondary/10/50 px-3 sm:px-4 py-3 flex items-center justify-between gap-2">
+        <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-secondary">
           Total Transfer
         </span>
-        <span className="font-display text-base sm:text-lg font-extrabold tabular-nums text-plugin">
+        <span className="text-base sm:text-lg font-extrabold tabular-nums text-secondary">
           {formatRupiah(total)}
         </span>
       </div>
@@ -1179,8 +1179,8 @@ function TransferCard({ name, initials, total, details }) {
 function CustomBarTooltip({ active, payload, label }) {
   if (!active || !payload || !payload.length) return null;
   return (
-    <div className="rounded-md border border-border bg-surface-2 p-3 shadow-card-hover min-w-[200px]">
-      <p className="mb-2 border-b border-border pb-1.5 text-xs font-bold text-ink">
+    <div className="rounded-md border border-hairline bg-surface-card p-3  min-w-[200px]">
+      <p className="mb-2 border-b border-hairline pb-1.5 text-xs font-bold text-ink">
         {label}
       </p>
       <div className="space-y-1.5">
@@ -1190,7 +1190,7 @@ function CustomBarTooltip({ active, payload, label }) {
               className="h-2 w-2 shrink-0 rounded-sm"
               style={{ backgroundColor: p.color }}
             />
-            <span className="flex-1 text-muted">{p.name}</span>
+            <span className="flex-1 text-ash">{p.name}</span>
             <span className="font-mono font-semibold tabular-nums text-ink">
               {formatRupiah(p.value)}
             </span>
@@ -1228,8 +1228,8 @@ function CustomPieTooltip({ active, payload }) {
   const p = payload[0];
   const d = p.payload;
   return (
-    <div className="rounded-md border border-border bg-surface-2 p-3 shadow-card-hover min-w-[180px]">
-      <div className="flex items-center gap-2 border-b border-border pb-1.5">
+    <div className="rounded-md border border-hairline bg-surface-card p-3  min-w-[180px]">
+      <div className="flex items-center gap-2 border-b border-hairline pb-1.5">
         <span
           className="h-2.5 w-2.5 rounded-sm"
           style={{ backgroundColor: d.color }}
@@ -1238,13 +1238,13 @@ function CustomPieTooltip({ active, payload }) {
       </div>
       <div className="mt-2 space-y-1">
         <div className="flex items-center justify-between text-xs">
-          <span className="text-muted">Profit</span>
+          <span className="text-ash">Profit</span>
           <span className="font-mono font-bold tabular-nums text-ink">
             {formatRupiah(p.value)}
           </span>
         </div>
         <div className="flex items-center justify-between text-xs">
-          <span className="text-muted">Kontribusi</span>
+          <span className="text-ash">Kontribusi</span>
           <span className="font-bold tabular-nums text-primary">
             {d.pct?.toFixed(1)}%
           </span>

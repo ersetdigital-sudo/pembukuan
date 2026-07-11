@@ -5,7 +5,7 @@ import { formatPercent } from "@/lib/utils/format";
 export default function ComparisonIndicator({ current, previous, label = "vs periode lalu", reverse = false }) {
   if (previous == null || previous === 0) {
     return (
-      <span className="inline-flex items-center gap-1 text-[11px] text-muted">
+      <span className="inline-flex items-center gap-1 text-[11px] text-ash">
         <Minus className="h-3 w-3" />
         {label}
       </span>
@@ -21,7 +21,7 @@ export default function ComparisonIndicator({ current, previous, label = "vs per
       className={cn(
         "inline-flex items-center gap-0.5 text-[11px] font-semibold",
         pct === 0
-          ? "text-muted"
+          ? "text-ash"
           : isGood
           ? "text-success"
           : "text-danger"
@@ -34,7 +34,7 @@ export default function ComparisonIndicator({ current, previous, label = "vs per
       ) : (
         <ArrowDown className="h-3 w-3" />
       )}
-      {formatPercent(Math.abs(pct), 1)} <span className="font-normal text-muted-foreground">{label}</span>
+      {formatPercent(Math.abs(pct), 1)} <span className="font-normal text-ash">{label}</span>
     </span>
   );
 }

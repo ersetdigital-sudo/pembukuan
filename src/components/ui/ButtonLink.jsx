@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils/cn";
 const variants = {
   primary: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm",
   secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-sm",
-  outline: "border border-border bg-surface-2 text-ink hover:bg-surface",
+  outline: "border border-hairline bg-surface-card text-ink hover:bg-surface",
   ghost: "text-ink hover:bg-surface",
   danger: "bg-danger text-danger-foreground hover:bg-danger/90 shadow-sm",
 };

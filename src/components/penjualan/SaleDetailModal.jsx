@@ -53,10 +53,10 @@ function getSaleTotals(s) {
 
 function InfoRow({ icon: Icon, label, value, valueClass = "" }) {
   return (
-    <div className="flex items-center justify-between gap-3 py-2 border-b border-border/60 last:border-0">
+    <div className="flex items-center justify-between gap-3 py-2 border-b border-hairline/60 last:border-0">
       <div className="flex items-center gap-2 shrink-0">
-        {Icon && <Icon className="h-3.5 w-3.5 text-muted-foreground" />}
-        <span className="text-xs text-muted-foreground">{label}</span>
+        {Icon && <Icon className="h-3.5 w-3.5 text-ash" />}
+        <span className="text-xs text-ash">{label}</span>
       </div>
       <div
         className={`text-xs font-semibold text-right text-ink min-w-0 truncate ${valueClass}`}
@@ -70,8 +70,8 @@ function InfoRow({ icon: Icon, label, value, valueClass = "" }) {
 function SectionTitle({ icon: Icon, children }) {
   return (
     <div className="flex items-center gap-2 pb-1">
-      {Icon && <Icon className="h-3.5 w-3.5 text-muted-foreground" />}
-      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+      {Icon && <Icon className="h-3.5 w-3.5 text-ash" />}
+      <p className="text-[10px] font-bold text-ash uppercase tracking-wider">
         {children}
       </p>
     </div>
@@ -113,7 +113,7 @@ export default function SaleDetailModal({
           <div className="min-w-0 flex-1">
             <DialogTitle>Detail Transaksi</DialogTitle>
             {sale.invoice && (
-              <p className="text-[10px] font-mono text-muted mt-0.5 truncate">
+              <p className="text-[10px] font-mono text-ash mt-0.5 truncate">
                 {sale.invoice}
               </p>
             )}
@@ -123,7 +123,7 @@ export default function SaleDetailModal({
         <div className="px-5 py-4 space-y-4">
           {/* Hero profit card — gradient */}
           <div
-            className={`relative overflow-hidden rounded-xl p-4 shadow-card-hover ${
+            className={`relative overflow-hidden rounded-xl p-4  ${
               profitPositive
                 ? "bg-gradient-to-br from-success to-success/85"
                 : "bg-gradient-to-br from-danger to-danger/85"
@@ -138,7 +138,7 @@ export default function SaleDetailModal({
                     Profit Bersih
                   </p>
                 </div>
-                <p className="font-display text-2xl sm:text-3xl font-bold leading-tight">
+                <p className="text-2xl sm:text-3xl font-bold leading-tight">
                   {formatRupiah(profit)}
                 </p>
                 <p className="text-[10px] opacity-80 mt-1">
@@ -157,28 +157,28 @@ export default function SaleDetailModal({
 
           {/* Quick stats — 2 col grid */}
           <div className="grid grid-cols-2 gap-2">
-            <div className="rounded-xl border border-border bg-surface-2 p-3">
-              <div className="flex items-center gap-1.5 text-muted-foreground">
+            <div className="rounded-xl border border-hairline bg-surface-card p-3">
+              <div className="flex items-center gap-1.5 text-ash">
                 <DollarSign className="h-3 w-3" />
                 <p className="text-[10px] uppercase tracking-wider font-semibold">Penjualan</p>
               </div>
-              <p className="font-display text-sm font-bold text-ink mt-1">
+              <p className="text-sm font-bold text-ink mt-1">
                 {formatRupiah(totalJual)}
               </p>
             </div>
-            <div className="rounded-xl border border-border bg-surface-2 p-3">
-              <div className="flex items-center gap-1.5 text-muted-foreground">
+            <div className="rounded-xl border border-hairline bg-surface-card p-3">
+              <div className="flex items-center gap-1.5 text-ash">
                 <Wallet className="h-3 w-3" />
                 <p className="text-[10px] uppercase tracking-wider font-semibold">Modal</p>
               </div>
-              <p className="font-display text-sm font-bold text-ink mt-1">
+              <p className="text-sm font-bold text-ink mt-1">
                 {formatRupiah(totalBeli)}
               </p>
             </div>
           </div>
 
           {/* Info pembeli */}
-          <div className="rounded-xl border border-border bg-surface-2 px-4 py-1">
+          <div className="rounded-xl border border-hairline bg-surface-card px-4 py-1">
             <div className="pt-2">
               <SectionTitle icon={User}>Info Pembeli</SectionTitle>
             </div>
@@ -222,16 +222,16 @@ export default function SaleDetailModal({
               {produkList.map((p, i) => (
                 <div
                   key={i}
-                  className="rounded-xl border border-border bg-surface-2 overflow-hidden hover:shadow-card transition-shadow"
+                  className="rounded-xl border border-hairline bg-surface-card overflow-hidden hover: transition-shadow"
                 >
-                  <div className="px-4 py-2 bg-surface/60 border-b border-border/60 flex items-center justify-between gap-2">
+                  <div className="px-4 py-2 bg-surface/60 border-b border-hairline/60 flex items-center justify-between gap-2">
                     <p className="text-xs font-bold text-primary truncate min-w-0">
                       {produkList.length > 1
                         ? `Produk ${i + 1}`
                         : p.nama_produk || "—"}
                     </p>
                     {p.kategori_produk && (
-                      <Badge className="bg-plugin-soft text-plugin border border-plugin/30">
+                      <Badge className="bg-secondary/10 text-secondary border border-secondary/30">
                         {p.kategori_produk}
                       </Badge>
                     )}
@@ -280,7 +280,7 @@ export default function SaleDetailModal({
           </div>
 
           {/* Ringkasan finansial */}
-          <div className="rounded-xl border border-border bg-surface-2 px-4 py-1">
+          <div className="rounded-xl border border-hairline bg-surface-card px-4 py-1">
             <div className="pt-2">
               <SectionTitle icon={TrendingUp}>Ringkasan Finansial</SectionTitle>
             </div>

@@ -177,7 +177,7 @@ export default function ProdukPage() {
           label="Plugin"
           value={formatNumber(pluginCount)}
           icon={Tag}
-          color="text-plugin"
+          color="text-secondary"
         />
         <StatCard
           label="Jasa"
@@ -196,7 +196,7 @@ export default function ProdukPage() {
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-2 mb-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ash" />
           <Input
             placeholder="Cari nama produk…"
             value={search}
@@ -207,7 +207,7 @@ export default function ProdukPage() {
         <select
           value={kategori}
           onChange={(e) => setKategori(e.target.value)}
-          className="h-10 px-3 rounded-md border border-input bg-surface-2 text-sm"
+          className="h-10 px-3 rounded-md border border-input bg-surface-card text-sm"
         >
           <option value="all">Semua Kategori</option>
           {KATEGORI.map((k) => (
@@ -248,7 +248,7 @@ export default function ProdukPage() {
                       <div className="flex flex-col">
                         <span>{p.nama_produk}</span>
                         {p.keterangan && (
-                          <span className="text-[10px] text-muted truncate max-w-[200px]">
+                          <span className="text-[10px] text-ash truncate max-w-[200px]">
                             {p.keterangan}
                           </span>
                         )}
@@ -261,7 +261,7 @@ export default function ProdukPage() {
                         {p.kategori}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-right text-sm text-muted">
+                    <TableCell className="text-right text-sm text-ash">
                       {formatRupiah(p.harga_beli)}
                     </TableCell>
                     <TableCell className="text-right text-sm font-medium">
@@ -282,7 +282,7 @@ export default function ProdukPage() {
                           {margin.toFixed(1)}%
                         </span>
                       ) : (
-                        <span className="text-sm text-muted">-</span>
+                        <span className="text-sm text-ash">-</span>
                       )}
                     </TableCell>
                     <TableCell>
@@ -291,7 +291,7 @@ export default function ProdukPage() {
                           type="button"
                           aria-label="Edit produk"
                           onClick={() => handleOpenEdit(p)}
-                          className="grid h-7 w-7 place-items-center rounded text-muted-foreground hover:bg-surface hover:text-ink transition-colors"
+                          className="grid h-7 w-7 place-items-center rounded text-ash hover:bg-surface hover:text-ink transition-colors"
                         >
                           <Pencil className="h-3.5 w-3.5" />
                         </button>
@@ -299,7 +299,7 @@ export default function ProdukPage() {
                           type="button"
                           aria-label="Hapus produk"
                           onClick={() => setDeleteId(p.id)}
-                          className="grid h-7 w-7 place-items-center rounded text-muted-foreground hover:bg-danger/10 hover:text-danger transition-colors"
+                          className="grid h-7 w-7 place-items-center rounded text-ash hover:bg-danger/10 hover:text-danger transition-colors"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
                         </button>
@@ -345,14 +345,14 @@ export default function ProdukPage() {
 
 function StatCard({ label, value, icon: Icon, color = "text-ink" }) {
   return (
-    <div className="rounded-card border border-border bg-surface-2 p-3">
+    <div className="rounded-md border border-hairline bg-surface-card p-3">
       <div className="flex items-center gap-2 mb-1">
         {Icon && <Icon className={`h-4 w-4 ${color}`} />}
-        <p className="text-[10px] uppercase tracking-wider font-semibold text-muted">
+        <p className="text-[10px] uppercase tracking-wider font-semibold text-ash">
           {label}
         </p>
       </div>
-      <p className={`font-display text-lg font-bold ${color}`}>{value}</p>
+      <p className={`text-lg font-bold ${color}`}>{value}</p>
     </div>
   );
 }

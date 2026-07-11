@@ -29,13 +29,13 @@ export default function PemasukanPage() {
         subtitle={`${sorted.length} entri · 12 bulan terakhir`}
       >
         <div className="text-right">
-          <p className="text-[10px] uppercase tracking-wider text-muted font-semibold">Total</p>
-          <p className="font-display text-lg font-bold text-primary">{formatRupiah(total)}</p>
+          <p className="text-[10px] uppercase tracking-wider text-ash font-semibold">Total</p>
+          <p className="text-lg font-bold text-primary">{formatRupiah(total)}</p>
         </div>
       </PageHeader>
 
       <div className="relative mb-4 max-w-md">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ash" />
         <Input
           placeholder="Cari keterangan…"
           value={search}
@@ -59,7 +59,7 @@ export default function PemasukanPage() {
             <TableBody>
               {filtered.map((i) => (
                 <TableRow key={i.id}>
-                  <TableCell className="text-muted">{formatDate(i.tanggal)}</TableCell>
+                  <TableCell className="text-ash">{formatDate(i.tanggal)}</TableCell>
                   <TableCell className="font-medium">{i.keterangan}</TableCell>
                   <TableCell className="text-right font-bold text-primary">
                     {formatRupiah(i.jumlah)}

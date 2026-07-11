@@ -20,7 +20,7 @@ export default function ProfitSharingCard({ sharing, periodLabel }) {
       {/* Header */}
       <CardHeader className="pb-2 flex items-center justify-between gap-2">
         <div className="min-w-0">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-muted">
+          <p className="text-button-sm font-mono uppercase tracking-[0.5px] text-ash">
             Rekap Transfer · {periodLabel}
           </p>
           <CardTitle className="mt-0.5">Pembagian Profit</CardTitle>
@@ -40,11 +40,11 @@ export default function ProfitSharingCard({ sharing, periodLabel }) {
             { label: "Plugin (40%)", value: pluginAndri },
             { label: "Jasa (40%)", value: jasaAndri },
           ]}
-          tone="plugin"
+          tone="secondary"
         />
 
         {/* Divider */}
-        <div className="h-px bg-border" />
+        <div className="h-px bg-hairline" />
 
         {/* Asrud */}
         <TransferBlock
@@ -64,16 +64,16 @@ export default function ProfitSharingCard({ sharing, periodLabel }) {
 }
 
 function TransferBlock({ name, initials, total, details, tone }) {
-  const isPlugin = tone === "plugin";
+  const isSecondary = tone === "secondary";
   const hasShare = details.reduce((s, d) => s + (d.value || 0), 0) > 0;
   const totalPositive = total >= 0;
 
   const toneMap = {
-    plugin: {
-      avatar: "bg-plugin/10 text-plugin",
-      bar: "from-plugin to-indigo-400",
-      pct: "text-plugin",
-      badge: "bg-plugin-soft/50 text-plugin",
+    secondary: {
+      avatar: "bg-secondary/10 text-secondary",
+      bar: "from-secondary to-blue-400",
+      pct: "text-secondary",
+      badge: "bg-secondary/10 text-secondary",
     },
     success: {
       avatar: "bg-success/10 text-success",
@@ -82,19 +82,19 @@ function TransferBlock({ name, initials, total, details, tone }) {
       badge: "bg-success/10 text-success",
     },
   };
-  const t = isPlugin ? toneMap.plugin : toneMap.success;
+  const t = isSecondary ? toneMap.secondary : toneMap.success;
 
   return (
     <div>
       {/* Person header */}
       <div className="flex items-center justify-between gap-2 mb-2">
         <div className="flex items-center gap-2 min-w-0">
-          <div className={`grid h-7 w-7 shrink-0 place-items-center rounded-full font-display text-[10px] font-bold ${t.avatar}`}>
+          <div className={`grid h-7 w-7 shrink-0 place-items-center rounded-full text-[10px] font-bold ${t.avatar}`}>
             {initials}
           </div>
           <div className="min-w-0">
             <p className="text-xs font-bold text-ink truncate">{name}</p>
-            <p className="text-[10px] text-muted">Transfer ke</p>
+            <p className="text-[10px] text-ash">Transfer ke</p>
           </div>
         </div>
         <span className={`shrink-0 font-mono text-xs font-bold tabular-nums ${totalPositive ? "text-ink" : "text-danger"}`}>
@@ -110,19 +110,19 @@ function TransferBlock({ name, initials, total, details, tone }) {
           return (
             <li key={d.label}>
               <div className="flex items-center justify-between gap-2">
-                <span className="text-[11px] text-muted truncate">{d.label}</span>
+                <span className="text-[11px] text-ash truncate">{d.label}</span>
                 <span className={`shrink-0 font-mono text-[11px] font-bold tabular-nums ${positive ? "text-ink" : "text-danger"}`}>
                   {formatRupiah(d.value)}
                 </span>
               </div>
               <div className="mt-1 flex items-center gap-2">
-                <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-100">
+                <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-background-bone">
                   <div
                     className={`h-full rounded-full bg-gradient-to-r ${positive ? t.bar : "from-danger to-red-400"} animate-bar-fill`}
                     style={{ width: `${Math.min(Math.max(pct, 0), 100)}%` }}
                   />
                 </div>
-                <span className={`shrink-0 w-8 text-right font-display text-[10px] font-bold tabular-nums ${t.pct}`}>
+                <span className={`shrink-0 w-8 text-right text-[10px] font-bold tabular-nums ${t.pct}`}>
                   {pct.toFixed(0)}%
                 </span>
               </div>

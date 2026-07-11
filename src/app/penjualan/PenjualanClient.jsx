@@ -194,7 +194,6 @@ export default function PenjualanClient() {
         <MonthPicker month={month} year={year} />
         <Button
           variant="primary"
-          className="bg-plugin hover:bg-plugin/90 text-white"
           onClick={openTambah}
         >
           <Plus className="h-4 w-4" />
@@ -215,8 +214,8 @@ export default function PenjualanClient() {
           title="Total Modal"
           value={formatRupiah(totalModal)}
           icon={Wallet}
-          iconBg="bg-sky-100"
-          iconColor="text-sky-600"
+          iconBg="bg-info/10"
+          iconColor="text-info"
         />
         <CompactStat
           title="Total Fee MP"
@@ -229,21 +228,21 @@ export default function PenjualanClient() {
           title="Total Profit"
           value={formatRupiah(totalProfit)}
           icon={Star}
-          iconBg="bg-plugin-soft"
-          iconColor="text-plugin"
+          iconBg="bg-secondary/10"
+          iconColor="text-secondary"
         />
       </div>
 
       {/* Search bar */}
       {sorted.length > 0 && (
         <div className="mb-4 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted pointer-events-none" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ash pointer-events-none" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Cari pembeli atau produk..."
-            className="w-full md:max-w-sm pl-9 pr-4 py-2 rounded-card border border-border bg-surface text-sm text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full md:max-w-sm pl-9 pr-4 py-2 rounded-xs border border-hairline bg-surface text-sm text-ink placeholder:text-stone focus:outline-none focus:ring-2 focus:ring-secondary/30"
           />
         </div>
       )}
@@ -257,30 +256,30 @@ export default function PenjualanClient() {
             <EmptyState message={`Tidak ada hasil untuk "${query}"`} />
           ) : (
             <>
-              <div className="hidden md:block rounded-card border border-border bg-surface-2 overflow-hidden shadow-card">
+              <div className="hidden md:block rounded-md border border-hairline bg-surface-card overflow-hidden">
             <div className="overflow-x-auto scroll-thin">
               <table className="w-full text-sm border-collapse">
-                <thead className="bg-surface/80 border-b-2 border-border">
+                <thead className="bg-surface/80 border-b-2 border-hairline">
                   <tr>
-                    <th className="text-left px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-ink border-r border-border last:border-r-0">
+                    <th className="text-left px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-ink border-r border-hairline last:border-r-0">
                       Tanggal
                     </th>
-                    <th className="text-left px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-ink border-r border-border">
+                    <th className="text-left px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-ink border-r border-hairline">
                       Pembeli
                     </th>
-                    <th className="text-left px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-ink border-r border-border">
+                    <th className="text-left px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-ink border-r border-hairline">
                       Marketplace
                     </th>
-                    <th className="text-left px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-ink border-r border-border">
+                    <th className="text-left px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-ink border-r border-hairline">
                       Produk
                     </th>
-                    <th className="text-right px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-ink border-r border-border">
+                    <th className="text-right px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-ink border-r border-hairline">
                       Fee MP
                     </th>
-                    <th className="text-right px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-ink border-r border-border">
+                    <th className="text-right px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-ink border-r border-hairline">
                       Total Jual
                     </th>
-                    <th className="text-right px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-ink border-r border-border">
+                    <th className="text-right px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-ink border-r border-hairline">
                       Profit
                     </th>
                     <th className="w-28"></th>
@@ -293,22 +292,22 @@ export default function PenjualanClient() {
                   return (
                     <tr
                       key={s.id}
-                      className={`border-b border-border transition-colors hover:bg-plugin/5 ${
-                        idx % 2 === 0 ? "bg-surface-2" : "bg-surface/30"
+                      className={`border-b border-hairline transition-colors hover:bg-secondary/5 ${
+                        idx % 2 === 0 ? "bg-surface-card" : "bg-surface/30"
                       }`}
                     >
-                      <td className="px-3 py-2 text-xs text-muted border-r border-border whitespace-nowrap">
+                      <td className="px-3 py-2 text-xs text-ash border-r border-hairline whitespace-nowrap">
                         {formatDate(s.tanggal)}
                       </td>
-                      <td className="px-3 py-2 font-medium text-ink border-r border-border align-middle whitespace-nowrap">
+                      <td className="px-3 py-2 font-medium text-ink border-r border-hairline align-middle whitespace-nowrap">
                         {s.nama_pembeli}
                       </td>
-                      <td className="px-3 py-2 border-r border-border">
+                      <td className="px-3 py-2 border-r border-hairline">
                         <Badge className={MP_BADGE[s.marketplace] || ""}>
                           {s.marketplace}
                         </Badge>
                       </td>
-                      <td className="px-3 py-2 border-r border-border align-middle">
+                      <td className="px-3 py-2 border-r border-hairline align-middle">
                         <div className="flex items-baseline gap-1.5 text-xs leading-snug min-w-0">
                           <span className="font-medium text-ink truncate min-w-0">
                             {produk[0]?.nama_produk}
@@ -319,7 +318,7 @@ export default function PenjualanClient() {
                             </span>
                           )}
                           {produk[0]?.masa_aktif && (
-                            <span className="text-muted text-[10px] shrink-0">
+                            <span className="text-ash text-[10px] shrink-0">
                               ({produk[0].masa_aktif})
                             </span>
                           )}
@@ -330,17 +329,17 @@ export default function PenjualanClient() {
                           )}
                         </div>
                       </td>
-                      <td className="px-3 py-2 text-right text-xs font-semibold border-r border-border whitespace-nowrap">
+                      <td className="px-3 py-2 text-right text-xs font-semibold border-r border-hairline whitespace-nowrap">
                         {s.fee_mp ? (
                           <span className="text-secondary">{formatRupiah(s.fee_mp)}</span>
                         ) : (
-                          <span className="text-muted">-</span>
+                          <span className="text-ash">-</span>
                         )}
                       </td>
-                      <td className="px-3 py-2 text-right font-semibold text-ink border-r border-border whitespace-nowrap">
+                      <td className="px-3 py-2 text-right font-semibold text-ink border-r border-hairline whitespace-nowrap">
                         {formatRupiah(totals.totalJual)}
                       </td>
-                      <td className="px-3 py-2 text-right font-bold text-plugin border-r border-border whitespace-nowrap">
+                      <td className="px-3 py-2 text-right font-bold text-secondary border-r border-hairline whitespace-nowrap">
                         {formatRupiah(totals.profit)}
                       </td>
                       <td className="px-2 py-2">
@@ -349,7 +348,7 @@ export default function PenjualanClient() {
                             type="button"
                             aria-label="Lihat detail"
                             onClick={() => setDetailSale(s)}
-                            className="p-1.5 text-muted-foreground hover:text-primary hover:bg-surface rounded transition-colors"
+                            className="p-1.5 text-ash hover:text-secondary hover:bg-surface rounded transition-colors"
                           >
                             <Eye className="h-3.5 w-3.5" />
                           </button>
@@ -357,7 +356,7 @@ export default function PenjualanClient() {
                             type="button"
                             aria-label="Edit"
                             onClick={() => openEdit(s)}
-                            className="p-1.5 text-muted-foreground hover:text-primary hover:bg-surface rounded transition-colors"
+                            className="p-1.5 text-ash hover:text-secondary hover:bg-surface rounded transition-colors"
                           >
                             <Pencil className="h-3.5 w-3.5" />
                           </button>
@@ -365,7 +364,7 @@ export default function PenjualanClient() {
                             type="button"
                             aria-label="Hapus"
                             onClick={() => handleDelete(s)}
-                            className="p-1.5 text-muted-foreground hover:text-danger hover:bg-danger/10 rounded transition-colors"
+                            className="p-1.5 text-ash hover:text-danger hover:bg-danger/10 rounded transition-colors"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
                           </button>
@@ -456,17 +455,17 @@ export default function PenjualanClient() {
 
 function CompactStat({ title, value, icon: Icon, iconBg, iconColor }) {
   return (
-    <div className="h-full rounded-card border border-border bg-surface-2 p-2.5 sm:p-3 flex items-center gap-2.5 sm:gap-3 shadow-card hover:shadow-card-hover transition-shadow">
+    <div className="h-full rounded-md border border-hairline bg-surface-card p-2.5 sm:p-3 flex items-center gap-2.5 sm:gap-3 transition-colors">
       <div
-        className={`h-8 w-8 sm:h-10 sm:w-10 rounded-lg sm:rounded-xl grid place-items-center shrink-0 ${iconBg} ${iconColor}`}
+        className={`h-8 w-8 sm:h-10 sm:w-10 rounded-md grid place-items-center shrink-0 ${iconBg} ${iconColor}`}
       >
         <Icon className="h-4 w-4 sm:h-5 sm:w-5" strokeWidth={2.25} />
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold text-muted leading-none truncate">
+        <p className="text-button-sm font-mono uppercase tracking-[0.5px] text-ash leading-none truncate">
           {title}
         </p>
-        <p className="font-display text-sm sm:text-lg font-bold mt-1 sm:mt-1.5 leading-tight text-ink tabular-nums tracking-tight break-words">
+        <p className="text-sm sm:text-lg font-bold mt-1 sm:mt-1.5 leading-tight text-ink tabular-nums tracking-tight break-words">
           {value}
         </p>
       </div>
@@ -478,11 +477,11 @@ function CompactStat({ title, value, icon: Icon, iconBg, iconColor }) {
 function MobileSaleCard({ sale, totals, produk, onDetail, onEdit, onDelete }) {
   const profitPositive = totals.profit >= 0;
   return (
-    <div className="rounded-card border border-border bg-surface-2 shadow-card overflow-hidden">
+    <div className="rounded-md border border-hairline bg-surface-card overflow-hidden">
       {/* Header: date + marketplace + actions */}
-      <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-border/40 bg-surface/30">
+      <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-hairline/40 bg-surface/30">
         <div className="flex items-center gap-2 min-w-0 flex-1">
-          <span className="text-[10px] font-mono text-muted whitespace-nowrap shrink-0">
+          <span className="text-[10px] font-mono text-ash whitespace-nowrap shrink-0">
             {formatDate(sale.tanggal)}
           </span>
           {sale.marketplace && (
@@ -496,7 +495,7 @@ function MobileSaleCard({ sale, totals, produk, onDetail, onEdit, onDelete }) {
             type="button"
             aria-label="Lihat detail"
             onClick={onDetail}
-            className="p-2 text-muted-foreground hover:text-primary hover:bg-surface rounded transition-colors"
+            className="p-2 text-ash hover:text-secondary hover:bg-surface rounded transition-colors"
           >
             <Eye className="h-4 w-4" />
           </button>
@@ -504,7 +503,7 @@ function MobileSaleCard({ sale, totals, produk, onDetail, onEdit, onDelete }) {
             type="button"
             aria-label="Edit"
             onClick={onEdit}
-            className="p-2 text-muted-foreground hover:text-primary hover:bg-surface rounded transition-colors"
+            className="p-2 text-ash hover:text-secondary hover:bg-surface rounded transition-colors"
           >
             <Pencil className="h-4 w-4" />
           </button>
@@ -512,7 +511,7 @@ function MobileSaleCard({ sale, totals, produk, onDetail, onEdit, onDelete }) {
             type="button"
             aria-label="Hapus"
             onClick={onDelete}
-            className="p-2 text-muted-foreground hover:text-danger hover:bg-danger/10 rounded transition-colors"
+            className="p-2 text-ash hover:text-danger hover:bg-danger/10 rounded transition-colors"
           >
             <Trash2 className="h-4 w-4" />
           </button>
@@ -522,7 +521,7 @@ function MobileSaleCard({ sale, totals, produk, onDetail, onEdit, onDelete }) {
       {/* Body: buyer + products */}
       <div className="px-3 py-2.5 space-y-2">
         <div>
-          <p className="text-[9px] uppercase tracking-wider text-muted-foreground font-semibold leading-none">
+          <p className="text-[9px] uppercase tracking-wider text-ash font-semibold leading-none">
             Pembeli
           </p>
           <p className="text-sm font-bold text-ink mt-1 break-words">
@@ -530,7 +529,7 @@ function MobileSaleCard({ sale, totals, produk, onDetail, onEdit, onDelete }) {
           </p>
         </div>
         <div>
-          <p className="text-[9px] uppercase tracking-wider text-muted-foreground font-semibold leading-none">
+          <p className="text-[9px] uppercase tracking-wider text-ash font-semibold leading-none">
             Produk
           </p>
           <div className="mt-1 flex flex-col gap-0.5">
@@ -546,7 +545,7 @@ function MobileSaleCard({ sale, totals, produk, onDetail, onEdit, onDelete }) {
                   <span className="font-bold text-ink shrink-0">×{p.qty}</span>
                 )}
                 {p.masa_aktif && (
-                  <span className="text-muted text-[10px] shrink-0">
+                  <span className="text-ash text-[10px] shrink-0">
                     ({p.masa_aktif})
                   </span>
                 )}
@@ -557,9 +556,9 @@ function MobileSaleCard({ sale, totals, produk, onDetail, onEdit, onDelete }) {
       </div>
 
       {/* Footer: 3-col financials grid */}
-      <div className="grid grid-cols-3 border-t border-border/40 divide-x divide-border/40">
+      <div className="grid grid-cols-3 border-t border-hairline/40 divide-x divide-hairline/40">
         <div className="px-2.5 py-2">
-          <p className="text-[9px] uppercase tracking-wider text-muted-foreground font-semibold leading-none">
+          <p className="text-[9px] uppercase tracking-wider text-ash font-semibold leading-none">
             Fee MP
           </p>
           <p className="text-[11px] sm:text-xs font-semibold text-secondary mt-1.5 truncate">
@@ -567,7 +566,7 @@ function MobileSaleCard({ sale, totals, produk, onDetail, onEdit, onDelete }) {
           </p>
         </div>
         <div className="px-2.5 py-2">
-          <p className="text-[9px] uppercase tracking-wider text-muted-foreground font-semibold leading-none">
+          <p className="text-[9px] uppercase tracking-wider text-ash font-semibold leading-none">
             Total Jual
           </p>
           <p className="text-[11px] sm:text-xs font-bold text-ink mt-1.5 truncate">
@@ -575,7 +574,7 @@ function MobileSaleCard({ sale, totals, produk, onDetail, onEdit, onDelete }) {
           </p>
         </div>
         <div className="px-2.5 py-2">
-          <p className="text-[9px] uppercase tracking-wider text-muted-foreground font-semibold leading-none">
+          <p className="text-[9px] uppercase tracking-wider text-ash font-semibold leading-none">
             Profit
           </p>
           <p

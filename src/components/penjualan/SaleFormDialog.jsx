@@ -186,7 +186,7 @@ export default function SaleFormDialog({
         </DialogHeader>
 
         {!editData && (
-          <div className="flex items-center gap-2 text-xs text-muted-foreground bg-secondary/10 rounded-lg px-3 py-2 mx-5 mt-4">
+          <div className="flex items-center gap-2 text-xs text-ash bg-secondary/10 rounded-lg px-3 py-2 mx-5 mt-4">
             <Sparkles className="w-3.5 h-3.5 text-secondary flex-shrink-0" />
             <span>
               Tempel data Shopee ke <strong>Nama Pembeli</strong> — nama & no HP otomatis terisi!
@@ -281,7 +281,7 @@ export default function SaleFormDialog({
             </div>
             <div className="space-y-1.5">
               <Label>
-                Fee MP <span className="text-[10px] text-muted">(biaya marketplace)</span>
+                Fee MP <span className="text-[10px] text-ash">(biaya marketplace)</span>
               </Label>
               <Input
                 type="number"
@@ -296,7 +296,7 @@ export default function SaleFormDialog({
           {/* Divider produk */}
           <div className="flex items-center gap-3 pt-1">
             <div className="flex-1 h-px bg-border" />
-            <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
+            <span className="text-[11px] font-bold text-ash uppercase tracking-wider">
               Produk
             </span>
             <div className="flex-1 h-px bg-border" />
@@ -307,7 +307,7 @@ export default function SaleFormDialog({
             {items.map((item, idx) => (
               <div
                 key={idx}
-                className="rounded-xl border border-border bg-surface/40 p-4 space-y-3"
+                className="rounded-xl border border-hairline bg-surface/40 p-4 space-y-3"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-primary">Produk {idx + 1}</span>
@@ -363,7 +363,7 @@ export default function SaleFormDialog({
                   <div className="space-y-1.5">
                     <Label>
                       Harga Jual{" "}
-                      <span className="text-[10px] text-muted">(per item)</span>
+                      <span className="text-[10px] text-ash">(per item)</span>
                     </Label>
                     <Input
                       value={`Rp ${Number(item.harga_jual || 0).toLocaleString("id-ID")}`}

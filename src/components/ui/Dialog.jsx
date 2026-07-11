@@ -47,7 +47,7 @@ export function DialogContent({ className = "", children }) {
       role="dialog"
       aria-modal="true"
       className={cn(
-        "relative z-10 w-full rounded-card sm:rounded-card border border-border bg-surface-2 shadow-card-hover",
+        "relative z-10 w-full rounded-md sm:rounded-md border border-hairline bg-surface-card ",
         "max-h-[92vh] sm:max-h-[90vh] overflow-y-auto scroll-thin",
         "animate-fade-scale",
         // Mobile: rounded di top aja, full-width sheet
@@ -64,7 +64,7 @@ export function DialogHeader({ className = "", children, onClose }) {
   return (
     <div
       className={cn(
-        "flex items-center justify-between gap-3 px-5 py-4 border-b border-border",
+        "flex items-center justify-between gap-3 px-5 py-4 border-b border-hairline",
         className
       )}
     >
@@ -74,7 +74,7 @@ export function DialogHeader({ className = "", children, onClose }) {
           type="button"
           onClick={onClose}
           aria-label="Tutup"
-          className="grid h-8 w-8 place-items-center rounded-md text-muted hover:bg-surface hover:text-ink transition-colors"
+          className="grid h-8 w-8 place-items-center rounded-md text-ash hover:bg-surface hover:text-ink transition-colors"
         >
           <X className="h-4 w-4" />
         </button>
@@ -85,7 +85,7 @@ export function DialogHeader({ className = "", children, onClose }) {
 
 export function DialogTitle({ className = "", children }) {
   return (
-    <h2 className={cn("font-display text-base font-bold text-ink leading-tight", className)}>
+    <h2 className={cn("text-base font-bold text-ink leading-tight", className)}>
       {children}
     </h2>
   );
@@ -95,7 +95,7 @@ export function DialogFooter({ className = "", children }) {
   return (
     <div
       className={cn(
-        "flex flex-wrap items-center justify-end gap-2 px-5 py-4 border-t border-border bg-surface/40",
+        "flex flex-wrap items-center justify-end gap-2 px-5 py-4 border-t border-hairline bg-surface/40",
         className
       )}
     >

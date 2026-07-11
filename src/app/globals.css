@@ -3,50 +3,114 @@
 @tailwind utilities;
 
 /* ===========================================================
-   Enterprise Design System — Semantic Tokens
-   Source: DESIGN.md (typeui.sh pull)
+   Sanity Design System — Semantic Tokens
+   Source: DESIGN.md (Sanity style)
    =========================================================== */
 :root {
   /* Brand */
-  --color-primary: 7 44 44;            /* #072C2C — sidebar, anchor */
-  --color-primary-foreground: 237 234 222;  /* #EDEADE — text on primary */
-
-  --color-secondary: 255 95 3;         /* #FF5F03 — accent, CTA */
+  --color-primary: 243 100 88;            /* #f36458 */
+  --color-primary-foreground: 255 255 255; /* #ffffff */
+  --color-secondary: 0 82 239;            /* #0052ef */
   --color-secondary-foreground: 255 255 255;
 
-  /* Plugin category (Kategori Plugin card, Rekap Transfer, +Tambah buttons) */
-  --color-plugin: 79 70 229;           /* #4F46E5 — indigo-600 */
-  --color-plugin-foreground: 255 255 255;
-  --color-plugin-soft: 224 231 255;    /* #E0E7FF — indigo-100 */
+  /* Backgrounds */
+  --color-background: 247 247 247;         /* #f7f7f7 */
+  --color-background-canvas: 247 247 247;  /* #f7f7f7 */
+  --color-background-bone: 255 255 255;    /* #ffffff */
 
   /* Surfaces */
-  --color-surface: 237 234 222;        /* #EDEADE — main bg */
-  --color-surface-2: 255 255 255;      /* #FFFFFF — cards */
+  --color-surface: 255 255 255;            /* #ffffff */
+  --color-surface-card: 255 255 255;       /* #ffffff */
+  --color-surface-dark: 33 33 33;          /* #212121 */
+  --color-surface-deep: 11 11 11;          /* #0b0b0b */
 
   /* Text */
-  --color-ink: 51 65 85;               /* #334155 — slate-700, softer than #111827 for long reads */
-  --color-muted: 100 116 139;          /* #64748B */
-  --color-muted-foreground: 71 85 105; /* #475569 */
+  --color-foreground: 11 11 11;            /* #0b0b0b */
+  --color-ink: 11 11 11;                   /* #0b0b0b */
+  --color-body: 11 11 11;                  /* #0b0b0b */
+  --color-charcoal: 11 11 11;              /* #0b0b0b */
+  --color-mute: 185 185 185;              /* #b9b9b9 */
+  --color-ash: 121 121 121;               /* #797979 */
+  --color-stone: 185 185 185;             /* #b9b9b9 */
 
-  /* UI */
-  --color-border: 226 232 240;         /* #E2E8F0 */
-  --color-input: 226 232 240;
-  --color-ring: 7 44 44;               /* primary focus ring */
+  /* On-color text */
+  --color-on-primary: 255 255 255;
+  --color-on-secondary: 255 255 255;
+  --color-on-background: 11 11 11;
+  --color-on-surface: 11 11 11;
+  --color-on-dark: 255 255 255;
+  --color-on-dark-mute: 185 185 185;       /* #b9b9b9 */
+
+  /* Borders */
+  --color-hairline: 237 237 237;           /* #ededed */
+  --color-hairline-strong: 33 33 33;       /* #212121 */
+  --color-divider: 237 237 237;            /* #ededed */
+  --color-divider-dark: 33 33 33;          /* #212121 */
+
+  /* Hero gradient */
+  --color-hero-warm: #f36458;
+  --color-hero-glow: #55beff;
+  --color-hero-pink: #e600ff;
 
   /* Status */
-  --color-success: 16 185 129;         /* #10B981 — emerald-500 */
-  --color-success-foreground: 255 255 255;
-  --color-warning: 217 119 6;          /* #D97706 */
-  --color-warning-foreground: 255 255 255;
-  --color-danger: 220 38 38;           /* #DC2626 */
-  --color-danger-foreground: 255 255 255;
+  --color-badge-success: 25 214 0;        /* #19d600 */
+  --color-badge-warning: 245 158 11;      /* #f59e0b */
+  --color-badge-info: 85 190 255;         /* #55beff */
+  --color-danger: 243 100 88;             /* re-use primary for danger in this system */
+
+  /* Interactive */
+  --color-link: 0 82 239;                 /* #0052ef */
+  --color-ring-focus: rgba(0, 82, 239, 0.15);
 }
 
-* { border-color: rgb(var(--color-border)); }
+/* Dark mode tokens */
+.dark {
+  --color-primary: 243 100 88;
+  --color-secondary: 0 82 239;
+
+  --color-background: 11 11 11;
+  --color-background-canvas: 11 11 11;
+  --color-background-bone: 33 33 33;
+
+  --color-surface: 33 33 33;
+  --color-surface-card: 33 33 33;
+  --color-surface-dark: 11 11 11;
+  --color-surface-deep: 0 0 0;
+
+  --color-foreground: 255 255 255;
+  --color-ink: 255 255 255;
+  --color-body: 185 185 185;
+  --color-charcoal: 255 255 255;
+  --color-mute: 121 121 121;
+  --color-ash: 185 185 185;
+  --color-stone: 121 121 121;
+
+  --color-on-primary: 255 255 255;
+  --color-on-secondary: 255 255 255;
+  --color-on-background: 255 255 255;
+  --color-on-surface: 255 255 255;
+  --color-on-dark: 255 255 255;
+  --color-on-dark-mute: 185 185 185;
+
+  --color-hairline: 33 33 33;
+  --color-hairline-strong: 121 121 121;
+  --color-divider: 33 33 33;
+  --color-divider-dark: 53 53 53;
+
+  --color-badge-success: 25 214 0;
+  --color-badge-warning: 245 158 11;
+  --color-badge-info: 85 190 255;
+  --color-danger: 243 100 88;
+
+  --color-link: 85 190 255;
+  --color-ring-focus: rgba(0, 82, 239, 0.3);
+}
+
+* { border-color: rgb(var(--color-hairline)); }
 
 html,
 body {
-  background: rgb(var(--color-surface));
+  background: rgb(var(--color-background));
   color: rgb(var(--color-ink));
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -56,25 +120,25 @@ body {
 *:focus-visible {
   outline: 2px solid rgb(var(--color-secondary));
   outline-offset: 2px;
-  border-radius: 0.25rem;
+  border-radius: 3px;
 }
 
 /* Subtle scrollbar (light bg) */
 .scroll-thin {
   scrollbar-width: thin;
-  scrollbar-color: rgb(var(--color-border)) transparent;
+  scrollbar-color: rgb(var(--color-hairline)) transparent;
 }
 .scroll-thin::-webkit-scrollbar { width: 8px; height: 8px; }
 .scroll-thin::-webkit-scrollbar-track { background: transparent; }
 .scroll-thin::-webkit-scrollbar-thumb {
-  background: rgb(var(--color-border));
-  border-radius: 9999px;
+  background: rgb(var(--color-hairline));
+  border-radius: 99999px;
 }
 .scroll-thin::-webkit-scrollbar-thumb:hover {
-  background: rgb(var(--color-muted) / 0.6);
+  background: rgb(var(--color-ash) / 0.6);
 }
 
-/* Subtle scrollbar (dark bg — sidebar, dialogs dark mode) */
+/* Subtle scrollbar (dark bg — sidebar, dialogs) */
 .scroll-thin-dark {
   scrollbar-width: thin;
   scrollbar-color: rgba(255,255,255,0.15) transparent;
@@ -83,7 +147,7 @@ body {
 .scroll-thin-dark::-webkit-scrollbar-track { background: transparent; }
 .scroll-thin-dark::-webkit-scrollbar-thumb {
   background: rgba(255,255,255,0.15);
-  border-radius: 9999px;
+  border-radius: 99999px;
 }
 .scroll-thin-dark::-webkit-scrollbar-thumb:hover {
   background: rgba(255,255,255,0.3);

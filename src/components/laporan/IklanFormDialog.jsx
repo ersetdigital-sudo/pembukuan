@@ -80,7 +80,7 @@ export default function IklanFormDialog({
       <DialogContent className="max-w-md">
         <DialogHeader onClose={() => onOpenChange(false)}>
           <div className="flex items-center gap-2 min-w-0 flex-1">
-            <Megaphone className="h-4 w-4 text-plugin shrink-0" />
+            <Megaphone className="h-4 w-4 text-secondary shrink-0" />
             <DialogTitle>
               {editData ? "Edit Biaya Iklan" : "Tambah Biaya Iklan"}
             </DialogTitle>
@@ -115,7 +115,7 @@ export default function IklanFormDialog({
                 ))}
               </SelectContent>
             </Select>
-            <p className="text-[10px] text-muted leading-relaxed">
+            <p className="text-[10px] text-ash leading-relaxed">
               Iklan <strong>Plugin</strong> mengurangi profit Plugin;{" "}
               <strong>Jasa</strong> mengurangi profit Jasa — dipotong sebelum
               dibagi Andri/Asrud/Modal.

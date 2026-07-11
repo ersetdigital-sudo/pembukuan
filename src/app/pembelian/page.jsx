@@ -30,24 +30,24 @@ export default function PembelianPage() {
         subtitle={`${sorted.length} entri · restock & pembelian operasional`}
       >
         <div className="text-right">
-          <p className="text-[10px] uppercase tracking-wider text-muted font-semibold">Total</p>
-          <p className="font-display text-lg font-bold text-primary">{formatRupiah(total)}</p>
+          <p className="text-button-sm font-mono uppercase tracking-[0.5px] text-ash">Total</p>
+          <p className="text-lg font-bold text-primary">{formatRupiah(total)}</p>
         </div>
       </PageHeader>
 
       <div className="grid grid-cols-2 gap-3 mb-4">
-        <div className="rounded-card border border-border bg-surface-2 p-3">
-          <p className="text-[10px] uppercase tracking-wider font-semibold text-muted">Total QTY</p>
-          <p className="font-display text-lg font-bold mt-1">{formatNumber(totalQty)}</p>
+        <div className="rounded-md border border-hairline bg-surface-card p-3">
+          <p className="text-button-sm font-mono uppercase tracking-[0.5px] text-ash">Total QTY</p>
+          <p className="text-lg font-bold mt-1">{formatNumber(totalQty)}</p>
         </div>
-        <div className="rounded-card border border-border bg-surface-2 p-3">
-          <p className="text-[10px] uppercase tracking-wider font-semibold text-muted">Total Belanja</p>
-          <p className="font-display text-lg font-bold text-primary mt-1">{formatRupiah(total)}</p>
+        <div className="rounded-md border border-hairline bg-surface-card p-3">
+          <p className="text-button-sm font-mono uppercase tracking-[0.5px] text-ash">Total Belanja</p>
+          <p className="text-lg font-bold text-primary mt-1">{formatRupiah(total)}</p>
         </div>
       </div>
 
       <div className="relative mb-4 max-w-md">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ash" />
         <Input
           placeholder="Cari nama produk…"
           value={search}
@@ -73,7 +73,7 @@ export default function PembelianPage() {
             <TableBody>
               {filtered.map((p) => (
                 <TableRow key={p.id}>
-                  <TableCell className="text-muted">{formatDate(p.tanggal)}</TableCell>
+                  <TableCell className="text-ash">{formatDate(p.tanggal)}</TableCell>
                   <TableCell className="font-medium">{p.nama_produk}</TableCell>
                   <TableCell className="text-center">{p.qty}</TableCell>
                   <TableCell className="text-right">{formatRupiah(p.harga_satuan)}</TableCell>

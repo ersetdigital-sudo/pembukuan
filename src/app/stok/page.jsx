@@ -37,8 +37,8 @@ export default function StokPage() {
         subtitle={`${stocks.length} produk dalam katalog`}
       >
         <div className="text-right">
-          <p className="text-[10px] uppercase tracking-wider text-muted font-semibold">Nilai Stok</p>
-          <p className="font-display text-lg font-bold text-primary">{formatRupiah(totalNilai)}</p>
+          <p className="text-[10px] uppercase tracking-wider text-ash font-semibold">Nilai Stok</p>
+          <p className="text-lg font-bold text-primary">{formatRupiah(totalNilai)}</p>
         </div>
       </PageHeader>
 
@@ -57,7 +57,7 @@ export default function StokPage() {
               <p className="font-semibold text-sm">
                 {outOfStock.length + lowStock.length} produk butuh restock
               </p>
-              <p className="text-xs text-muted mt-0.5">
+              <p className="text-xs text-ash mt-0.5">
                 {outOfStock.length} habis · {lowStock.length} stok rendah
               </p>
             </div>
@@ -67,7 +67,7 @@ export default function StokPage() {
 
       <div className="flex flex-col sm:flex-row gap-2 mb-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ash" />
           <Input
             placeholder="Cari nama produk…"
             value={search}
@@ -78,7 +78,7 @@ export default function StokPage() {
         <select
           value={kategori}
           onChange={(e) => setKategori(e.target.value)}
-          className="h-10 px-3 rounded-md border border-input bg-surface-2 text-sm"
+          className="h-10 px-3 rounded-md border border-input bg-surface-card text-sm"
         >
           <option value="all">Semua Kategori</option>
           {KATEGORI.map((k) => (
@@ -119,7 +119,7 @@ export default function StokPage() {
                         {s.kategori === "Jasa" ? "∞" : s.stok}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-right text-sm text-muted">
+                    <TableCell className="text-right text-sm text-ash">
                       {formatRupiah(s.harga_beli)}
                     </TableCell>
                     <TableCell className="text-right text-sm font-medium">
@@ -141,9 +141,9 @@ export default function StokPage() {
 
 function Stat({ label, value, color = "text-ink" }) {
   return (
-    <div className="rounded-card border border-border bg-surface-2 p-3">
-      <p className="text-[10px] uppercase tracking-wider font-semibold text-muted">{label}</p>
-      <p className={`font-display text-lg font-bold mt-1 ${color}`}>{value}</p>
+    <div className="rounded-md border border-hairline bg-surface-card p-3">
+      <p className="text-[10px] uppercase tracking-wider font-semibold text-ash">{label}</p>
+      <p className={`text-lg font-bold mt-1 ${color}`}>{value}</p>
     </div>
   );
 }

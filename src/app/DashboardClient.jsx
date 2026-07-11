@@ -1,4 +1,4 @@
-ï»¿"use client";
+"use client";
 
 import { useMemo } from "react";
 import { useSearchParams } from "next/navigation";
@@ -116,7 +116,7 @@ export default function DashboardPage() {
   const prevBiaya = totalBiaya; // approximation: same period expenses
   const prevNet = prevProfit;
 
-  // Monthly bar chart data â€” for the selected year, all 12 months
+  // Monthly bar chart data — for the selected year, all 12 months
   const monthlyData = useMemo(() => {
     return MONTHS.map((name, idx) => {
       const ms = sales.filter((s) => {
@@ -151,7 +151,7 @@ export default function DashboardPage() {
       pct: totalProfit > 0 ? Math.round((v.profit / totalProfit) * 100) : 0,
     }));
 
-  // Kategori produk breakdown â€” using per-product categorization
+  // Kategori produk breakdown — using per-product categorization
   const catMap = useMemo(() => {
     const map = { Plugin: 0, Jasa: 0 };
     periodSales.forEach((s) => {
@@ -215,7 +215,7 @@ export default function DashboardPage() {
     <div>
       <PageHeader
         title="Sales Recap"
-        subtitle={`Ringkasan bisnis OOS SHOP â€” ${periodLabel}`}
+        subtitle={`Ringkasan bisnis OOS SHOP — ${periodLabel}`}
       >
         <MonthPicker month={month} year={year} />
       </PageHeader>
@@ -290,10 +290,10 @@ export default function DashboardPage() {
 
 function ComparisonBlock({ label, current, previous, prevLabel, reverse = false }) {
   return (
-    <div className="rounded-card border border-border bg-surface-2 px-3 py-2 flex items-center justify-between gap-2">
+    <div className="rounded-md border border-hairline bg-surface-card px-3 py-2 flex items-center justify-between gap-2">
       <div className="min-w-0 flex-1">
-        <p className="text-[10px] uppercase tracking-wider font-semibold text-muted truncate leading-none">
-          {label} <span className="text-muted-foreground font-normal normal-case">vs {prevLabel}</span>
+        <p className="text-[10px] uppercase tracking-wider font-semibold text-ash truncate leading-none">
+          {label} <span className="text-ash font-normal normal-case">vs {prevLabel}</span>
         </p>
         <p className="font-mono text-sm font-bold text-ink leading-tight mt-1">{formatRupiah(current)}</p>
       </div>
