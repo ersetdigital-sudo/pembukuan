@@ -102,7 +102,7 @@ export default function LaporanPage() {
 
   const totalLaba = periodSales.reduce((sum, s) => sum + profitFn(s), 0);
   const totalFeeMP = periodSales.reduce((sum, s) => sum + (s.fee_mp || 0), 0);
-  const totalBiayaLain = periodExpenses.reduce((sum, e) => sum + (e.jumlah || 0), 0);
+  const totalBiayaOperasional = periodExpenses.reduce((sum, e) => sum + (e.jumlah || 0), 0);
   const biayaNonFeeMP = periodExpenses
     .filter((e) => e.kategori !== "Fee Marketplace")
     .reduce((sum, e) => sum + (e.jumlah || 0), 0);
@@ -112,7 +112,10 @@ export default function LaporanPage() {
   // Biaya iklan (period-filtered, per-kategori)
   const totalIklan = periodIklans.reduce((s, e) => s + (e.jumlah || 0), 0);
 
-  const netProfit = totalLaba + totalPemasukanLain - totalIklan;
+  // Total semua biaya (operasional + iklan)
+  const totalBiayaLain = totalBiayaOperasional + totalIklan;
+
+  const netProfit = totalLaba + totalPemasukanLain - totalBiayaLain;
 
   // Marketplace aggregation
   const mpMap = useMemo(() => aggregateByMarketplace(periodSales, profitFn), [periodSales, profitFn]);
@@ -387,6 +390,10 @@ export default function LaporanPage() {
           |{" "}
           <span className="text-ink font-semibold">
             Operasional {formatRupiah(biayaNonFeeMP)}
+          </span>{" "}
+          |{" "}
+          <span className="text-warning font-semibold">
+            Iklan {formatRupiah(totalIklan)}
           </span>
         </span>
       </div>
