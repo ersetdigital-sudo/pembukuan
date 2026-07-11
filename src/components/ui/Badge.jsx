@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils/cn";
 
 const variants = {
   default: "bg-secondary text-ink",
-  primary: "bg-primary text-on-primary",
+  primary: "bg-primary text-white",
   success: "bg-success/15 text-success",
   warning: "bg-warning/15 text-warning",
   danger: "bg-danger/15 text-danger",

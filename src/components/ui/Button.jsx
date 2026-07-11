@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils/cn";
 
 const variants = {
   primary:
-    "bg-primary text-on-primary hover:bg-primary-deep active:shadow-press rounded-full shadow-sm",
+    "bg-primary text-white hover:bg-primary-deep active:shadow-press rounded-full shadow-sm",
   secondary:
     "bg-surface text-ink border border-hairline shadow-card hover:shadow-card-hover rounded-full",
   chip:
@@ -12,7 +12,7 @@ const variants = {
   ghost:
     "text-ink hover:bg-secondary rounded-full",
   danger:
-    "bg-danger text-on-primary hover:bg-danger/90 active:shadow-press rounded-full",
+    "bg-danger text-white hover:bg-danger/90 active:shadow-press rounded-full",
 };
 
 const sizes = {
