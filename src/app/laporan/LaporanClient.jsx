@@ -13,6 +13,7 @@ export const dynamic = "force-dynamic";
 
 import PageHeader from "@/components/layout/PageHeader";
 import MonthPicker from "@/components/dashboard/MonthPicker";
+import StatCard from "@/components/dashboard/StatCard";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/Table";
@@ -318,62 +319,66 @@ export default function LaporanPage() {
         title="Laporan"
         subtitle={`Rekap keuangan - ${periodLabel}`}
       >
-        <MonthPicker month={month} year={year} />
-        <Button
-          variant="outline"
-          onClick={() =>
-            exportToPDF({
-              periodLabel,
-              totalLaba,
-              totalPemasukanLain,
-              totalBiayaLain,
-              netProfit,
-              totalFeeMP,
-              biayaNonFeeMP,
-              mpMap,
-              productList,
-              sharing,
-            })
-          }
-        >
-          <Download className="h-4 w-4" />
-          Export PDF
-        </Button>
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
+          <MonthPicker month={month} year={year} />
+          <Button
+            variant="secondary"
+            onClick={() =>
+              exportToPDF({
+                periodLabel,
+                totalLaba,
+                totalPemasukanLain,
+                totalBiayaLain,
+                netProfit,
+                totalFeeMP,
+                biayaNonFeeMP,
+                mpMap,
+                productList,
+                sharing,
+              })
+            }
+            className="w-full sm:w-auto"
+          >
+            <Download className="h-4 w-4" />
+            Export PDF
+          </Button>
+        </div>
       </PageHeader>
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-        <KpiCard
+      {/* KPI Cards — samain style dengan dashboard */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 mb-4 sm:mb-5">
+        <StatCard
           title="Total Profit Penjualan"
           value={formatRupiah(totalLaba)}
           icon={TrendingUp}
-          tone="emerald"
+          color="emerald"
         />
-        <KpiCard
+        <StatCard
           title="Total HPP"
           value={formatRupiah(totalHPP)}
           icon={Package}
-          tone="sky"
+          color="sky"
         />
-        <KpiCard
+        <StatCard
           title="Total Biaya"
           value={formatRupiah(totalBiayaLain)}
           icon={Receipt}
-          tone="secondary"
+          color="primary"
         />
-        <KpiCard
+        <StatCard
           title="Net Profit"
           value={formatRupiah(netProfit)}
           icon={DollarSign}
-          tone="plugin"
+          color="emerald"
+          valueClass={netProfit >= 0 ? "text-success" : "text-danger"}
         />
       </div>
 
       {/* Fee breakdown */}
-      <div className="mb-6 text-xs text-ash bg-surface-card rounded-md border border-hairline px-4 py-2.5 flex flex-wrap gap-x-4 gap-y-1">
+      <div className="mb-6 text-xs text-ash bg-surface-card rounded-sm shadow-card px-4 py-2.5 flex flex-wrap gap-x-4 gap-y-1">
         <span>
           Biaya:{" "}
-          <span className="text-secondary font-semibold">
+          <span className="text-info font-semibold">
             Fee MP {formatRupiah(totalFeeMP)}
           </span>{" "}
           |{" "}
@@ -641,13 +646,13 @@ export default function LaporanPage() {
         <div className="mb-3 flex items-start justify-between gap-3">
           <div>
             <h2 className="text-base font-bold text-ink flex items-center gap-2">
-              <Megaphone className="h-4 w-4 text-secondary" /> Biaya Iklan
+              <Megaphone className="h-4 w-4 text-info" /> Biaya Iklan
             </h2>
             <p className="text-xs text-ash mt-0.5">
               Mengurangi profit bersih kategori sebelum dibagi ke partner
             </p>
           </div>
-          <Button variant="plugin" size="sm" onClick={openIklanTambah}>
+          <Button variant="primary" size="sm" onClick={openIklanTambah}>
             <Plus className="h-4 w-4" /> Tambah
           </Button>
         </div>
@@ -655,13 +660,13 @@ export default function LaporanPage() {
         {/* Per-kategori breakdown badges (hanya muncul kalau ada iklan di periode ini) */}
         {totalIklan > 0 && (
           <div className="mb-3 flex flex-wrap gap-2">
-            <div className="flex items-center gap-2 rounded-md border border-secondary/20 bg-secondary/10/40 px-3 py-1.5 text-xs">
+            <div className="flex items-center gap-2 rounded-full bg-info/10 px-3 py-1.5 text-xs">
               <span className="text-ash">Iklan Plugin</span>
-              <span className="font-bold tabular-nums text-secondary">
+              <span className="font-bold tabular-nums text-info">
                 {formatRupiah(sharing.iklanPlugin)}
               </span>
             </div>
-            <div className="flex items-center gap-2 rounded-md border border-success/20 bg-success/5 px-3 py-1.5 text-xs">
+            <div className="flex items-center gap-2 rounded-full bg-success/10 px-3 py-1.5 text-xs">
               <span className="text-ash">Iklan Jasa</span>
               <span className="font-bold tabular-nums text-success">
                 {formatRupiah(sharing.iklanJasa)}
@@ -670,78 +675,139 @@ export default function LaporanPage() {
           </div>
         )}
 
-        <Card>
-          {periodIklans.length === 0 ? (
-            <EmptyState message="Belum ada biaya iklan di periode ini" />
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-36">Tanggal</TableHead>
-                  <TableHead>Kategori</TableHead>
-                  <TableHead>Keterangan</TableHead>
-                  <TableHead className="text-right">Jumlah</TableHead>
-                  <TableHead className="w-20 text-right">Aksi</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {periodIklans.map((e) => (
-                  <TableRow key={e.id}>
-                    <TableCell className="text-ash whitespace-nowrap">
-                      {formatDateId(e.tanggal)}
+        {periodIklans.length === 0 ? (
+          <EmptyState message="Belum ada biaya iklan di periode ini" />
+        ) : (
+          <>
+            {/* Desktop: table */}
+            <div className="hidden md:block rounded-sm bg-surface-card shadow-card overflow-hidden">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-36">Tanggal</TableHead>
+                    <TableHead>Kategori</TableHead>
+                    <TableHead>Keterangan</TableHead>
+                    <TableHead className="text-right">Jumlah</TableHead>
+                    <TableHead className="w-20 text-right">Aksi</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {periodIklans.map((e) => (
+                    <TableRow key={e.id}>
+                      <TableCell className="text-ash whitespace-nowrap">
+                        {formatDateId(e.tanggal)}
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          className={
+                            e.kategori === "Plugin"
+                              ? "bg-info/10 text-info border border-info/20"
+                              : "bg-success/15 text-success border border-success/30"
+                          }
+                        >
+                          {e.kategori}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-xs text-ash truncate max-w-[200px]">
+                        {e.keterangan || "-"}
+                      </TableCell>
+                      <TableCell className="text-right font-bold text-ink tabular-nums">
+                        {formatRupiah(e.jumlah)}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center justify-end gap-0.5">
+                          <button
+                            type="button"
+                            aria-label="Edit iklan"
+                            onClick={() => openIklanEdit(e)}
+                            className="grid h-7 w-7 place-items-center rounded text-ash hover:bg-surface hover:text-ink transition-colors"
+                          >
+                            <Pencil className="h-3.5 w-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            aria-label="Hapus iklan"
+                            onClick={() => setIklanDeleteId(e.id)}
+                            className="grid h-7 w-7 place-items-center rounded text-ash hover:bg-danger/10 hover:text-danger transition-colors"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  <TableRow className="bg-info/5 hover:bg-info/5">
+                    <TableCell colSpan={3} className="font-bold text-info text-xs uppercase tracking-wider">
+                      Total Biaya Iklan
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="text-right font-extrabold text-info tabular-nums">
+                      {formatRupiah(totalIklan)}
+                    </TableCell>
+                    <TableCell />
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+
+            {/* Mobile: card list */}
+            <div className="md:hidden space-y-2.5">
+              {periodIklans.map((e) => (
+                <div key={e.id} className="rounded-sm bg-surface-card shadow-card overflow-hidden">
+                  <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-hairline/40 bg-surface/30">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="text-[10px] font-mono text-ash whitespace-nowrap">
+                        {formatDateId(e.tanggal)}
+                      </span>
                       <Badge
                         className={
                           e.kategori === "Plugin"
-                            ? "bg-secondary/10 text-secondary border border-secondary/20"
+                            ? "bg-info/10 text-info border border-info/20"
                             : "bg-success/15 text-success border border-success/30"
                         }
                       >
                         {e.kategori}
                       </Badge>
-                    </TableCell>
-                    <TableCell className="text-xs text-ash truncate max-w-[200px]">
+                    </div>
+                    <div className="flex items-center gap-0.5 shrink-0">
+                      <button
+                        type="button"
+                        aria-label="Edit iklan"
+                        onClick={() => openIklanEdit(e)}
+                        className="p-2 text-ash hover:text-ink hover:bg-surface rounded transition-colors"
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </button>
+                      <button
+                        type="button"
+                        aria-label="Hapus iklan"
+                        onClick={() => setIklanDeleteId(e.id)}
+                        className="p-2 text-ash hover:text-danger hover:bg-danger/10 rounded transition-colors"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="px-3 py-2.5 flex items-center justify-between gap-2">
+                    <p className="text-sm text-ink break-words min-w-0">
                       {e.keterangan || "-"}
-                    </TableCell>
-                    <TableCell className="text-right font-bold text-secondary tabular-nums">
+                    </p>
+                    <p className="text-sm font-bold text-ink shrink-0 whitespace-nowrap">
                       {formatRupiah(e.jumlah)}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center justify-end gap-0.5">
-                        <button
-                          type="button"
-                          aria-label="Edit iklan"
-                          onClick={() => openIklanEdit(e)}
-                          className="grid h-7 w-7 place-items-center rounded text-ash hover:bg-surface hover:text-ink transition-colors"
-                        >
-                          <Pencil className="h-3.5 w-3.5" />
-                        </button>
-                        <button
-                          type="button"
-                          aria-label="Hapus iklan"
-                          onClick={() => setIklanDeleteId(e.id)}
-                          className="grid h-7 w-7 place-items-center rounded text-ash hover:bg-danger/10 hover:text-danger transition-colors"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-                <TableRow className="bg-secondary/5 hover:bg-secondary/5">
-                  <TableCell colSpan={3} className="font-bold text-secondary text-xs uppercase tracking-wider">
-                    Total Biaya Iklan
-                  </TableCell>
-                  <TableCell className="text-right font-extrabold text-secondary tabular-nums">
-                    {formatRupiah(totalIklan)}
-                  </TableCell>
-                  <TableCell />
-                </TableRow>
-              </TableBody>
-            </Table>
-          )}
-        </Card>
+                    </p>
+                  </div>
+                </div>
+              ))}
+              <div className="rounded-sm bg-info/10 px-3 py-2.5 flex items-center justify-between gap-2">
+                <span className="text-xs font-bold text-info uppercase tracking-wider">
+                  Total Biaya Iklan
+                </span>
+                <span className="text-sm font-extrabold text-info tabular-nums">
+                  {formatRupiah(totalIklan)}
+                </span>
+              </div>
+            </div>
+          </>
+        )}
       </section>
 
       {/* Ringkasan HPP (Modal Terjual) */}
@@ -839,75 +905,112 @@ export default function LaporanPage() {
             {activeMarketplaces.length === 0 ? (
               <EmptyState message="Belum ada data" />
             ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Marketplace</TableHead>
-                    <TableHead className="text-center">Terjual</TableHead>
-                    <TableHead className="text-right">Fee MP</TableHead>
-                    <TableHead className="text-right">Profit</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
+              <>
+                {/* Desktop: table */}
+                <div className="hidden md:block">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Marketplace</TableHead>
+                        <TableHead className="text-center">Terjual</TableHead>
+                        <TableHead className="text-right">Fee MP</TableHead>
+                        <TableHead className="text-right">Profit</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {activeMarketplaces.map((mp) => {
+                        const v = mpMap[mp];
+                        const share = mpTotals.profit > 0 ? (v.profit / mpTotals.profit) * 100 : 0;
+                        return (
+                          <TableRow key={mp} className="group transition-colors">
+                            <TableCell className="font-medium">
+                              <div className="flex items-center gap-2.5">
+                                <span
+                                  className={`inline-flex h-6 items-center rounded-md px-1.5 text-[10px] font-bold ${MP_BADGE[mp] || "bg-secondary text-ash"}`}
+                                >
+                                  {mp.slice(0, 3).toUpperCase()}
+                                </span>
+                                <span className="text-ash">{mp}</span>
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-center">
+                              <Badge variant="outline">{formatNumber(v.qty)}</Badge>
+                            </TableCell>
+                            <TableCell className="text-right text-info font-semibold tabular-nums">
+                              {v.fee > 0 ? formatRupiah(v.fee) : "-"}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <div className="flex flex-col items-end leading-tight">
+                                <span className="font-bold tabular-nums text-ash">
+                                  {formatRupiah(v.profit)}
+                                </span>
+                                {share > 0 && (
+                                  <span className="text-[10px] font-semibold tabular-nums text-ash">
+                                    {share.toFixed(1)}%
+                                  </span>
+                                )}
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                    {/* Footer total "" pinned at the bottom, visually separated */}
+                    <tfoot>
+                      <TableRow className="border-t-2 border-primary/15 bg-primary/5 hover:bg-primary/5">
+                        <TableCell className="text-[11px] font-bold uppercase tracking-widest text-primary">
+                          Total
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <span className="font-bold tabular-nums text-ash">
+                            {formatNumber(mpTotals.qty)}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-right font-bold tabular-nums text-info whitespace-nowrap">
+                          {formatRupiah(mpTotals.fee)}
+                        </TableCell>
+                        <TableCell className="text-right whitespace-nowrap">
+                          <span className="text-base font-extrabold tabular-nums text-primary">
+                            {formatRupiah(mpTotals.profit)}
+                          </span>
+                        </TableCell>
+                      </TableRow>
+                    </tfoot>
+                  </Table>
+                </div>
+
+                {/* Mobile: card list */}
+                <div className="md:hidden space-y-2 px-3 pb-3">
                   {activeMarketplaces.map((mp) => {
                     const v = mpMap[mp];
                     const share = mpTotals.profit > 0 ? (v.profit / mpTotals.profit) * 100 : 0;
                     return (
-                      <TableRow key={mp} className="group transition-colors">
-                        <TableCell className="font-medium">
-                          <div className="flex items-center gap-2.5">
-                            <span
-                              className={`inline-flex h-6 items-center rounded-md px-1.5 text-[10px] font-bold ${MP_BADGE[mp] || "bg-muted/20 text-ash"}`}
-                            >
-                              {mp.slice(0, 3).toUpperCase()}
-                            </span>
-                            <span className="text-ash">{mp}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <Badge variant="outline">{formatNumber(v.qty)}</Badge>
-                        </TableCell>
-                        <TableCell className="text-right text-secondary font-semibold tabular-nums">
-                          {v.fee > 0 ? formatRupiah(v.fee) : "-"}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex flex-col items-end leading-tight">
-                            <span className="font-bold tabular-nums text-ash">
-                              {formatRupiah(v.profit)}
-                            </span>
-                            {share > 0 && (
-                              <span className="text-[10px] font-semibold tabular-nums text-ash">
-                                {share.toFixed(1)}%
-                              </span>
-                            )}
-                          </div>
-                        </TableCell>
-                      </TableRow>
+                      <div key={mp} className="rounded-sm bg-surface/50 px-3 py-2.5 flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <span
+                            className={`inline-flex h-6 items-center rounded-md px-1.5 text-[10px] font-bold shrink-0 ${MP_BADGE[mp] || "bg-secondary text-ash"}`}
+                          >
+                            {mp.slice(0, 3).toUpperCase()}
+                          </span>
+                          <span className="text-sm font-medium text-ink truncate">{mp}</span>
+                        </div>
+                        <div className="text-right shrink-0">
+                          <p className="text-sm font-bold text-ink tabular-nums">{formatRupiah(v.profit)}</p>
+                          <p className="text-[10px] text-ash tabular-nums">
+                            {formatNumber(v.qty)} terjual{share > 0 ? ` · ${share.toFixed(1)}%` : ""}
+                          </p>
+                        </div>
+                      </div>
                     );
                   })}
-                </TableBody>
-                {/* Footer total "" pinned at the bottom, visually separated */}
-                <tfoot>
-                  <TableRow className="border-t-2 border-primary/15 bg-primary/5 hover:bg-primary/5">
-                    <TableCell className="text-[11px] font-bold uppercase tracking-widest text-primary">
-                      Total
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <span className="font-bold tabular-nums text-ash">
-                        {formatNumber(mpTotals.qty)}
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-right font-bold tabular-nums text-secondary whitespace-nowrap">
-                      {formatRupiah(mpTotals.fee)}
-                    </TableCell>
-                    <TableCell className="text-right whitespace-nowrap">
-                      <span className="text-base font-extrabold tabular-nums text-primary">
-                        {formatRupiah(mpTotals.profit)}
-                      </span>
-                    </TableCell>
-                  </TableRow>
-                </tfoot>
-              </Table>
+                  <div className="rounded-sm bg-primary/5 px-3 py-2.5 flex items-center justify-between gap-2">
+                    <span className="text-[11px] font-bold uppercase tracking-widest text-primary">Total</span>
+                    <span className="text-sm font-extrabold tabular-nums text-primary">
+                      {formatRupiah(mpTotals.profit)}
+                    </span>
+                  </div>
+                </div>
+              </>
             )}
           </CardContent>
         </Card>
@@ -920,34 +1023,55 @@ export default function LaporanPage() {
             {productList.length === 0 ? (
               <EmptyState message="Belum ada data" />
             ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-8">#</TableHead>
-                    <TableHead>Produk</TableHead>
-                    <TableHead className="text-center">Qty</TableHead>
-                    <TableHead className="text-right">Profit</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
+              <>
+                {/* Desktop: table */}
+                <div className="hidden md:block">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="w-8">#</TableHead>
+                        <TableHead>Produk</TableHead>
+                        <TableHead className="text-center">Qty</TableHead>
+                        <TableHead className="text-right">Profit</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {productList.map(([nama, data], i) => (
+                        <TableRow key={nama}>
+                          <TableCell>
+                            <span className="w-5 h-5 rounded-full bg-primary/10 text-primary text-[10px] font-bold inline-flex items-center justify-center">
+                              {i + 1}
+                            </span>
+                          </TableCell>
+                          <TableCell className="font-medium truncate max-w-[180px]">{nama}</TableCell>
+                          <TableCell className="text-center">
+                            <Badge variant="outline">{formatNumber(data.qty)}</Badge>
+                          </TableCell>
+                          <TableCell className="text-right font-bold text-primary">
+                            {formatRupiah(data.profit)}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+
+                {/* Mobile: card list */}
+                <div className="md:hidden space-y-2 px-3 pb-3">
                   {productList.map(([nama, data], i) => (
-                    <TableRow key={nama}>
-                      <TableCell>
-                        <span className="w-5 h-5 rounded-full bg-primary/10 text-primary text-[10px] font-bold inline-flex items-center justify-center">
-                          {i + 1}
-                        </span>
-                      </TableCell>
-                      <TableCell className="font-medium truncate max-w-[180px]">{nama}</TableCell>
-                      <TableCell className="text-center">
-                        <Badge variant="outline">{formatNumber(data.qty)}</Badge>
-                      </TableCell>
-                      <TableCell className="text-right font-bold text-primary">
-                        {formatRupiah(data.profit)}
-                      </TableCell>
-                    </TableRow>
+                    <div key={nama} className="rounded-sm bg-surface/50 px-3 py-2.5 flex items-center gap-2.5">
+                      <span className="w-6 h-6 rounded-full bg-primary/10 text-primary text-[11px] font-bold inline-flex items-center justify-center shrink-0">
+                        {i + 1}
+                      </span>
+                      <span className="text-sm font-medium text-ink truncate flex-1 min-w-0">{nama}</span>
+                      <div className="text-right shrink-0">
+                        <p className="text-sm font-bold text-primary tabular-nums">{formatRupiah(data.profit)}</p>
+                        <p className="text-[10px] text-ash tabular-nums">{formatNumber(data.qty)} qty</p>
+                      </div>
+                    </div>
                   ))}
-                </TableBody>
-              </Table>
+                </div>
+              </>
             )}
           </CardContent>
         </Card>
@@ -983,36 +1107,6 @@ export default function LaporanPage() {
 }
 
 // â"€â"€ Sub-components â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
-
-function KpiCard({ title, value, icon: Icon, tone = "emerald" }) {
-  const toneMap = {
-    emerald: "bg-success/10 text-success",
-    sky: "bg-sky-100 text-sky-600",
-    secondary: "bg-secondary/10 text-secondary",
-    primary: "bg-primary/10 text-primary",
-    plugin: "bg-secondary/10 text-secondary",
-  };
-  const t = toneMap[tone] || toneMap.primary;
-  return (
-    <div className="group relative overflow-hidden rounded-md border border-hairline bg-surface-card px-3 py-2.5  transition-all duration-200 hover:-translate-y-0.5 hover:border-ink/20 hover:">
-      <div className="flex items-center gap-2.5">
-        <div
-          className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${t}`}
-        >
-          {Icon && <Icon className="h-[18px] w-[18px]" />}
-        </div>
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-[10px] font-semibold uppercase tracking-wider text-ash leading-tight">
-            {title}
-          </p>
-          <p className="mt-0.5 truncate text-[15px] font-bold text-ink leading-tight">
-            {value}
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function ProfitCard({ tone, kicker, totalLabel, total, buckets }) {
   const isPlugin = tone === "plugin";

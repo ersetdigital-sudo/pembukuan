@@ -13,10 +13,10 @@ import {
 } from "lucide-react";
 import PageHeader from "@/components/layout/PageHeader";
 import EmptyState from "@/components/ui/EmptyState";
-import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import StatCard from "@/components/dashboard/StatCard";
 import {
   Table,
   TableHeader,
@@ -160,36 +160,37 @@ export default function ProdukPage() {
         title="Produk"
         subtitle={`${totalProducts} produk dalam katalog`}
       >
-        <Button variant="plugin" size="sm" onClick={handleOpenAdd}>
+        <Button variant="primary" size="sm" onClick={handleOpenAdd}>
           <Plus className="h-4 w-4" />
           Tambah Produk
         </Button>
       </PageHeader>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+      {/* Stat cards — samain style dengan dashboard */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 mb-4 sm:mb-5">
         <StatCard
-          label="Total Produk"
+          title="Total Produk"
           value={formatNumber(totalProducts)}
           icon={Boxes}
+          color="primary"
         />
         <StatCard
-          label="Plugin"
+          title="Plugin"
           value={formatNumber(pluginCount)}
           icon={Tag}
-          color="text-secondary"
+          color="sky"
         />
         <StatCard
-          label="Jasa"
+          title="Jasa"
           value={formatNumber(jasaCount)}
           icon={Wrench}
-          color="text-success"
+          color="emerald"
         />
         <StatCard
-          label="Potensi Profit Stok"
+          title="Potensi Profit Stok"
           value={formatRupiah(potensiProfit)}
           icon={TrendingUp}
-          color="text-primary"
+          color="emerald"
         />
       </div>
 
@@ -207,7 +208,7 @@ export default function ProdukPage() {
         <select
           value={kategori}
           onChange={(e) => setKategori(e.target.value)}
-          className="h-10 px-3 rounded-md border border-input bg-surface-card text-sm"
+          className="h-10 px-3 rounded-sm border border-hairline-strong bg-surface-card text-sm text-ink"
         >
           <option value="all">Semua Kategori</option>
           {KATEGORI.map((k) => (
@@ -218,100 +219,175 @@ export default function ProdukPage() {
         </select>
       </div>
 
-      {/* Table */}
-      <Card>
-        {sorted.length === 0 ? (
-          <EmptyState message="Belum ada produk" />
-        ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Produk</TableHead>
-                <TableHead>Kategori</TableHead>
-                <TableHead className="text-right">Modal</TableHead>
-                <TableHead className="text-right">Jual</TableHead>
-                <TableHead className="text-center">Stok</TableHead>
-                <TableHead className="text-right">Margin</TableHead>
-                <TableHead className="w-24 text-right">Aksi</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {sorted.map((p) => {
-                const margin =
-                  p.harga_beli > 0
-                    ? ((p.harga_jual - p.harga_beli) / p.harga_beli) * 100
-                    : null;
+      {sorted.length === 0 ? (
+        <EmptyState message="Belum ada produk" />
+      ) : (
+        <>
+          {/* Desktop: table */}
+          <div className="hidden md:block rounded-sm bg-surface-card shadow-card overflow-hidden">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Produk</TableHead>
+                  <TableHead>Kategori</TableHead>
+                  <TableHead className="text-right">Modal</TableHead>
+                  <TableHead className="text-right">Jual</TableHead>
+                  <TableHead className="text-center">Stok</TableHead>
+                  <TableHead className="text-right">Margin</TableHead>
+                  <TableHead className="w-24 text-right">Aksi</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {sorted.map((p) => {
+                  const margin =
+                    p.harga_beli > 0
+                      ? ((p.harga_jual - p.harga_beli) / p.harga_beli) * 100
+                      : null;
 
-                return (
-                  <TableRow key={p.id}>
-                    <TableCell className="font-medium">
-                      <div className="flex flex-col">
-                        <span>{p.nama_produk}</span>
-                        {p.keterangan && (
-                          <span className="text-[10px] text-ash truncate max-w-[200px]">
-                            {p.keterangan}
+                  return (
+                    <TableRow key={p.id}>
+                      <TableCell className="font-medium">
+                        <div className="flex flex-col">
+                          <span>{p.nama_produk}</span>
+                          {p.keterangan && (
+                            <span className="text-[10px] text-ash truncate max-w-[200px]">
+                              {p.keterangan}
+                            </span>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          variant={p.kategori === "Plugin" ? "primary" : "success"}
+                        >
+                          {p.kategori}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right text-sm text-ash">
+                        {formatRupiah(p.harga_beli)}
+                      </TableCell>
+                      <TableCell className="text-right text-sm font-medium">
+                        {formatRupiah(p.harga_jual)}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <Badge variant="outline">
+                          {p.kategori === "Jasa" ? "∞" : formatNumber(p.stok)}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {margin !== null ? (
+                          <span
+                            className={`font-bold text-sm ${
+                              margin >= 0 ? "text-success" : "text-danger"
+                            }`}
+                          >
+                            {margin.toFixed(1)}%
+                          </span>
+                        ) : (
+                          <span className="text-sm text-ash">-</span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center justify-end gap-0.5">
+                          <button
+                            type="button"
+                            aria-label="Edit produk"
+                            onClick={() => handleOpenEdit(p)}
+                            className="grid h-7 w-7 place-items-center rounded text-ash hover:bg-surface hover:text-ink transition-colors"
+                          >
+                            <Pencil className="h-3.5 w-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            aria-label="Hapus produk"
+                            onClick={() => setDeleteId(p.id)}
+                            className="grid h-7 w-7 place-items-center rounded text-ash hover:bg-danger/10 hover:text-danger transition-colors"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </div>
+
+          {/* Mobile: card list */}
+          <div className="md:hidden space-y-2.5">
+            {sorted.map((p) => {
+              const margin =
+                p.harga_beli > 0
+                  ? ((p.harga_jual - p.harga_beli) / p.harga_beli) * 100
+                  : null;
+              return (
+                <div key={p.id} className="rounded-sm bg-surface-card shadow-card overflow-hidden">
+                  <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-hairline/40 bg-surface/30">
+                    <Badge variant={p.kategori === "Plugin" ? "primary" : "success"}>
+                      {p.kategori}
+                    </Badge>
+                    <div className="flex items-center gap-0.5 shrink-0">
+                      <button
+                        type="button"
+                        aria-label="Edit produk"
+                        onClick={() => handleOpenEdit(p)}
+                        className="p-2 text-ash hover:text-ink hover:bg-surface rounded transition-colors"
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </button>
+                      <button
+                        type="button"
+                        aria-label="Hapus produk"
+                        onClick={() => setDeleteId(p.id)}
+                        className="p-2 text-ash hover:text-danger hover:bg-danger/10 rounded transition-colors"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="px-3 py-2.5">
+                    <p className="text-[9px] uppercase tracking-wider text-ash font-semibold leading-none">
+                      Produk
+                    </p>
+                    <p className="text-sm font-bold text-ink mt-1 break-words">
+                      {p.nama_produk}
+                    </p>
+                    {p.keterangan && (
+                      <p className="text-xs text-ash mt-0.5 break-words">{p.keterangan}</p>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-2 border-t border-hairline/40 divide-x divide-hairline/40">
+                    <div className="px-2.5 py-2">
+                      <p className="text-[9px] uppercase tracking-wider text-ash font-semibold leading-none">
+                        Modal / Jual
+                      </p>
+                      <p className="text-xs font-semibold text-ink mt-1.5 truncate">
+                        {formatRupiah(p.harga_beli)} → {formatRupiah(p.harga_jual)}
+                      </p>
+                    </div>
+                    <div className="px-2.5 py-2">
+                      <p className="text-[9px] uppercase tracking-wider text-ash font-semibold leading-none">
+                        Stok / Margin
+                      </p>
+                      <p className="text-xs font-bold mt-1.5 truncate">
+                        <span className="text-ink">
+                          {p.kategori === "Jasa" ? "∞" : formatNumber(p.stok)}
+                        </span>
+                        {margin !== null && (
+                          <span className={margin >= 0 ? "text-success" : "text-danger"}>
+                            {" "}· {margin.toFixed(1)}%
                           </span>
                         )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={p.kategori === "Plugin" ? "primary" : "success"}
-                      >
-                        {p.kategori}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right text-sm text-ash">
-                      {formatRupiah(p.harga_beli)}
-                    </TableCell>
-                    <TableCell className="text-right text-sm font-medium">
-                      {formatRupiah(p.harga_jual)}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Badge variant="outline">
-                        {p.kategori === "Jasa" ? "∞" : formatNumber(p.stok)}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      {margin !== null ? (
-                        <span
-                          className={`font-bold text-sm ${
-                            margin >= 0 ? "text-success" : "text-danger"
-                          }`}
-                        >
-                          {margin.toFixed(1)}%
-                        </span>
-                      ) : (
-                        <span className="text-sm text-ash">-</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center justify-end gap-0.5">
-                        <button
-                          type="button"
-                          aria-label="Edit produk"
-                          onClick={() => handleOpenEdit(p)}
-                          className="grid h-7 w-7 place-items-center rounded text-ash hover:bg-surface hover:text-ink transition-colors"
-                        >
-                          <Pencil className="h-3.5 w-3.5" />
-                        </button>
-                        <button
-                          type="button"
-                          aria-label="Hapus produk"
-                          onClick={() => setDeleteId(p.id)}
-                          className="grid h-7 w-7 place-items-center rounded text-ash hover:bg-danger/10 hover:text-danger transition-colors"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        )}
-      </Card>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
 
       {/* Dialogs */}
       <ProdukFormDialog
@@ -339,20 +415,6 @@ export default function ProdukPage() {
         variant="danger"
         onConfirm={handleConfirmDelete}
       />
-    </div>
-  );
-}
-
-function StatCard({ label, value, icon: Icon, color = "text-ink" }) {
-  return (
-    <div className="rounded-md border border-hairline bg-surface-card p-3">
-      <div className="flex items-center gap-2 mb-1">
-        {Icon && <Icon className={`h-4 w-4 ${color}`} />}
-        <p className="text-[10px] uppercase tracking-wider font-semibold text-ash">
-          {label}
-        </p>
-      </div>
-      <p className={`text-lg font-bold ${color}`}>{value}</p>
     </div>
   );
 }

@@ -80,7 +80,7 @@ export default function IklanFormDialog({
       <DialogContent className="max-w-md">
         <DialogHeader onClose={() => onOpenChange(false)}>
           <div className="flex items-center gap-2 min-w-0 flex-1">
-            <Megaphone className="h-4 w-4 text-secondary shrink-0" />
+            <Megaphone className="h-4 w-4 text-info shrink-0" />
             <DialogTitle>
               {editData ? "Edit Biaya Iklan" : "Tambah Biaya Iklan"}
             </DialogTitle>
@@ -161,7 +161,7 @@ export default function IklanFormDialog({
           </Button>
           <Button
             type="submit"
-            variant="plugin"
+            variant="primary"
             disabled={!isValid || isSaving}
             onClick={handleSubmit}
           >
