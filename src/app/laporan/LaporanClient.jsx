@@ -108,10 +108,11 @@ export default function LaporanPage() {
     .reduce((sum, e) => sum + (e.jumlah || 0), 0);
   const totalPemasukanLain = periodIncomes.reduce((sum, i) => sum + (i.jumlah || 0), 0);
   const totalHPP = periodSales.reduce((sum, s) => sum + getSaleTotals(s).totalBeli, 0);
-  const netProfit = totalLaba + totalPemasukanLain;
 
   // Biaya iklan (period-filtered, per-kategori)
   const totalIklan = periodIklans.reduce((s, e) => s + (e.jumlah || 0), 0);
+
+  const netProfit = totalLaba + totalPemasukanLain - totalIklan;
 
   // Marketplace aggregation
   const mpMap = useMemo(() => aggregateByMarketplace(periodSales, profitFn), [periodSales, profitFn]);
