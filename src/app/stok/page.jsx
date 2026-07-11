@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search, AlertTriangle } from "lucide-react";
+import { Search, AlertTriangle, Boxes, TriangleAlert, PackageX, Wallet } from "lucide-react";
 import PageHeader from "@/components/layout/PageHeader";
 import EmptyState from "@/components/ui/EmptyState";
-import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
+import StatCard from "@/components/dashboard/StatCard";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/Table";
 import { formatRupiah, formatNumber } from "@/lib/utils/format";
 import { KATEGORI } from "@/lib/constants";
@@ -25,7 +25,6 @@ export default function StokPage() {
     if (!search.trim()) return true;
     return (s.nama_produk || "").toLowerCase().includes(search.toLowerCase());
   });
-  const totalNilai = stocks.reduce((s, x) => s + x.stok * x.harga_beli, 0);
   const totalJual = stocks.reduce((s, x) => s + x.stok * x.harga_jual, 0);
   const lowStock = stocks.filter((s) => s.stok > 0 && s.stok <= 5);
   const outOfStock = stocks.filter((s) => s.stok === 0);
@@ -35,34 +34,51 @@ export default function StokPage() {
       <PageHeader
         title="Stok"
         subtitle={`${stocks.length} produk dalam katalog`}
-      >
-        <div className="text-right">
-          <p className="text-[10px] uppercase tracking-wider text-ash font-semibold">Nilai Stok</p>
-          <p className="text-lg font-bold text-primary">{formatRupiah(totalNilai)}</p>
-        </div>
-      </PageHeader>
+      />
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-        <Stat label="Total Produk" value={formatNumber(stocks.length)} />
-        <Stat label="Stok Rendah (≤5)" value={formatNumber(lowStock.length)} color="text-warning" />
-        <Stat label="Habis" value={formatNumber(outOfStock.length)} color="text-danger" />
-        <Stat label="Potensi Jual" value={formatRupiah(totalJual)} color="text-primary" />
+      {/* Stat cards — samain style dengan dashboard */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 mb-4 sm:mb-5">
+        <StatCard
+          title="Total Produk"
+          value={formatNumber(stocks.length)}
+          icon={Boxes}
+          color="primary"
+        />
+        <StatCard
+          title="Stok Rendah (≤5)"
+          value={formatNumber(lowStock.length)}
+          icon={TriangleAlert}
+          color="warning"
+          valueClass="text-warning"
+        />
+        <StatCard
+          title="Habis"
+          value={formatNumber(outOfStock.length)}
+          icon={PackageX}
+          color="danger"
+          valueClass="text-danger"
+        />
+        <StatCard
+          title="Potensi Jual"
+          value={formatRupiah(totalJual)}
+          icon={Wallet}
+          color="emerald"
+          valueClass="text-success"
+        />
       </div>
 
       {(lowStock.length > 0 || outOfStock.length > 0) && (
-        <Card className="p-4 mb-4 border-warning/40 bg-warning/5">
-          <div className="flex items-start gap-2">
-            <AlertTriangle className="h-5 w-5 text-warning shrink-0 mt-0.5" />
-            <div>
-              <p className="font-semibold text-sm">
-                {outOfStock.length + lowStock.length} produk butuh restock
-              </p>
-              <p className="text-xs text-ash mt-0.5">
-                {outOfStock.length} habis · {lowStock.length} stok rendah
-              </p>
-            </div>
+        <div className="rounded-sm bg-warning/10 p-4 mb-4 flex items-start gap-2">
+          <AlertTriangle className="h-5 w-5 text-warning shrink-0 mt-0.5" />
+          <div>
+            <p className="font-semibold text-sm text-ink">
+              {outOfStock.length + lowStock.length} produk butuh restock
+            </p>
+            <p className="text-xs text-ash mt-0.5">
+              {outOfStock.length} habis · {lowStock.length} stok rendah
+            </p>
           </div>
-        </Card>
+        </div>
       )}
 
       <div className="flex flex-col sm:flex-row gap-2 mb-4">
@@ -78,7 +94,7 @@ export default function StokPage() {
         <select
           value={kategori}
           onChange={(e) => setKategori(e.target.value)}
-          className="h-10 px-3 rounded-md border border-input bg-surface-card text-sm"
+          className="h-10 px-3 rounded-sm border border-hairline-strong bg-surface-card text-sm text-ink"
         >
           <option value="all">Semua Kategori</option>
           {KATEGORI.map((k) => (
@@ -87,63 +103,111 @@ export default function StokPage() {
         </select>
       </div>
 
-      <Card>
-        {filtered.length === 0 ? (
-          <EmptyState message="Belum ada produk" />
-        ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Produk</TableHead>
-                <TableHead>Kategori</TableHead>
-                <TableHead className="text-center">Stok</TableHead>
-                <TableHead className="text-right">Modal</TableHead>
-                <TableHead className="text-right">Jual</TableHead>
-                <TableHead className="text-right">Nilai</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filtered.map((s) => {
-                const isLow = s.stok > 0 && s.stok <= 5;
-                const isOut = s.stok === 0;
-                return (
-                  <TableRow key={s.id}>
-                    <TableCell className="font-medium">{s.nama_produk}</TableCell>
-                    <TableCell>
-                      <Badge variant={s.kategori === "Plugin" ? "primary" : "success"}>
-                        {s.kategori}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Badge variant={isOut ? "danger" : isLow ? "warning" : "outline"}>
-                        {s.kategori === "Jasa" ? "∞" : s.stok}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right text-sm text-ash">
-                      {formatRupiah(s.harga_beli)}
-                    </TableCell>
-                    <TableCell className="text-right text-sm font-medium">
-                      {formatRupiah(s.harga_jual)}
-                    </TableCell>
-                    <TableCell className="text-right font-bold text-primary">
-                      {s.kategori === "Jasa" ? "-" : formatRupiah(s.stok * s.harga_beli)}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        )}
-      </Card>
-    </div>
-  );
-}
+      {filtered.length === 0 ? (
+        <EmptyState message="Belum ada produk" />
+      ) : (
+        <>
+          {/* Desktop: table */}
+          <div className="hidden md:block rounded-sm bg-surface-card shadow-card overflow-hidden">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Produk</TableHead>
+                  <TableHead>Kategori</TableHead>
+                  <TableHead className="text-center">Stok</TableHead>
+                  <TableHead className="text-right">Modal</TableHead>
+                  <TableHead className="text-right">Jual</TableHead>
+                  <TableHead className="text-right">Nilai</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filtered.map((s) => {
+                  const isLow = s.stok > 0 && s.stok <= 5;
+                  const isOut = s.stok === 0;
+                  return (
+                    <TableRow key={s.id}>
+                      <TableCell className="font-medium">{s.nama_produk}</TableCell>
+                      <TableCell>
+                        <Badge variant={s.kategori === "Plugin" ? "primary" : "success"}>
+                          {s.kategori}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <Badge variant={isOut ? "danger" : isLow ? "warning" : "outline"}>
+                          {s.kategori === "Jasa" ? "∞" : s.stok}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right text-sm text-ash">
+                        {formatRupiah(s.harga_beli)}
+                      </TableCell>
+                      <TableCell className="text-right text-sm font-medium">
+                        {formatRupiah(s.harga_jual)}
+                      </TableCell>
+                      <TableCell className="text-right font-bold text-ink">
+                        {s.kategori === "Jasa" ? "-" : formatRupiah(s.stok * s.harga_beli)}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </div>
 
-function Stat({ label, value, color = "text-ink" }) {
-  return (
-    <div className="rounded-md border border-hairline bg-surface-card p-3">
-      <p className="text-[10px] uppercase tracking-wider font-semibold text-ash">{label}</p>
-      <p className={`text-lg font-bold mt-1 ${color}`}>{value}</p>
+          {/* Mobile: card list */}
+          <div className="md:hidden space-y-2.5">
+            {filtered.map((s) => {
+              const isLow = s.stok > 0 && s.stok <= 5;
+              const isOut = s.stok === 0;
+              return (
+                <div key={s.id} className="rounded-sm bg-surface-card shadow-card overflow-hidden">
+                  <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-hairline/40 bg-surface/30">
+                    <Badge variant={s.kategori === "Plugin" ? "primary" : "success"}>
+                      {s.kategori}
+                    </Badge>
+                    <Badge variant={isOut ? "danger" : isLow ? "warning" : "outline"}>
+                      {s.kategori === "Jasa" ? "∞ stok" : `${formatNumber(s.stok)} stok`}
+                    </Badge>
+                  </div>
+                  <div className="px-3 py-2.5">
+                    <p className="text-[9px] uppercase tracking-wider text-ash font-semibold leading-none">
+                      Produk
+                    </p>
+                    <p className="text-sm font-bold text-ink mt-1 break-words">
+                      {s.nama_produk}
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-3 border-t border-hairline/40 divide-x divide-hairline/40">
+                    <div className="px-2.5 py-2">
+                      <p className="text-[9px] uppercase tracking-wider text-ash font-semibold leading-none">
+                        Modal
+                      </p>
+                      <p className="text-xs font-semibold text-ink mt-1.5 truncate">
+                        {formatRupiah(s.harga_beli)}
+                      </p>
+                    </div>
+                    <div className="px-2.5 py-2">
+                      <p className="text-[9px] uppercase tracking-wider text-ash font-semibold leading-none">
+                        Jual
+                      </p>
+                      <p className="text-xs font-semibold text-ink mt-1.5 truncate">
+                        {formatRupiah(s.harga_jual)}
+                      </p>
+                    </div>
+                    <div className="px-2.5 py-2">
+                      <p className="text-[9px] uppercase tracking-wider text-ash font-semibold leading-none">
+                        Nilai
+                      </p>
+                      <p className="text-xs font-bold text-ink mt-1.5 truncate">
+                        {s.kategori === "Jasa" ? "-" : formatRupiah(s.stok * s.harga_beli)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
     </div>
   );
 }
