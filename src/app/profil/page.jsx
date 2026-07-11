@@ -1,6 +1,6 @@
 "use client";
 
-import { PageHeader } from "@/components/layout/PageHeader";
+import PageHeader from "@/components/layout/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { User, Mail, Phone, MapPin } from "lucide-react";
 
