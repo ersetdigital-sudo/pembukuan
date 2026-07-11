@@ -346,7 +346,7 @@ export default function LaporanPage() {
       </PageHeader>
 
       {/* KPI Cards — samain style dengan dashboard */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 mb-4 sm:mb-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 mb-4 sm:mb-5">
         <StatCard
           title="Total Profit Penjualan"
           value={formatRupiah(totalLaba)}
