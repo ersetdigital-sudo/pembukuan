@@ -324,7 +324,7 @@ export default function PenjualanClient() {
                             </span>
                           )}
                           {produk.length > 1 && (
-                            <span className="inline-flex items-center px-1.5 py-0 rounded text-[10px] font-semibold bg-secondary/10 text-secondary border border-secondary/20">
+                            <span className="inline-flex items-center px-1.5 py-0 rounded text-[10px] font-semibold bg-secondary text-ash border border-hairline">
                               +{produk.length - 1} lainnya
                             </span>
                           )}
@@ -332,7 +332,7 @@ export default function PenjualanClient() {
                       </td>
                       <td className="px-3 py-2 text-right text-xs font-semibold border-r border-hairline whitespace-nowrap">
                         {s.fee_mp ? (
-                          <span className="text-secondary">{formatRupiah(s.fee_mp)}</span>
+                          <span className="text-charcoal">{formatRupiah(s.fee_mp)}</span>
                         ) : (
                           <span className="text-ash">-</span>
                         )}
@@ -340,7 +340,9 @@ export default function PenjualanClient() {
                       <td className="px-3 py-2 text-right font-semibold text-ink border-r border-hairline whitespace-nowrap">
                         {formatRupiah(totals.totalJual)}
                       </td>
-                      <td className="px-3 py-2 text-right font-bold text-secondary border-r border-hairline whitespace-nowrap">
+                      <td className={`px-3 py-2 text-right font-bold border-r border-hairline whitespace-nowrap ${
+                        totals.profit >= 0 ? "text-success" : "text-danger"
+                      }`}>
                         {formatRupiah(totals.profit)}
                       </td>
                       <td className="px-2 py-2">
