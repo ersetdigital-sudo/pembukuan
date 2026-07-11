@@ -13,6 +13,7 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import MonthPicker from "@/components/dashboard/MonthPicker";
+import StatCard from "@/components/dashboard/StatCard";
 import SaleFormDialog from "@/components/penjualan/SaleFormDialog";
 import SaleDetailModal from "@/components/penjualan/SaleDetailModal";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
@@ -191,45 +192,45 @@ export default function PenjualanClient() {
         title="Penjualan"
         subtitle="Catat semua transaksi penjualan harian"
       >
-        <MonthPicker month={month} year={year} />
-        <Button
-          variant="primary"
-          onClick={openTambah}
-        >
-          <Plus className="h-4 w-4" />
-          Tambah
-        </Button>
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
+          <MonthPicker month={month} year={year} />
+          <Button
+            variant="primary"
+            onClick={openTambah}
+            className="w-full sm:w-auto"
+          >
+            <Plus className="h-4 w-4" />
+            Tambah
+          </Button>
+        </div>
       </PageHeader>
 
-      {/* 4 compact stat cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
-        <CompactStat
+      {/* 4 stat cards — samain style dengan dashboard */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 mb-4 sm:mb-5">
+        <StatCard
           title="Total Penjualan"
           value={formatRupiah(totalJual)}
           icon={TrendingUp}
-          iconBg="bg-success/10"
-          iconColor="text-success"
+          color="emerald"
         />
-        <CompactStat
+        <StatCard
           title="Total Modal"
           value={formatRupiah(totalModal)}
           icon={Wallet}
-          iconBg="bg-info/10"
-          iconColor="text-info"
+          color="sky"
         />
-        <CompactStat
+        <StatCard
           title="Total Fee MP"
           value={formatRupiah(totalFee)}
           icon={Tag}
-          iconBg="bg-secondary/10"
-          iconColor="text-secondary"
+          color="secondary"
         />
-        <CompactStat
+        <StatCard
           title="Total Profit"
           value={formatRupiah(totalProfit)}
           icon={Star}
-          iconBg="bg-secondary/10"
-          iconColor="text-secondary"
+          color="emerald"
+          valueClass={totalProfit >= 0 ? "text-success" : "text-danger"}
         />
       </div>
 
@@ -453,27 +454,7 @@ export default function PenjualanClient() {
   );
 }
 
-function CompactStat({ title, value, icon: Icon, iconBg, iconColor }) {
-  return (
-    <div className="h-full rounded-sm bg-surface-card shadow-card hover:shadow-card-hover transition-shadow duration-200 p-4 flex items-center gap-3">
-      <div
-        className={`h-10 w-10 rounded-full grid place-items-center shrink-0 ${iconBg} ${iconColor}`}
-      >
-        <Icon className="h-4.5 w-4.5" strokeWidth={2} />
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-[11px] font-medium text-ash leading-none truncate">
-          {title}
-        </p>
-        <p className="text-heading-sm mt-1 leading-tight text-ink tabular-nums break-words">
-          {value}
-        </p>
-      </div>
-    </div>
-  );
-}
-
-// â"€â"€ Mobile-only card view (pengganti tabel di mobile) â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
+// ── Mobile-only card view (pengganti tabel di mobile) ──────────────
 function MobileSaleCard({ sale, totals, produk, onDetail, onEdit, onDelete }) {
   const profitPositive = totals.profit >= 0;
   return (
