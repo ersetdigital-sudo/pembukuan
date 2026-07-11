@@ -430,22 +430,41 @@ export default function LaporanPage() {
             const pluginS = sharing.pluginShares || {};
             const jasaS = sharing.jasaShares || {};
 
-            // Collect unique persons
+            // Collect unique persons (exclude "Modal & Dev" — merge into Asrud)
             const persons = {};
+            const modalEntries = []; // collect modal entries to merge into Asrud
+
             pluginP.forEach((p) => {
               const key = p.name.toLowerCase().replace(/[^a-z]/g, "");
-              if (!persons[key]) persons[key] = { name: p.name, initials: p.initials, details: [], total: 0 };
               const val = pluginS[key] || 0;
-              persons[key].details.push({ label: `Plugin (${p.percentage}%)`, value: val });
-              persons[key].total += val;
+              // "Modal & Dev" or similar non-person entries go to Asrud
+              if (key === "modaldev" || key === "modal") {
+                modalEntries.push({ label: `${p.name} (${p.percentage}%)`, value: val });
+              } else {
+                if (!persons[key]) persons[key] = { name: p.name, initials: p.initials, details: [], total: 0 };
+                persons[key].details.push({ label: `Plugin (${p.percentage}%)`, value: val });
+                persons[key].total += val;
+              }
             });
             jasaP.forEach((p) => {
               const key = p.name.toLowerCase().replace(/[^a-z]/g, "");
-              if (!persons[key]) persons[key] = { name: p.name, initials: p.initials, details: [], total: 0 };
               const val = jasaS[key] || 0;
+              if (!persons[key]) persons[key] = { name: p.name, initials: p.initials, details: [], total: 0 };
               persons[key].details.push({ label: `Jasa (${p.percentage}%)`, value: val });
               persons[key].total += val;
             });
+
+            // Merge modal entries into Asrud (or last person if Asrud doesn't exist)
+            if (modalEntries.length > 0) {
+              const asrudKey = "asrud";
+              const target = persons[asrudKey] || Object.values(persons)[Object.values(persons).length - 1];
+              if (target) {
+                modalEntries.forEach((entry) => {
+                  target.details.push(entry);
+                  target.total += entry.value;
+                });
+              }
+            }
 
             return Object.values(persons).map((person) => (
               <TransferCard

@@ -10,22 +10,39 @@ export default function ProfitSharingCard({ sharing, periodLabel }) {
   const pluginS = sharing.pluginShares || {};
   const jasaS = sharing.jasaShares || {};
 
-  // Build person-based transfer blocks dynamically
+  // Build person-based transfer blocks dynamically (merge Modal & Dev into Asrud)
   const persons = {};
+  const modalEntries = [];
+
   pluginP.forEach((p) => {
     const key = p.name.toLowerCase().replace(/[^a-z]/g, "");
-    if (!persons[key]) persons[key] = { name: p.name, initials: p.initials, details: [], total: 0 };
     const val = pluginS[key] || 0;
-    persons[key].details.push({ label: `Plugin (${p.percentage}%)`, value: val });
-    persons[key].total += val;
+    if (key === "modaldev" || key === "modal") {
+      modalEntries.push({ label: `${p.name} (${p.percentage}%)`, value: val });
+    } else {
+      if (!persons[key]) persons[key] = { name: p.name, initials: p.initials, details: [], total: 0 };
+      persons[key].details.push({ label: `Plugin (${p.percentage}%)`, value: val });
+      persons[key].total += val;
+    }
   });
   jasaP.forEach((p) => {
     const key = p.name.toLowerCase().replace(/[^a-z]/g, "");
-    if (!persons[key]) persons[key] = { name: p.name, initials: p.initials, details: [], total: 0 };
     const val = jasaS[key] || 0;
+    if (!persons[key]) persons[key] = { name: p.name, initials: p.initials, details: [], total: 0 };
     persons[key].details.push({ label: `Jasa (${p.percentage}%)`, value: val });
     persons[key].total += val;
   });
+
+  // Merge modal entries into Asrud
+  if (modalEntries.length > 0) {
+    const target = persons.asrud || Object.values(persons)[Object.values(persons).length - 1];
+    if (target) {
+      modalEntries.forEach((entry) => {
+        target.details.push(entry);
+        target.total += entry.value;
+      });
+    }
+  }
 
   const personList = Object.values(persons);
 
