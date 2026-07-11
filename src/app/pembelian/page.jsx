@@ -49,6 +49,7 @@ export default function PembelianPage() {
           value={formatRupiah(total)}
           icon={Wallet}
           color="emerald"
+          className="col-span-2 lg:col-span-1"
         />
       </div>
 

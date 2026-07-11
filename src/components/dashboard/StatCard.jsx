@@ -18,9 +18,10 @@ export default function StatCard({
   icon: Icon,
   color = "primary",
   valueClass = "",
+  className = "",
 }) {
   return (
-    <Card className="p-4 flex items-center gap-3">
+    <Card className={cn("p-4 flex items-center gap-3", className)}>
       <div className="h-9 w-9 rounded-sm bg-primary text-on-primary grid place-items-center shrink-0">
         {Icon && <Icon className="h-4 w-4" strokeWidth={2} />}
       </div>
