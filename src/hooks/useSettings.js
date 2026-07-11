@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { supabase } from "@/lib/supabase/client";
 import { MARKETPLACES } from "@/lib/constants";
 
-// Default profit sharing config (matches the hardcoded values)
+// Default profit sharing config
 const DEFAULT_PROFIT_SHARING = {
   plugin: {
     partners: [
@@ -23,149 +23,131 @@ const DEFAULT_PROFIT_SHARING = {
 
 const DEFAULT_MARKETPLACES = MARKETPLACES;
 
-// Module-level cache — shared across all hook instances in the same session
-let _settingsCache = null;
-let _settingsPromise = null;
+// Global state — shared across all components
+let _settings = {
+  marketplaces: DEFAULT_MARKETPLACES,
+  profitSharing: DEFAULT_PROFIT_SHARING,
+  loaded: false,
+};
+let _fetchPromise = null;
+let _listeners = new Set();
 
-/** Invalidate settings cache (forces re-fetch on next hook mount) */
-export function invalidateSettingsCache() {
-  _settingsCache = null;
-  _settingsPromise = null;
+function notify() {
+  _listeners.forEach((fn) => fn({ ..._settings }));
 }
 
-/** Fetch settings from Supabase (shared promise to avoid duplicate calls) */
-function fetchSettings() {
-  if (_settingsCache) return Promise.resolve(_settingsCache);
-  if (_settingsPromise) return _settingsPromise;
+/** Fetch settings from Supabase once */
+function ensureLoaded() {
+  if (_settings.loaded) return Promise.resolve(_settings);
+  if (_fetchPromise) return _fetchPromise;
 
   if (!supabase) {
-    const defaults = { marketplaces: DEFAULT_MARKETPLACES, profitSharing: DEFAULT_PROFIT_SHARING };
-    _settingsCache = defaults;
-    return Promise.resolve(defaults);
+    _settings.loaded = true;
+    return Promise.resolve(_settings);
   }
 
-  _settingsPromise = supabase
+  _fetchPromise = supabase
     .from("settings")
     .select("key, value")
     .then(({ data, error }) => {
       if (error) throw error;
-
       const map = {};
-      (data || []).forEach((row) => {
-        map[row.key] = row.value;
-      });
+      (data || []).forEach((row) => { map[row.key] = row.value; });
 
-      const mp = Array.isArray(map.marketplaces)
-        ? map.marketplaces
-        : DEFAULT_MARKETPLACES;
-      const ps = map.profit_sharing || DEFAULT_PROFIT_SHARING;
-
-      _settingsCache = { marketplaces: mp, profitSharing: ps };
-      return _settingsCache;
+      if (Array.isArray(map.marketplaces)) {
+        _settings.marketplaces = map.marketplaces;
+      }
+      if (map.profit_sharing && map.profit_sharing.plugin) {
+        _settings.profitSharing = map.profit_sharing;
+      }
+      _settings.loaded = true;
+      notify();
+      return _settings;
     })
     .catch((err) => {
-      console.warn("[Settings] Failed to load:", err.message);
-      _settingsCache = { marketplaces: DEFAULT_MARKETPLACES, profitSharing: DEFAULT_PROFIT_SHARING };
-      return _settingsCache;
+      console.warn("[Settings] load error:", err.message);
+      _settings.loaded = true;
+      return _settings;
     })
-    .finally(() => {
-      _settingsPromise = null;
-    });
+    .finally(() => { _fetchPromise = null; });
 
-  return _settingsPromise;
+  return _fetchPromise;
 }
 
 /**
- * Hook to load and save app settings from Supabase settings table.
- * Falls back to defaults if Supabase is unavailable.
+ * Hook to use app settings. Always returns latest from global state.
  */
 export function useSettings() {
-  const [marketplaces, setMarketplaces] = useState(
-    () => _settingsCache?.marketplaces || DEFAULT_MARKETPLACES
-  );
-  const [profitSharing, setProfitSharing] = useState(
-    () => _settingsCache?.profitSharing || DEFAULT_PROFIT_SHARING
-  );
-  const [loading, setLoading] = useState(!_settingsCache);
+  const [state, setState] = useState(() => ({ ..._settings }));
   const [saving, setSaving] = useState(false);
 
-  // Load settings on mount
   useEffect(() => {
-    if (_settingsCache) {
-      setMarketplaces(_settingsCache.marketplaces);
-      setProfitSharing(_settingsCache.profitSharing);
-      setLoading(false);
-      return;
+    // Subscribe to changes
+    const listener = (s) => setState(s);
+    _listeners.add(listener);
+
+    // Trigger load if not loaded yet
+    if (!_settings.loaded) {
+      ensureLoaded().then((s) => setState({ ...s }));
+    } else {
+      // Sync in case another component updated
+      setState({ ..._settings });
     }
 
-    fetchSettings().then((settings) => {
-      setMarketplaces(settings.marketplaces);
-      setProfitSharing(settings.profitSharing);
-      setLoading(false);
-    });
+    return () => { _listeners.delete(listener); };
   }, []);
 
   // Save marketplaces
   const saveMarketplaces = useCallback(async (newList) => {
     setSaving(true);
-    setMarketplaces(newList);
+    _settings.marketplaces = newList;
+    notify();
 
     if (supabase) {
       try {
-        const { error } = await supabase
+        await supabase
           .from("settings")
           .upsert({ id: "set-1", key: "marketplaces", value: newList, updated_at: new Date().toISOString() });
-        if (error) throw error;
       } catch (err) {
-        console.warn("[Settings] Failed to save marketplaces:", err.message);
+        console.warn("[Settings] save marketplaces error:", err.message);
       }
     }
-
-    _settingsCache = { ...(_settingsCache || {}), marketplaces: newList };
     setSaving(false);
   }, []);
 
   // Save profit sharing
   const saveProfitSharing = useCallback(async (newConfig) => {
     setSaving(true);
-    setProfitSharing(newConfig);
+    _settings.profitSharing = newConfig;
+    notify();
 
     if (supabase) {
       try {
-        const { error } = await supabase
+        await supabase
           .from("settings")
           .upsert({ id: "set-2", key: "profit_sharing", value: newConfig, updated_at: new Date().toISOString() });
-        if (error) throw error;
       } catch (err) {
-        console.warn("[Settings] Failed to save profit sharing:", err.message);
+        console.warn("[Settings] save profit_sharing error:", err.message);
       }
     }
-
-    _settingsCache = { ...(_settingsCache || {}), profitSharing: newConfig };
     setSaving(false);
   }, []);
 
   return {
-    marketplaces,
-    profitSharing,
-    loading,
+    marketplaces: state.marketplaces,
+    profitSharing: state.profitSharing,
+    loading: !state.loaded,
     saving,
     saveMarketplaces,
     saveProfitSharing,
   };
 }
 
-/**
- * Get profit sharing config synchronously (from cache or defaults).
- * Used by computeProfitSharing without requiring React context.
- */
+/** Sync getter for non-React code */
 export function getProfitSharingConfig() {
-  return _settingsCache?.profitSharing || DEFAULT_PROFIT_SHARING;
+  return _settings.profitSharing;
 }
 
-/**
- * Get marketplaces list synchronously (from cache or defaults).
- */
 export function getMarketplacesConfig() {
-  return _settingsCache?.marketplaces || DEFAULT_MARKETPLACES;
+  return _settings.marketplaces;
 }

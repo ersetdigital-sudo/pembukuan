@@ -5,15 +5,29 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
 export default function ProfitSharingCard({ sharing, periodLabel }) {
   if (!sharing) return null;
 
-  const {
-    transferAndri,
-    transferAsrud,
-    pluginAndri,
-    jasaAndri,
-    pluginAsrud,
-    jasaAsrud,
-    pluginModal,
-  } = sharing;
+  const pluginP = sharing.pluginPartners || [];
+  const jasaP = sharing.jasaPartners || [];
+  const pluginS = sharing.pluginShares || {};
+  const jasaS = sharing.jasaShares || {};
+
+  // Build person-based transfer blocks dynamically
+  const persons = {};
+  pluginP.forEach((p) => {
+    const key = p.name.toLowerCase().replace(/[^a-z]/g, "");
+    if (!persons[key]) persons[key] = { name: p.name, initials: p.initials, details: [], total: 0 };
+    const val = pluginS[key] || 0;
+    persons[key].details.push({ label: `Plugin (${p.percentage}%)`, value: val });
+    persons[key].total += val;
+  });
+  jasaP.forEach((p) => {
+    const key = p.name.toLowerCase().replace(/[^a-z]/g, "");
+    if (!persons[key]) persons[key] = { name: p.name, initials: p.initials, details: [], total: 0 };
+    const val = jasaS[key] || 0;
+    persons[key].details.push({ label: `Jasa (${p.percentage}%)`, value: val });
+    persons[key].total += val;
+  });
+
+  const personList = Object.values(persons);
 
   return (
     <Card className="p-0 overflow-hidden">
@@ -30,30 +44,18 @@ export default function ProfitSharingCard({ sharing, periodLabel }) {
       </CardHeader>
 
       <CardContent className="pt-0 space-y-4">
-        <TransferBlock
-          name="Andri"
-          initials="A"
-          total={transferAndri}
-          details={[
-            { label: "Plugin (40%)", value: pluginAndri },
-            { label: "Jasa (40%)", value: jasaAndri },
-          ]}
-          tone="primary"
-        />
-
-        <div className="h-px bg-divider" />
-
-        <TransferBlock
-          name="Asrud"
-          initials="As"
-          total={transferAsrud}
-          details={[
-            { label: "Plugin (40%)", value: pluginAsrud },
-            { label: "Jasa (60%)", value: jasaAsrud },
-            { label: "Modal & Dev (20%)", value: pluginModal },
-          ]}
-          tone="success"
-        />
+        {personList.map((person, idx) => (
+          <div key={person.name}>
+            {idx > 0 && <div className="h-px bg-divider mb-4" />}
+            <TransferBlock
+              name={person.name}
+              initials={person.initials}
+              total={person.total}
+              details={person.details}
+              tone={idx === 0 ? "primary" : "success"}
+            />
+          </div>
+        ))}
       </CardContent>
     </Card>
   );
@@ -65,7 +67,7 @@ function TransferBlock({ name, initials, total, details, tone }) {
 
   const toneMap = {
     primary: {
-      avatar: "bg-primary text-on-primary",
+      avatar: "bg-primary text-white",
       bar: "from-ink to-ash",
       pct: "text-ink",
     },

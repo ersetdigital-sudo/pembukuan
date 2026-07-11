@@ -397,21 +397,20 @@ export default function LaporanPage() {
           kicker="Kategori Plugin"
           totalLabel="Total Profit Bersih"
           total={sharing.profitPlugin}
-          buckets={[
-            { pct: 40, initials: "A", label: "Andri", value: sharing.pluginAndri },
-            { pct: 40, initials: "As", label: "Asrud", value: sharing.pluginAsrud },
-            { pct: 20, initials: "M", label: "Modal & Dev", value: sharing.pluginModal },
-          ]}
+          buckets={(sharing.pluginPartners || []).map((p) => {
+            const key = p.name.toLowerCase().replace(/[^a-z]/g, "");
+            return { pct: p.percentage, initials: p.initials, label: p.name, value: sharing.pluginShares?.[key] || 0 };
+          })}
         />
         <ProfitCard
           tone="success"
           kicker="Kategori Jasa"
           totalLabel="Total Profit Bersih"
           total={sharing.profitJasa}
-          buckets={[
-            { pct: 40, initials: "A", label: "Andri", value: sharing.jasaAndri },
-            { pct: 60, initials: "As", label: "Asrud", value: sharing.jasaAsrud },
-          ]}
+          buckets={(sharing.jasaPartners || []).map((p) => {
+            const key = p.name.toLowerCase().replace(/[^a-z]/g, "");
+            return { pct: p.percentage, initials: p.initials, label: p.name, value: sharing.jasaShares?.[key] || 0 };
+          })}
         />
       </div>
 
@@ -424,25 +423,40 @@ export default function LaporanPage() {
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <TransferCard
-            name="Andri"
-            initials="A"
-            total={sharing.transferAndri}
-            details={[
-              { label: "Plugin (40%)", value: sharing.pluginAndri },
-              { label: "Jasa (40%)", value: sharing.jasaAndri },
-            ]}
-          />
-          <TransferCard
-            name="Asrud"
-            initials="As"
-            total={sharing.transferAsrud}
-            details={[
-              { label: "Plugin (40%)", value: sharing.pluginAsrud },
-              { label: "Jasa (60%)", value: sharing.jasaAsrud },
-              { label: "Modal & Dev Plugin (20%)", value: sharing.pluginModal },
-            ]}
-          />
+          {(() => {
+            // Build transfer cards dynamically from settings partners
+            const pluginP = sharing.pluginPartners || [];
+            const jasaP = sharing.jasaPartners || [];
+            const pluginS = sharing.pluginShares || {};
+            const jasaS = sharing.jasaShares || {};
+
+            // Collect unique persons
+            const persons = {};
+            pluginP.forEach((p) => {
+              const key = p.name.toLowerCase().replace(/[^a-z]/g, "");
+              if (!persons[key]) persons[key] = { name: p.name, initials: p.initials, details: [], total: 0 };
+              const val = pluginS[key] || 0;
+              persons[key].details.push({ label: `Plugin (${p.percentage}%)`, value: val });
+              persons[key].total += val;
+            });
+            jasaP.forEach((p) => {
+              const key = p.name.toLowerCase().replace(/[^a-z]/g, "");
+              if (!persons[key]) persons[key] = { name: p.name, initials: p.initials, details: [], total: 0 };
+              const val = jasaS[key] || 0;
+              persons[key].details.push({ label: `Jasa (${p.percentage}%)`, value: val });
+              persons[key].total += val;
+            });
+
+            return Object.values(persons).map((person) => (
+              <TransferCard
+                key={person.name}
+                name={person.name}
+                initials={person.initials}
+                total={person.total}
+                details={person.details}
+              />
+            ));
+          })()}
         </div>
       </div>
 
