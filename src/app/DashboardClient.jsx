@@ -234,7 +234,10 @@ export default function DashboardPage() {
         <StatCard
           title="Total Profit"
           value={formatRupiah(totalProfit)}
-          sub={`Untung ${formatPercent(totalPenjualan > 0 ? (totalProfit / totalPenjualan) * 100 : 0).replace('.', ',')} dari total penjualan`}
+          sub={totalProfit >= 0
+            ? `Margin ${formatPercent(totalPenjualan > 0 ? (totalProfit / totalPenjualan) * 100 : 0).replace('.', ',')} dari penjualan`
+            : `Rugi ${formatPercent(totalPenjualan > 0 ? Math.abs((totalProfit / totalPenjualan) * 100) : 0).replace('.', ',')} dari penjualan`
+          }
           icon={TrendingUp}
           color="emerald"
           valueClass={totalProfit >= 0 ? "text-success" : "text-danger"}
@@ -242,7 +245,7 @@ export default function DashboardPage() {
         <StatCard
           title="Total Biaya"
           value={formatRupiah(totalBiaya)}
-          sub={`${(totalPenjualan > 0 ? (totalFeeMP / totalPenjualan) * 100 : 0).toFixed(1).replace('.', ',')}% dari penjualan`}
+          sub={totalPenjualan > 0 ? `${(totalBiaya / totalPenjualan * 100).toFixed(1).replace('.', ',')}% dari penjualan` : "Belum ada penjualan"}
           icon={Receipt}
           color="secondary"
         />
