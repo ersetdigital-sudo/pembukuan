@@ -146,16 +146,7 @@ export function aggregateByCustomer(sales, profitFn) {
  *                                   { plugin: { partners: [...] }, jasa: { partners: [...] } }
  */
 export function computeProfitSharing(sales, profitFn, iklans = [], sharingConfig = null) {
-  // Import dynamically to avoid circular deps; fallback if not available
-  let config = sharingConfig;
-  if (!config) {
-    try {
-      const { getProfitSharingConfig } = require("@/hooks/useSettings");
-      config = getProfitSharingConfig();
-    } catch {
-      config = null;
-    }
-  }
+  const config = sharingConfig || null;
 
   // Default percentages if no config
   const pluginPartners = config?.plugin?.partners || [
