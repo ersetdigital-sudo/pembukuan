@@ -27,7 +27,7 @@ const defaultForm = {
 
 export default function PembelianPage() {
   const [search, setSearch] = useState("");
-  const { purchases: dbPurchases } = useSupabaseData();
+  const { purchases: dbPurchases, stocks } = useSupabaseData();
   const { toast } = useToast();
 
   const [purchases, setPurchases] = useState([]);
@@ -50,9 +50,31 @@ export default function PembelianPage() {
   const total = filtered.reduce((s, p) => s + (p.total || 0), 0);
   const totalQty = filtered.reduce((s, p) => s + (p.qty || 0), 0);
 
+  // Product name suggestions from stocks
+  const productNames = useMemo(
+    () => [...new Set((stocks || []).map((s) => s.nama_produk).filter(Boolean))].sort(),
+    [stocks]
+  );
+  const [produkQuery, setProdukQuery] = useState("");
+  const [showProdukList, setShowProdukList] = useState(false);
+  const filteredProducts = produkQuery
+    ? productNames.filter((n) => n.toLowerCase().includes(produkQuery.toLowerCase()))
+    : productNames;
+
+  // Rupiah display formatter (strips non-digits, formats with dots)
+  const toRupiahDisplay = (val) => {
+    const num = Number(String(val).replace(/\D/g, ""));
+    if (!num) return "";
+    return num.toLocaleString("id-ID");
+  };
+
+  const [hargaDisplay, setHargaDisplay] = useState("");
+
   const openTambah = () => {
     setEditData(null);
     setForm(defaultForm);
+    setHargaDisplay("");
+    setProdukQuery("");
     setDialogOpen(true);
   };
 
@@ -65,6 +87,8 @@ export default function PembelianPage() {
       harga_satuan: item.harga_satuan || "",
       keterangan: item.keterangan || "",
     });
+    setHargaDisplay(item.harga_satuan ? toRupiahDisplay(item.harga_satuan) : "");
+    setProdukQuery(item.nama_produk || "");
     setDialogOpen(true);
   };
 
@@ -282,41 +306,74 @@ export default function PembelianPage() {
       )}
 
       {/* Form Dialog */}
-      <Dialog open={dialogOpen} onOpenChange={(o) => { setDialogOpen(o); if (!o) setEditData(null); }}>
+      <Dialog open={dialogOpen} onOpenChange={(o) => { setDialogOpen(o); if (!o) { setEditData(null); setShowProdukList(false); } }}>
         <DialogContent className="max-w-md">
           <DialogHeader onClose={() => setDialogOpen(false)}>
             <DialogTitle>{editData ? "Edit Pembelian" : "Tambah Pembelian"}</DialogTitle>
           </DialogHeader>
 
           <form onSubmit={handleSave} className="px-5 py-4 space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <Label>Tanggal *</Label>
-                <Input
-                  type="date"
-                  value={form.tanggal}
-                  onChange={(e) => setField("tanggal", e.target.value)}
-                  required
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label>Nama Produk *</Label>
-                <Input
-                  value={form.nama_produk}
-                  onChange={(e) => setField("nama_produk", e.target.value)}
-                  placeholder="Nama produk yang dibeli"
-                  required
-                />
-              </div>
+            {/* Tanggal */}
+            <div className="space-y-1.5">
+              <Label>Tanggal *</Label>
+              <Input
+                type="date"
+                value={form.tanggal}
+                onChange={(e) => setField("tanggal", e.target.value)}
+                required
+              />
             </div>
 
+            {/* Nama Produk - Combobox */}
+            <div className="space-y-1.5 relative">
+              <Label>Nama Produk *</Label>
+              <Input
+                value={produkQuery}
+                onChange={(e) => {
+                  setProdukQuery(e.target.value);
+                  setField("nama_produk", e.target.value);
+                  setShowProdukList(true);
+                }}
+                onFocus={() => setShowProdukList(true)}
+                onBlur={() => setTimeout(() => setShowProdukList(false), 200)}
+                placeholder="Ketik atau pilih dari daftar..."
+                required
+                autoComplete="off"
+              />
+              {showProdukList && filteredProducts.length > 0 && (
+                <div className="absolute z-50 mt-1 w-full max-h-48 overflow-auto rounded-sm border border-hairline bg-surface-card shadow-elevated animate-fade-up">
+                  {filteredProducts.map((name) => (
+                    <button
+                      key={name}
+                      type="button"
+                      className="w-full text-left px-3 py-2 text-body-sm hover:bg-secondary transition-colors"
+                      onMouseDown={() => {
+                        setProdukQuery(name);
+                        setField("nama_produk", name);
+                        setShowProdukList(false);
+                        // Auto-fill harga beli from stock
+                        const stock = (stocks || []).find((s) => s.nama_produk === name);
+                        if (stock && stock.harga_beli) {
+                          setField("harga_satuan", stock.harga_beli);
+                          setHargaDisplay(toRupiahDisplay(stock.harga_beli));
+                        }
+                      }}
+                    >
+                      {name}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* QTY + Harga Satuan */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <Label>QTY *</Label>
                 <Input
                   type="number"
                   min="1"
-                  value={form.qty}
+                  value={form.qty || ""}
                   onChange={(e) => setField("qty", e.target.value)}
                   placeholder="0"
                   onFocus={(e) => e.target.select()}
@@ -325,15 +382,22 @@ export default function PembelianPage() {
               </div>
               <div className="space-y-1.5">
                 <Label>Harga Satuan *</Label>
-                <Input
-                  type="number"
-                  min="0"
-                  value={form.harga_satuan}
-                  onChange={(e) => setField("harga_satuan", e.target.value)}
-                  placeholder="0"
-                  onFocus={(e) => e.target.select()}
-                  required
-                />
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[12px] text-ash pointer-events-none">Rp</span>
+                  <Input
+                    value={hargaDisplay}
+                    onChange={(e) => {
+                      const raw = e.target.value.replace(/\D/g, "");
+                      const num = Number(raw) || 0;
+                      setHargaDisplay(raw ? Number(raw).toLocaleString("id-ID") : "");
+                      setField("harga_satuan", num);
+                    }}
+                    onFocus={(e) => e.target.select()}
+                    placeholder="0"
+                    className="pl-8"
+                    required
+                  />
+                </div>
               </div>
             </div>
 
@@ -347,6 +411,7 @@ export default function PembelianPage() {
               </div>
             )}
 
+            {/* Keterangan */}
             <div className="space-y-1.5">
               <Label>Keterangan</Label>
               <Input
@@ -357,18 +422,10 @@ export default function PembelianPage() {
             </div>
 
             <DialogFooter>
-              <Button
-                type="button"
-                variant="ghost"
-                onClick={() => setDialogOpen(false)}
-              >
+              <Button type="button" variant="ghost" onClick={() => setDialogOpen(false)}>
                 Batal
               </Button>
-              <Button
-                type="submit"
-                variant="primary"
-                disabled={!isValid || isSaving}
-              >
+              <Button type="submit" variant="primary" disabled={!isValid || isSaving}>
                 {isSaving ? "Menyimpan..." : editData ? "Simpan" : "Tambah"}
               </Button>
             </DialogFooter>
