@@ -1,9 +1,10 @@
 import { cn } from "@/lib/utils/cn";
 import { Card } from "@/components/ui/Card";
 
-const ICON_BG = {
+// Sub-caption pill uses status tokens — icon chip itself stays black/white chrome
+const PILL = {
   emerald: "bg-success/10 text-success",
-  primary: "bg-primary/5 text-ink",
+  primary: "bg-secondary text-ash",
   secondary: "bg-secondary text-ash",
   warning: "bg-warning/10 text-warning",
   danger: "bg-danger/10 text-danger",
@@ -19,33 +20,33 @@ export default function StatCard({
   valueClass = "",
 }) {
   return (
-    <Card className="p-4 flex items-center gap-3">
-      <div
-        className={cn(
-          "h-10 w-10 rounded-full grid place-items-center shrink-0",
-          ICON_BG[color] || ICON_BG.primary
-        )}
-      >
-        {Icon && <Icon className="h-4.5 w-4.5" strokeWidth={2} />}
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-[11px] font-medium text-ash leading-none truncate">
+    <Card className="p-5 md:p-6 flex flex-col gap-3">
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-body-sm font-medium text-ash leading-none truncate">
           {title}
         </p>
-        <p
+        <div className="h-9 w-9 rounded-sm bg-primary text-on-primary grid place-items-center shrink-0">
+          {Icon && <Icon className="h-4 w-4" strokeWidth={2} />}
+        </div>
+      </div>
+      <p
+        className={cn(
+          "text-heading-md font-bold leading-tight break-words tabular-nums",
+          valueClass || "text-ink"
+        )}
+      >
+        {value}
+      </p>
+      {sub && (
+        <span
           className={cn(
-            "text-heading-sm mt-1 leading-tight break-words tabular-nums",
-            valueClass || "text-ink"
+            "inline-flex self-start items-center rounded-full px-2.5 py-1 text-[11px] font-medium leading-none truncate max-w-full",
+            PILL[color] || PILL.primary
           )}
         >
-          {value}
-        </p>
-        {sub && (
-          <p className="text-[11px] text-stone mt-1 leading-tight truncate">
-            {sub}
-          </p>
-        )}
-      </div>
+          {sub}
+        </span>
+      )}
     </Card>
   );
 }
