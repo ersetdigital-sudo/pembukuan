@@ -14,7 +14,7 @@ export const dynamic = "force-dynamic";
 import PageHeader from "@/components/layout/PageHeader";
 import MonthPicker from "@/components/dashboard/MonthPicker";
 import StatCard from "@/components/dashboard/StatCard";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/Table";
 import { Badge } from "@/components/ui/Badge";
@@ -814,7 +814,7 @@ export default function LaporanPage() {
       <section className="mb-6">
         <div className="mb-3">
           <h2 className="text-base font-bold text-ink flex items-center gap-2">
-            <Package className="h-4 w-4 text-secondary" /> Total HPP Produk
+            <Package className="h-4 w-4 text-info" /> Total HPP Produk
           </h2>
           <p className="text-xs text-ash mt-0.5">
             Total modal (harga beli × qty) untuk semua produk terjual di periode ini
@@ -832,7 +832,7 @@ export default function LaporanPage() {
                     {formatRupiah(totalHPP)}
                   </p>
                 </div>
-                <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-secondary/10 text-secondary">
+                <div className="grid h-12 w-12 shrink-0 place-items-center rounded-sm bg-primary text-on-primary">
                   <Package className="h-6 w-6" />
                 </div>
               </div>
@@ -895,120 +895,63 @@ export default function LaporanPage() {
         <Card>
           <CardHeader>
             <div className="flex items-baseline justify-between gap-3">
-              <CardTitle>Detail per Marketplace</CardTitle>
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-ash">
+              <div>
+                <CardTitle>Detail per Marketplace</CardTitle>
+                <CardDescription>Qty terjual dan profit per channel penjualan</CardDescription>
+              </div>
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-ash shrink-0">
                 {activeMarketplaces.length} aktif
               </span>
             </div>
           </CardHeader>
-          <CardContent className="p-0">
+          <CardContent>
             {activeMarketplaces.length === 0 ? (
               <EmptyState message="Belum ada data" />
             ) : (
               <>
-                {/* Desktop: table */}
-                <div className="hidden md:block">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Marketplace</TableHead>
-                        <TableHead className="text-center">Terjual</TableHead>
-                        <TableHead className="text-right">Fee MP</TableHead>
-                        <TableHead className="text-right">Profit</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {activeMarketplaces.map((mp) => {
-                        const v = mpMap[mp];
-                        const share = mpTotals.profit > 0 ? (v.profit / mpTotals.profit) * 100 : 0;
-                        return (
-                          <TableRow key={mp} className="group transition-colors">
-                            <TableCell className="font-medium">
-                              <div className="flex items-center gap-2.5">
-                                <span
-                                  className={`inline-flex h-6 items-center rounded-md px-1.5 text-[10px] font-bold ${MP_BADGE[mp] || "bg-secondary text-ash"}`}
-                                >
-                                  {mp.slice(0, 3).toUpperCase()}
-                                </span>
-                                <span className="text-ash">{mp}</span>
-                              </div>
-                            </TableCell>
-                            <TableCell className="text-center">
-                              <Badge variant="outline">{formatNumber(v.qty)}</Badge>
-                            </TableCell>
-                            <TableCell className="text-right text-info font-semibold tabular-nums">
-                              {v.fee > 0 ? formatRupiah(v.fee) : "-"}
-                            </TableCell>
-                            <TableCell className="text-right">
-                              <div className="flex flex-col items-end leading-tight">
-                                <span className="font-bold tabular-nums text-ash">
-                                  {formatRupiah(v.profit)}
-                                </span>
-                                {share > 0 && (
-                                  <span className="text-[10px] font-semibold tabular-nums text-ash">
-                                    {share.toFixed(1)}%
-                                  </span>
-                                )}
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                    {/* Footer total "" pinned at the bottom, visually separated */}
-                    <tfoot>
-                      <TableRow className="border-t-2 border-primary/15 bg-primary/5 hover:bg-primary/5">
-                        <TableCell className="text-[11px] font-bold uppercase tracking-widest text-primary">
-                          Total
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <span className="font-bold tabular-nums text-ash">
-                            {formatNumber(mpTotals.qty)}
-                          </span>
-                        </TableCell>
-                        <TableCell className="text-right font-bold tabular-nums text-info whitespace-nowrap">
-                          {formatRupiah(mpTotals.fee)}
-                        </TableCell>
-                        <TableCell className="text-right whitespace-nowrap">
-                          <span className="text-base font-extrabold tabular-nums text-primary">
-                            {formatRupiah(mpTotals.profit)}
-                          </span>
-                        </TableCell>
-                      </TableRow>
-                    </tfoot>
-                  </Table>
-                </div>
-
-                {/* Mobile: card list */}
-                <div className="md:hidden space-y-2 px-3 pb-3">
+                <ul className="space-y-3">
                   {activeMarketplaces.map((mp) => {
                     const v = mpMap[mp];
                     const share = mpTotals.profit > 0 ? (v.profit / mpTotals.profit) * 100 : 0;
                     return (
-                      <div key={mp} className="rounded-sm bg-surface/50 px-3 py-2.5 flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <span
-                            className={`inline-flex h-6 items-center rounded-md px-1.5 text-[10px] font-bold shrink-0 ${MP_BADGE[mp] || "bg-secondary text-ash"}`}
-                          >
-                            {mp.slice(0, 3).toUpperCase()}
-                          </span>
-                          <span className="text-sm font-medium text-ink truncate">{mp}</span>
+                      <li key={mp} className="flex items-center gap-3">
+                        <span
+                          className={`inline-flex h-7 shrink-0 items-center rounded-sm px-1.5 text-[10px] font-bold ${MP_BADGE[mp] || "bg-secondary text-ash"}`}
+                        >
+                          {mp.slice(0, 3).toUpperCase()}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center justify-between gap-2">
+                            <p className="truncate text-xs font-semibold text-ink">{mp}</p>
+                            <span className="shrink-0 text-[10px] font-semibold tabular-nums text-ash">
+                              {formatNumber(v.qty)} terjual
+                            </span>
+                          </div>
+                          <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
+                            <div
+                              className="h-full rounded-full bg-ink animate-bar-fill"
+                              style={{ width: `${Math.min(Math.max(share, 0), 100)}%` }}
+                            />
+                          </div>
                         </div>
-                        <div className="text-right shrink-0">
-                          <p className="text-sm font-bold text-ink tabular-nums">{formatRupiah(v.profit)}</p>
-                          <p className="text-[10px] text-ash tabular-nums">
-                            {formatNumber(v.qty)} terjual{share > 0 ? ` · ${share.toFixed(1)}%` : ""}
+                        <div className="shrink-0 text-right leading-tight">
+                          <p className="text-sm font-bold tabular-nums text-ink">{formatRupiah(v.profit)}</p>
+                          <p className="text-[10px] tabular-nums text-info">
+                            {v.fee > 0 ? `Fee ${formatRupiah(v.fee)}` : "\u00A0"}
                           </p>
                         </div>
-                      </div>
+                      </li>
                     );
                   })}
-                  <div className="rounded-sm bg-primary/5 px-3 py-2.5 flex items-center justify-between gap-2">
-                    <span className="text-[11px] font-bold uppercase tracking-widest text-primary">Total</span>
-                    <span className="text-sm font-extrabold tabular-nums text-primary">
-                      {formatRupiah(mpTotals.profit)}
-                    </span>
-                  </div>
+                </ul>
+
+                <div className="mt-4 rounded-sm bg-primary/5 px-3 py-2.5 flex items-center justify-between gap-2">
+                  <span className="text-[11px] font-bold uppercase tracking-widest text-ink">
+                    Total ({formatNumber(mpTotals.qty)} terjual)
+                  </span>
+                  <span className="text-sm font-bold tabular-nums text-ink">
+                    {formatRupiah(mpTotals.profit)}
+                  </span>
                 </div>
               </>
             )}
@@ -1018,60 +961,44 @@ export default function LaporanPage() {
         <Card>
           <CardHeader>
             <CardTitle>Produk Terlaris</CardTitle>
+            <CardDescription>Top {productList.length} produk berdasarkan quantity</CardDescription>
           </CardHeader>
-          <CardContent className="p-0">
+          <CardContent>
             {productList.length === 0 ? (
               <EmptyState message="Belum ada data" />
             ) : (
-              <>
-                {/* Desktop: table */}
-                <div className="hidden md:block">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="w-8">#</TableHead>
-                        <TableHead>Produk</TableHead>
-                        <TableHead className="text-center">Qty</TableHead>
-                        <TableHead className="text-right">Profit</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {productList.map(([nama, data], i) => (
-                        <TableRow key={nama}>
-                          <TableCell>
-                            <span className="w-5 h-5 rounded-full bg-primary/10 text-primary text-[10px] font-bold inline-flex items-center justify-center">
-                              {i + 1}
-                            </span>
-                          </TableCell>
-                          <TableCell className="font-medium truncate max-w-[180px]">{nama}</TableCell>
-                          <TableCell className="text-center">
-                            <Badge variant="outline">{formatNumber(data.qty)}</Badge>
-                          </TableCell>
-                          <TableCell className="text-right font-bold text-primary">
-                            {formatRupiah(data.profit)}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-
-                {/* Mobile: card list */}
-                <div className="md:hidden space-y-2 px-3 pb-3">
-                  {productList.map(([nama, data], i) => (
-                    <div key={nama} className="rounded-sm bg-surface/50 px-3 py-2.5 flex items-center gap-2.5">
-                      <span className="w-6 h-6 rounded-full bg-primary/10 text-primary text-[11px] font-bold inline-flex items-center justify-center shrink-0">
+              <ul className="space-y-3">
+                {productList.map(([nama, data], i) => {
+                  const maxQty = productList[0]?.[1]?.qty || 1;
+                  const share = (data.qty / maxQty) * 100;
+                  return (
+                    <li key={nama} className="flex items-center gap-3">
+                      <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-primary/10 text-[11px] font-bold text-primary">
                         {i + 1}
                       </span>
-                      <span className="text-sm font-medium text-ink truncate flex-1 min-w-0">{nama}</span>
-                      <div className="text-right shrink-0">
-                        <p className="text-sm font-bold text-primary tabular-nums">{formatRupiah(data.profit)}</p>
-                        <p className="text-[10px] text-ash tabular-nums">{formatNumber(data.qty)} qty</p>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="truncate text-xs font-semibold text-ink">{nama}</p>
+                          <span className="shrink-0 text-[10px] font-semibold tabular-nums text-ash">
+                            {formatNumber(data.qty)} qty
+                          </span>
+                        </div>
+                        <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
+                          <div
+                            className="h-full rounded-full bg-primary animate-bar-fill"
+                            style={{ width: `${Math.min(Math.max(share, 0), 100)}%` }}
+                          />
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </>
+                      <div className="shrink-0 text-right">
+                        <p className="text-sm font-bold tabular-nums text-primary">
+                          {formatRupiah(data.profit)}
+                        </p>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
             )}
           </CardContent>
         </Card>
