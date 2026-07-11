@@ -206,7 +206,7 @@ export default function PenjualanClient() {
       </PageHeader>
 
       {/* 4 stat cards — samain style dengan dashboard */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 mb-4 sm:mb-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 mb-4 sm:mb-5">
         <StatCard
           title="Total Penjualan"
           value={formatRupiah(totalJual)}
