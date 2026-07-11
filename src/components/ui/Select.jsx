@@ -23,13 +23,13 @@ export function SelectTrigger({ className = "", children }) {
       onClick={() => ctx.setOpen(!ctx.open)}
       onBlur={() => setTimeout(() => ctx.setOpen(false), 150)}
       className={cn(
-        "h-10 w-full rounded-md border border-input bg-surface-card px-3 text-sm text-ink inline-flex items-center justify-between gap-2",
-        "focus:border-primary focus:outline-none focus:ring-0",
+        "h-10 w-full rounded-lg border border-hairline bg-surface-card px-3 text-sm text-ink inline-flex items-center justify-between gap-2 transition-all",
+        "hover:border-primary/30 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10 shadow-sm",
         className
       )}
     >
       {children}
-      <ChevronDown className="h-4 w-4 text-ash shrink-0" />
+      <ChevronDown className={cn("h-4 w-4 text-ash shrink-0 transition-transform", ctx.open && "rotate-180")} />
     </button>
   );
 }
@@ -54,7 +54,7 @@ export function SelectContent({ className = "", children }) {
   return (
     <div
       className={cn(
-        "absolute z-50 mt-1 w-full max-h-60 overflow-auto rounded-md border border-hairline bg-surface-card ",
+        "absolute z-50 mt-2 w-full max-h-60 overflow-auto rounded-lg border border-hairline bg-surface-card shadow-lg",
         className
       )}
     >
@@ -74,9 +74,9 @@ export function SelectItem({ value, children, className = "" }) {
         ctx.setOpen(false);
       }}
       className={cn(
-        "w-full text-left px-2 py-1.5 text-sm rounded-sm flex items-center justify-between",
-        "hover:bg-surface",
-        selected && "bg-surface font-semibold",
+        "w-full text-left px-3 py-2 text-sm rounded-md flex items-center justify-between transition-colors",
+        "hover:bg-surface-bone",
+        selected && "bg-primary/10 text-primary font-semibold",
         className
       )}
     >

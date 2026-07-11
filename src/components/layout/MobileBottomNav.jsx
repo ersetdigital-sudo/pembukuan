@@ -21,7 +21,7 @@ export default function MobileBottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t border-hairline bg-surface-bone lg:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t border-hairline bg-surface shadow-lg lg:hidden">
       {MOBILE_NAV.map((item) => {
         const Icon = item.icon;
         const isActive = item.href === "/" ? pathname === "/" : pathname?.startsWith(item.href);
@@ -31,7 +31,7 @@ export default function MobileBottomNav() {
             key={item.href}
             href={item.href}
             className={cn(
-              "flex flex-col items-center justify-center gap-1 flex-1 py-3 px-2 transition-colors",
+              "flex flex-col items-center justify-center gap-1 flex-1 py-3 px-2 transition-all",
               isActive
                 ? "text-primary"
                 : "text-ash hover:text-ink"

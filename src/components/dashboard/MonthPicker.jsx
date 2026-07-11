@@ -34,11 +34,11 @@ export default function MonthPicker({ month, year, onChange }) {
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-3">
       <Select
         value={m}
         onValueChange={(v) => handleChange(v, y)}
-        className="w-40"
+        className="w-full sm:w-44"
       >
         <SelectTrigger>
           <SelectValue placeholder="Bulan">{monthLabel}</SelectValue>
@@ -53,7 +53,7 @@ export default function MonthPicker({ month, year, onChange }) {
       <Select
         value={y}
         onValueChange={(v) => handleChange(m, v)}
-        className="w-28"
+        className="w-full sm:w-32"
       >
         <SelectTrigger>
           <SelectValue />

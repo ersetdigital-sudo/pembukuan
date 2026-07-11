@@ -17,22 +17,22 @@ export default function TopProducts({ items, limit = 5 }) {
         {top.length === 0 ? (
           <p className="text-sm text-ash text-center py-8">Belum ada data</p>
         ) : (
-          <ul className="space-y-2">
+          <ul className="space-y-3">
             {top.map(([nama, data], i) => (
-              <li key={nama} className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-full bg-primary/10 text-primary text-[10px] font-bold inline-flex items-center justify-center shrink-0">
+              <li key={nama} className="flex items-center gap-3 p-2 rounded-lg hover:bg-surface-bone transition-colors">
+                <span className="w-6 h-6 rounded-full bg-primary text-white text-xs font-bold inline-flex items-center justify-center shrink-0">
                   {i + 1}
                 </span>
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <p className="text-xs font-medium truncate">{nama}</p>
+                  <div className="flex items-center gap-2 mb-2">
+                    <p className="text-sm font-semibold truncate">{nama}</p>
                     {data.kategori && (
                       <Badge variant={data.kategori === "Plugin" ? "primary" : "success"}>
                         {data.kategori}
                       </Badge>
                     )}
                   </div>
-                  <div className="h-1 bg-muted rounded-full mt-1 overflow-hidden">
+                  <div className="h-1.5 bg-muted rounded-full overflow-hidden">
                     <div
                       className="h-full bg-primary rounded-full transition-all"
                       style={{ width: `${Math.min(100, (data.qty / maxQty) * 100)}%` }}
@@ -40,8 +40,8 @@ export default function TopProducts({ items, limit = 5 }) {
                   </div>
                 </div>
                 <div className="text-right shrink-0">
-                  <p className="text-xs font-semibold">{formatNumber(data.qty)} pcs</p>
-                  <p className="text-[10px] text-success font-bold">{formatRupiah(data.profit)}</p>
+                  <p className="text-xs font-semibold text-ink">{formatNumber(data.qty)} pcs</p>
+                  <p className="text-xs text-success font-bold">{formatRupiah(data.profit)}</p>
                 </div>
               </li>
             ))}
