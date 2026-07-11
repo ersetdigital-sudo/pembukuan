@@ -198,7 +198,7 @@ export default function ProdukPage() {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ash" />
           <Input
-            placeholder="Cari nama produkâ€¦"
+            placeholder="Cari nama produk"¦"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-9"
@@ -269,7 +269,7 @@ export default function ProdukPage() {
                     </TableCell>
                     <TableCell className="text-center">
                       <Badge variant="outline">
-                        {p.kategori === "Jasa" ? "âˆž" : formatNumber(p.stok)}
+                        {p.kategori === "Jasa" ? "∞" : formatNumber(p.stok)}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">

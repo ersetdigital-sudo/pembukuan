@@ -44,7 +44,7 @@ export default function StokPage() {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         <Stat label="Total Produk" value={formatNumber(stocks.length)} />
-        <Stat label="Stok Rendah (â‰¤5)" value={formatNumber(lowStock.length)} color="text-warning" />
+        <Stat label="Stok Rendah (≤5)" value={formatNumber(lowStock.length)} color="text-warning" />
         <Stat label="Habis" value={formatNumber(outOfStock.length)} color="text-danger" />
         <Stat label="Potensi Jual" value={formatRupiah(totalJual)} color="text-primary" />
       </div>
@@ -58,7 +58,7 @@ export default function StokPage() {
                 {outOfStock.length + lowStock.length} produk butuh restock
               </p>
               <p className="text-xs text-ash mt-0.5">
-                {outOfStock.length} habis Â· {lowStock.length} stok rendah
+                {outOfStock.length} habis · {lowStock.length} stok rendah
               </p>
             </div>
           </div>
@@ -69,7 +69,7 @@ export default function StokPage() {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ash" />
           <Input
-            placeholder="Cari nama produkâ€¦"
+            placeholder="Cari nama produk"¦"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-9"
@@ -116,7 +116,7 @@ export default function StokPage() {
                     </TableCell>
                     <TableCell className="text-center">
                       <Badge variant={isOut ? "danger" : isLow ? "warning" : "outline"}>
-                        {s.kategori === "Jasa" ? "âˆž" : s.stok}
+                        {s.kategori === "Jasa" ? "∞" : s.stok}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right text-sm text-ash">

@@ -21,7 +21,7 @@ export default function ProfitSharingCard({ sharing, periodLabel }) {
       <CardHeader className="pb-2 flex items-center justify-between gap-2">
         <div className="min-w-0">
           <p className="text-button-sm font-mono uppercase tracking-[0.5px] text-ash">
-            Rekap Transfer Â· {periodLabel}
+            Rekap Transfer · {periodLabel}
           </p>
           <CardTitle className="mt-0.5">Pembagian Profit</CardTitle>
         </div>

@@ -314,7 +314,7 @@ export default function PenjualanClient() {
                           </span>
                           {produk[0]?.qty > 0 && (
                             <span className="font-bold text-ink shrink-0">
-                              Ã—{produk[0].qty}
+                              ×{produk[0].qty}
                             </span>
                           )}
                           {produk[0]?.masa_aktif && (
@@ -542,7 +542,7 @@ function MobileSaleCard({ sale, totals, produk, onDetail, onEdit, onDelete }) {
                   {p.nama_produk}
                 </span>
                 {p.qty > 0 && (
-                  <span className="font-bold text-ink shrink-0">Ã—{p.qty}</span>
+                  <span className="font-bold text-ink shrink-0">×{p.qty}</span>
                 )}
                 {p.masa_aktif && (
                   <span className="text-ash text-[10px] shrink-0">

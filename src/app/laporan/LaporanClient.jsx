@@ -51,7 +51,7 @@ export default function LaporanPage() {
   const [iklanDeleteId, setIklanDeleteId] = useState(null);
   const [iklanSaving, setIklanSaving] = useState(false);
 
-  // Helper â€” does the entry fall in the current year/month filter?
+  // Helper "” does the entry fall in the current year/month filter?
   const inPeriod = useCallback(
     (tanggal) => {
       if (!tanggal) return false;
@@ -153,7 +153,7 @@ export default function LaporanPage() {
     [mpMap]
   );
 
-  // Chart data â€” daily when a specific month is picked, yearly when 'all'
+  // Chart data "” daily when a specific month is picked, yearly when 'all'
   const monthlyData = useMemo(() => {
     const yNum = Number(year);
     const inYear = (d) => d.getFullYear() === yNum;
@@ -199,8 +199,8 @@ export default function LaporanPage() {
 
   const isYearly = month === "all";
 
-  // Bar-chart series toggle state â€” lets user focus on one metric at a time so the
-  // daily view (28-31 days Ã— 3 bars) doesn't get cramped.
+  // Bar-chart series toggle state "” lets user focus on one metric at a time so the
+  // daily view (28-31 days × 3 bars) doesn't get cramped.
   const [activeSeries, setActiveSeries] = useState({ laba: true, pemasukan: true, biaya: true });
   const visibleCount = [activeSeries.laba, activeSeries.pemasukan, activeSeries.biaya].filter(Boolean).length;
   const toggleSeries = (key) =>
@@ -316,7 +316,7 @@ export default function LaporanPage() {
     <div>
       <PageHeader
         title="Laporan"
-        subtitle={`Rekap keuangan â€” ${periodLabel}`}
+        subtitle={`Rekap keuangan "” ${periodLabel}`}
       >
         <MonthPicker month={month} year={year} />
         <Button
@@ -448,7 +448,7 @@ export default function LaporanPage() {
                 <CardTitle>
                   {isYearly
                     ? `Grafik Bulanan (${year})`
-                    : `Grafik Harian â€” ${MONTHS[Number(month)]} ${year}`}
+                    : `Grafik Harian "” ${MONTHS[Number(month)]} ${year}`}
                 </CardTitle>
                 <p className="mt-0.5 text-xs text-ash">
                   {visibleCount === 1 && activeSeries.laba && `Total Profit ${formatRupiahShort(sumLaba)}`}
@@ -457,7 +457,7 @@ export default function LaporanPage() {
                   {visibleCount > 1 && (isYearly ? "Klik chip untuk fokus ke 1 metrik" : "Tip: klik chip biar bar lebih lega")}
                 </p>
               </div>
-              {/* Series toggle chips â€” replace default legend */}
+              {/* Series toggle chips "” replace default legend */}
               <div className="flex flex-wrap gap-1.5">
                 <SeriesChip
                   label="Profit"
@@ -498,7 +498,7 @@ export default function LaporanPage() {
                       <stop offset="100%" stopColor="rgb(var(--color-secondary))" stopOpacity={0.3} />
                     </linearGradient>
                   </defs>
-                  {/* No CartesianGrid â€” modern charts breathe without gridlines */}
+                  {/* No CartesianGrid "” modern charts breathe without gridlines */}
                   <XAxis
                     dataKey="name"
                     tick={{ fontSize: isYearly ? 11 : 10, fill: "rgb(var(--color-muted))" }}
@@ -702,7 +702,7 @@ export default function LaporanPage() {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-xs text-ash truncate max-w-[200px]">
-                      {e.keterangan || "â€”"}
+                      {e.keterangan || ""”"}
                     </TableCell>
                     <TableCell className="text-right font-bold text-secondary tabular-nums">
                       {formatRupiah(e.jumlah)}
@@ -751,7 +751,7 @@ export default function LaporanPage() {
             <Package className="h-4 w-4 text-secondary" /> Total HPP Produk
           </h2>
           <p className="text-xs text-ash mt-0.5">
-            Total modal (harga beli Ã— qty) untuk semua produk terjual di periode ini
+            Total modal (harga beli × qty) untuk semua produk terjual di periode ini
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -886,7 +886,7 @@ export default function LaporanPage() {
                     );
                   })}
                 </TableBody>
-                {/* Footer total â€” pinned at the bottom, visually separated */}
+                {/* Footer total "” pinned at the bottom, visually separated */}
                 <tfoot>
                   <TableRow className="border-t-2 border-primary/15 bg-primary/5 hover:bg-primary/5">
                     <TableCell className="text-[11px] font-bold uppercase tracking-widest text-primary">
@@ -1058,7 +1058,7 @@ function ProfitCard({ tone, kicker, totalLabel, total, buckets }) {
         </div>
       </div>
 
-      {/* Body â€” list rows */}
+      {/* Body "” list rows */}
       <div className={`px-2 sm:px-3 pb-3 sm:pb-4 divide-y ${t.divider}`}>
         {buckets.map((b) => (
           <ProfitRow key={b.label} pct={b.pct} label={b.label} initials={b.initials} value={b.value} tone={t} />
@@ -1110,7 +1110,7 @@ function TransferCard({ name, initials, total, details }) {
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_20px_40px_-12px_rgba(99,102,241,0.15)]">
 
-      {/* Header â€” icon chip + name */}
+      {/* Header "” icon chip + name */}
       <div className="px-4 sm:px-6 pt-4 sm:pt-5 pb-3 sm:pb-4 flex items-center justify-between gap-3">
         <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
           <div className="grid h-9 w-9 sm:h-10 sm:w-10 shrink-0 place-items-center rounded-full bg-secondary/10 text-secondary">
@@ -1132,7 +1132,7 @@ function TransferCard({ name, initials, total, details }) {
         </div>
       </div>
 
-      {/* Composition â€” each source as a row with mini progress bar + % contribution */}
+      {/* Composition "” each source as a row with mini progress bar + % contribution */}
       <ul className="px-3 sm:px-4 pb-3 sm:pb-4 space-y-2.5">
         {details.map((d) => {
           const pct = hasShare ? (d.value / sum) * 100 : 0;
@@ -1201,7 +1201,7 @@ function CustomBarTooltip({ active, payload, label }) {
   );
 }
 
-// Render % label outside the donut slice â€” only for slices â‰¥ 5% to avoid clutter
+// Render % label outside the donut slice "” only for slices â‰¥ 5% to avoid clutter
 function renderPieLabel({ cx, cy, midAngle, outerRadius, percent }) {
   if (!percent || percent < 0.05) return null;
   const RADIAN = Math.PI / 180;
@@ -1254,7 +1254,7 @@ function CustomPieTooltip({ active, payload }) {
   );
 }
 
-// Series toggle chip for the bar chart â€” replaces Recharts' default legend so users
+// Series toggle chip for the bar chart "” replaces Recharts' default legend so users
 // can focus on a single metric (uncrowds the daily view). Styled as a pill: filled
 // when active, ghosted when off.
 function SeriesChip({ label, color, active, onClick }) {
@@ -1380,7 +1380,7 @@ async function exportToPDF({
 
   // Profit sharing Plugin
   y = newPage(y);
-  y = sectionTitle(y, `Pembagian Profit â€” Plugin (Total: ${fmt(sharing.profitPlugin)})`);
+  y = sectionTitle(y, `Pembagian Profit "” Plugin (Total: ${fmt(sharing.profitPlugin)})`);
   const colX = [M, M + 60, M + 100];
   ["Nama", "Porsi", "Jumlah"].forEach((h, i) => {
     doc.setFontSize(8); doc.setFont("helvetica", "bold"); doc.setTextColor(80, 80, 100);
@@ -1407,7 +1407,7 @@ async function exportToPDF({
 
   // Profit sharing Jasa (new 40/60 split)
   y = newPage(y);
-  y = sectionTitle(y, `Pembagian Profit â€” Jasa (Total: ${fmt(sharing.profitJasa)})`);
+  y = sectionTitle(y, `Pembagian Profit "” Jasa (Total: ${fmt(sharing.profitJasa)})`);
   ["Nama", "Porsi", "Jumlah"].forEach((h, i) => {
     doc.setFontSize(8); doc.setFont("helvetica", "bold"); doc.setTextColor(80, 80, 100);
     doc.text(h, colX[i], y);

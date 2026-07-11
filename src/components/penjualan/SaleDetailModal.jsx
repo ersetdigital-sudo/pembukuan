@@ -121,7 +121,7 @@ export default function SaleDetailModal({
         </DialogHeader>
 
         <div className="px-5 py-4 space-y-4">
-          {/* Hero profit card â€” gradient */}
+          {/* Hero profit card "” gradient */}
           <div
             className={`relative overflow-hidden rounded-xl p-4  ${
               profitPositive
@@ -155,7 +155,7 @@ export default function SaleDetailModal({
             </div>
           </div>
 
-          {/* Quick stats â€” 2 col grid */}
+          {/* Quick stats "” 2 col grid */}
           <div className="grid grid-cols-2 gap-2">
             <div className="rounded-xl border border-hairline bg-surface-card p-3">
               <div className="flex items-center gap-1.5 text-ash">
@@ -228,7 +228,7 @@ export default function SaleDetailModal({
                     <p className="text-xs font-bold text-primary truncate min-w-0">
                       {produkList.length > 1
                         ? `Produk ${i + 1}`
-                        : p.nama_produk || "â€”"}
+                        : p.nama_produk || ""”"}
                     </p>
                     {p.kategori_produk && (
                       <Badge className="bg-secondary/10 text-secondary border border-secondary/30">
@@ -314,7 +314,7 @@ export default function SaleDetailModal({
           </div>
         </div>
 
-        {/* Footer actions â€” Edit & Hapus berfungsi */}
+        {/* Footer actions "” Edit & Hapus berfungsi */}
         <DialogFooter>
           {onDelete && (
             <Button

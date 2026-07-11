@@ -7,7 +7,7 @@ export default function NotFound() {
       <h1 className="text-2xl font-bold mt-4">Halaman tidak ditemukan</h1>
       <p className="text-sm text-ash mt-2">Halaman yang Anda cari tidak ada.</p>
       <div className="mt-6">
-        <ButtonLink href="/">â† Kembali ke Dashboard</ButtonLink>
+        <ButtonLink href="/">&larr; Kembali ke Dashboard</ButtonLink>
       </div>
     </div>
   );

@@ -64,7 +64,7 @@ export default function BiayaPage() {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ash" />
           <Input
-            placeholder="Cari keteranganâ€¦"
+            placeholder="Cari keterangan"¦"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-9"
