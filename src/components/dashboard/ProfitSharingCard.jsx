@@ -18,14 +18,14 @@ export default function ProfitSharingCard({ sharing, periodLabel }) {
   return (
     <Card className="p-0 overflow-hidden">
       {/* Header */}
-      <CardHeader className="pb-2 flex items-center justify-between gap-2">
+      <CardHeader className="pb-2.5 flex items-center justify-between gap-2">
         <div className="min-w-0">
-          <p className="text-button-sm font-mono uppercase tracking-[0.5px] text-ash">
+          <p className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-ash/60">
             Rekap Transfer · {periodLabel}
           </p>
-          <CardTitle className="mt-0.5">Pembagian Profit</CardTitle>
+          <CardTitle className="mt-1">Pembagian Profit</CardTitle>
         </div>
-        <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-primary/10 text-primary">
+        <div className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-primary/20 to-primary/10 text-primary shadow-sm">
           <Wallet className="h-4 w-4" />
         </div>
       </CardHeader>
@@ -108,21 +108,21 @@ function TransferBlock({ name, initials, total, details, tone }) {
           const pct = hasShare && total > 0 ? (d.value / total) * 100 : 0;
           const positive = d.value >= 0;
           return (
-            <li key={d.label}>
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-[11px] text-ash truncate">{d.label}</span>
-                <span className={`shrink-0 font-mono text-[11px] font-bold tabular-nums ${positive ? "text-ink" : "text-danger"}`}>
+            <li key={d.label} className="group">
+              <div className="flex items-center justify-between gap-2 mb-1.5">
+                <span className="text-[10px] sm:text-xs text-ash/70 truncate font-medium group-hover:text-ash transition-colors">{d.label}</span>
+                <span className={`shrink-0 font-mono text-[10px] sm:text-xs font-bold tabular-nums ${positive ? "text-ink" : "text-danger"}`}>
                   {formatRupiah(d.value)}
                 </span>
               </div>
-              <div className="mt-1 flex items-center gap-2">
-                <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-background-bone">
+              <div className="flex items-center gap-2">
+                <div className="h-1 flex-1 overflow-hidden rounded-full bg-muted/50">
                   <div
-                    className={`h-full rounded-full bg-gradient-to-r ${positive ? t.bar : "from-danger to-red-400"} animate-bar-fill`}
+                    className={`h-full rounded-full bg-gradient-to-r ${positive ? t.bar : "from-danger to-red-400"} transition-all duration-500`}
                     style={{ width: `${Math.min(Math.max(pct, 0), 100)}%` }}
                   />
                 </div>
-                <span className={`shrink-0 w-8 text-right text-[10px] font-bold tabular-nums ${t.pct}`}>
+                <span className={`shrink-0 w-7 text-right text-[9px] sm:text-[10px] font-bold tabular-nums ${t.pct}`}>
                   {pct.toFixed(0)}%
                 </span>
               </div>

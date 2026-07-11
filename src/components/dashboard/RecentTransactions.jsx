@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { formatRupiah, formatDate } from "@/lib/utils/format";
 import { getSaleProducts } from "@/lib/utils/sale";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/Card";
@@ -26,20 +26,20 @@ export default function RecentTransactions({ items, limit = 5 }) {
       </CardHeader>
       <CardContent>
         {top.length === 0 ? (
-          <p className="text-sm text-ash text-center py-8">Belum ada transaksi</p>
+          <p className="text-xs sm:text-sm text-ash text-center py-6">Belum ada transaksi</p>
         ) : (
-          <ul className="space-y-2">
+          <ul className="space-y-2.5">
             {top.map((s) => {
               const totals = s.__totals || { totalJual: 0, profit: 0 };
               return (
-                <li key={s.id} className="flex items-center justify-between gap-2.5">
+                <li key={s.id} className="flex items-center justify-between gap-2.5 p-2 rounded-lg hover:bg-primary/5 transition-all duration-200 group">
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-medium truncate">{productLabel(s)}</p>
-                    <p className="text-[10px] text-ash">{s.nama_pembeli} · {formatDate(s.tanggal)}</p>
+                    <p className="text-xs sm:text-sm font-semibold truncate">{productLabel(s)}</p>
+                    <p className="text-[10px] text-ash/60 font-medium">{s.nama_pembeli} · {formatDate(s.tanggal)}</p>
                   </div>
-                  <div className="text-right shrink-0">
-                    <p className="text-xs font-bold text-primary">{formatRupiah(totals.totalJual)}</p>
-                    <Badge className={`text-[9px] px-1.5 py-0 ${MP_BADGE[s.marketplace] || "bg-muted text-ink"}`}>
+                  <div className="text-right shrink-0 opacity-70 group-hover:opacity-100 transition-opacity">
+                    <p className="text-[10px] sm:text-xs font-bold text-primary">{formatRupiah(totals.totalJual)}</p>
+                    <Badge className={`text-[9px] px-1.5 py-0.5 ${MP_BADGE[s.marketplace] || "bg-muted text-ink"}`}>
                       {s.marketplace}
                     </Badge>
                   </div>
