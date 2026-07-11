@@ -9,7 +9,6 @@ import {
   LayoutDashboard,
   ShoppingCart,
   FileBarChart,
-  Boxes,
   ShoppingBag,
   Receipt,
   Wallet,
@@ -40,7 +39,6 @@ const NAV = [
     group: "Insights",
     items: [
       { href: "/laporan", label: "Laporan", icon: FileBarChart },
-      { href: "/stok", label: "Stok", icon: Boxes },
     ],
   },
   {
