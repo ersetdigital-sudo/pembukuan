@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Loader2, Sparkles, Plus, Trash2 } from "lucide-react";
+import { cn } from "@/lib/utils/cn";
 import {
   Dialog,
   DialogContent,
@@ -180,64 +181,68 @@ export default function SaleFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl w-full mx-auto sm:mx-0 sm:rounded-lg rounded-2xl">
         <DialogHeader onClose={() => onOpenChange(false)}>
-          <DialogTitle>{editData ? "Edit Transaksi" : "Tambah Transaksi"}</DialogTitle>
+          <DialogTitle className="text-xl sm:text-2xl font-bold">{editData ? "Edit Transaksi" : "Tambah Transaksi"}</DialogTitle>
         </DialogHeader>
 
         {!editData && (
-          <div className="flex items-center gap-2 text-xs text-ash bg-secondary/10 rounded-lg px-3 py-2 mx-5 mt-4">
-            <Sparkles className="w-3.5 h-3.5 text-secondary flex-shrink-0" />
+          <div className="flex items-center gap-2 text-xs sm:text-sm text-ash bg-secondary/10 rounded-lg px-3 py-2 sm:px-4 sm:py-3 mx-4 sm:mx-0 mt-2 sm:mt-0">
+            <Sparkles className="w-4 h-4 sm:w-4 sm:h-4 text-secondary flex-shrink-0" />
             <span>
               Tempel data Shopee ke <strong>Nama Pembeli</strong> - nama & no HP otomatis terisi!
             </span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="px-5 py-4 space-y-4">
+        <form onSubmit={handleSubmit} className="px-4 sm:px-6 py-4 space-y-4 sm:space-y-5">
           {/* Info Transaksi (shared) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <Label>Tanggal *</Label>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <div className="space-y-2">
+              <Label className="text-sm sm:text-base">Tanggal *</Label>
               <Input
                 type="date"
                 value={form.tanggal}
                 onChange={(e) => setField("tanggal", e.target.value)}
+                className="text-base"
                 required
               />
             </div>
-            <div className="space-y-1.5">
-              <Label>Nama Pembeli *</Label>
+            <div className="space-y-2">
+              <Label className="text-sm sm:text-base">Nama Pembeli *</Label>
               <Input
                 value={form.nama_pembeli}
                 onChange={(e) => setField("nama_pembeli", e.target.value)}
                 onPaste={handleNamaPaste}
                 placeholder="Tempel data Shopee di sini..."
-                className={
+                className={cn(
+                  "text-base",
                   parsedFlash ? "border-success ring-1 ring-success/40 transition-all duration-300" : ""
-                }
+                )}
                 required
               />
             </div>
-            <div className="space-y-1.5">
-              <Label>No HP</Label>
+            <div className="space-y-2">
+              <Label className="text-sm sm:text-base">No HP</Label>
               <Input
                 value={form.no_hp}
                 onChange={(e) => setField("no_hp", e.target.value)}
-                className={
+                className={cn(
+                  "text-base",
                   parsedFlash ? "border-success ring-1 ring-success/40 transition-all duration-300" : ""
-                }
+                )}
               />
             </div>
-            <div className="space-y-1.5">
-              <Label>Username/Domain</Label>
+            <div className="space-y-2">
+              <Label className="text-sm sm:text-base">Username/Domain</Label>
               <Input
                 value={form.username_domain}
                 onChange={(e) => setField("username_domain", e.target.value)}
+                className="text-base"
               />
             </div>
-            <div className="space-y-1.5">
-              <Label>Marketplace *</Label>
+            <div className="space-y-2">
+              <Label className="text-sm sm:text-base">Marketplace *</Label>
               <Select
                 value={form.marketplace}
                 onValueChange={(v) => setField("marketplace", v)}

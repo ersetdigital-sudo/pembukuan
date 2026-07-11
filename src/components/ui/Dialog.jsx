@@ -47,11 +47,11 @@ export function DialogContent({ className = "", children }) {
       role="dialog"
       aria-modal="true"
       className={cn(
-        "relative z-10 w-full rounded-md sm:rounded-md border border-hairline bg-surface-card ",
+        "relative z-10 w-full border border-hairline bg-surface-card shadow-xl",
         "max-h-[92vh] sm:max-h-[90vh] overflow-y-auto scroll-thin",
         "animate-fade-scale",
-        // Mobile: rounded di top aja, full-width sheet
-        "rounded-b-none sm:rounded-b-card",
+        // Mobile: rounded top corners, full-width sheet. Desktop: full rounded
+        "rounded-t-2xl sm:rounded-lg rounded-b-none sm:rounded-b-lg",
         className
       )}
     >
@@ -64,7 +64,7 @@ export function DialogHeader({ className = "", children, onClose }) {
   return (
     <div
       className={cn(
-        "flex items-center justify-between gap-3 px-5 py-4 border-b border-hairline",
+        "flex items-center justify-between gap-3 px-4 sm:px-6 py-4 sm:py-5 border-b border-hairline/50",
         className
       )}
     >
@@ -74,7 +74,7 @@ export function DialogHeader({ className = "", children, onClose }) {
           type="button"
           onClick={onClose}
           aria-label="Tutup"
-          className="grid h-8 w-8 place-items-center rounded-md text-ash hover:bg-surface hover:text-ink transition-colors"
+          className="grid h-8 w-8 place-items-center rounded-lg text-ash hover:bg-hairline/50 hover:text-ink transition-all active:scale-95"
         >
           <X className="h-4 w-4" />
         </button>
@@ -95,7 +95,7 @@ export function DialogFooter({ className = "", children }) {
   return (
     <div
       className={cn(
-        "flex flex-wrap items-center justify-end gap-2 px-5 py-4 border-t border-hairline bg-surface/40",
+        "flex flex-wrap items-center justify-end gap-2 sm:gap-3 px-4 sm:px-6 py-4 sm:py-5 border-t border-hairline/50 bg-surface/40",
         className
       )}
     >

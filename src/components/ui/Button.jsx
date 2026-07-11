@@ -2,16 +2,16 @@ import { cn } from "@/lib/utils/cn";
 
 const variants = {
   primary:
-    "bg-primary text-on-primary hover:bg-secondary rounded-full",
+    "bg-primary text-white hover:bg-primary/90 active:scale-95 rounded-full transition-all",
   secondary:
-    "bg-surface-dark text-on-dark-mute hover:bg-secondary hover:text-on-primary rounded-full",
+    "bg-surface-dark text-on-dark-mute hover:bg-surface-dark/90 hover:text-on-primary rounded-full transition-all",
   plugin:
-    "bg-secondary text-on-secondary hover:bg-secondary/90 rounded-full",
+    "bg-secondary text-on-secondary hover:bg-secondary/90 rounded-full transition-all",
   outline:
-    "border border-hairline bg-background-bone text-ink hover:bg-secondary hover:text-on-primary rounded-full",
-  ghost: "text-ink hover:bg-secondary/10 rounded-sm",
+    "border border-hairline bg-background-bone text-ink hover:bg-hairline/50 hover:text-ink rounded-full transition-all",
+  ghost: "text-ink hover:bg-hairline/20 rounded-sm transition-all",
   danger:
-    "bg-danger text-on-primary hover:bg-danger/90 rounded-full",
+    "bg-danger text-white hover:bg-danger/90 active:scale-95 rounded-full transition-all",
 };
 
 const sizes = {
@@ -32,7 +32,7 @@ export function Button({
     <button
       type={type}
       className={cn(
-        "inline-flex items-center justify-center gap-2 font-semibold transition-colors disabled:opacity-40 disabled:pointer-events-none",
+        "inline-flex items-center justify-center gap-2 font-semibold disabled:opacity-40 disabled:pointer-events-none",
         variants[variant],
         sizes[size],
         className
