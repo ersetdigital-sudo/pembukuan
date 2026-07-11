@@ -116,7 +116,7 @@ export default function DashboardPage() {
   const prevBiaya = totalBiaya; // approximation: same period expenses
   const prevNet = prevProfit;
 
-  // Monthly bar chart data — for the selected year, all 12 months
+  // Monthly bar chart data â€” for the selected year, all 12 months
   const monthlyData = useMemo(() => {
     return MONTHS.map((name, idx) => {
       const ms = sales.filter((s) => {
@@ -151,7 +151,7 @@ export default function DashboardPage() {
       pct: totalProfit > 0 ? Math.round((v.profit / totalProfit) * 100) : 0,
     }));
 
-  // Kategori produk breakdown — using per-product categorization
+  // Kategori produk breakdown â€” using per-product categorization
   const catMap = useMemo(() => {
     const map = { Plugin: 0, Jasa: 0 };
     periodSales.forEach((s) => {
@@ -215,7 +215,7 @@ export default function DashboardPage() {
     <div>
       <PageHeader
         title="Sales Recap"
-        subtitle={`Ringkasan bisnis OOS SHOP — ${periodLabel}`}
+        subtitle={`Ringkasan bisnis OOS SHOP â€” ${periodLabel}`}
       >
         <MonthPicker month={month} year={year} />
       </PageHeader>

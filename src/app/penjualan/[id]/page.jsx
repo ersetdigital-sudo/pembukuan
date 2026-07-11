@@ -78,7 +78,7 @@ export default function SaleDetailPage({ params }) {
                     )}
                   </div>
                   <p className="text-xs text-ash mt-1">
-                    {p.qty} × {formatRupiah(p.harga_jual)} (modal {formatRupiah(p.harga_beli)})
+                    {p.qty} Ã— {formatRupiah(p.harga_jual)} (modal {formatRupiah(p.harga_beli)})
                   </p>
                 </div>
                 <div className="text-right shrink-0">

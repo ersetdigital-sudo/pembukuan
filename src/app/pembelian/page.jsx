@@ -27,7 +27,7 @@ export default function PembelianPage() {
     <div>
       <PageHeader
         title="Pembelian"
-        subtitle={`${sorted.length} entri · restock & pembelian operasional`}
+        subtitle={`${sorted.length} entri Â· restock & pembelian operasional`}
       >
         <div className="text-right">
           <p className="text-button-sm font-mono uppercase tracking-[0.5px] text-ash">Total</p>
@@ -49,7 +49,7 @@ export default function PembelianPage() {
       <div className="relative mb-4 max-w-md">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ash" />
         <Input
-          placeholder="Cari nama produk…"
+          placeholder="Cari nama produkâ€¦"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="pl-9"

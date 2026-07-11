@@ -314,7 +314,7 @@ export default function PenjualanClient() {
                           </span>
                           {produk[0]?.qty > 0 && (
                             <span className="font-bold text-ink shrink-0">
-                              ×{produk[0].qty}
+                              Ã—{produk[0].qty}
                             </span>
                           )}
                           {produk[0]?.masa_aktif && (
@@ -473,7 +473,7 @@ function CompactStat({ title, value, icon: Icon, iconBg, iconColor }) {
   );
 }
 
-// ── Mobile-only card view (pengganti tabel di mobile) ──────────────
+// â”€â”€ Mobile-only card view (pengganti tabel di mobile) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function MobileSaleCard({ sale, totals, produk, onDetail, onEdit, onDelete }) {
   const profitPositive = totals.profit >= 0;
   return (
@@ -542,7 +542,7 @@ function MobileSaleCard({ sale, totals, produk, onDetail, onEdit, onDelete }) {
                   {p.nama_produk}
                 </span>
                 {p.qty > 0 && (
-                  <span className="font-bold text-ink shrink-0">×{p.qty}</span>
+                  <span className="font-bold text-ink shrink-0">Ã—{p.qty}</span>
                 )}
                 {p.masa_aktif && (
                   <span className="text-ash text-[10px] shrink-0">

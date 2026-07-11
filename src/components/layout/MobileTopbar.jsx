@@ -48,7 +48,7 @@ export default function MobileTopbar({ onOpen }) {
           </div>
           {!showBrand && (
             <div className="truncate text-[10px] font-mono uppercase tracking-[0.5px] text-ash">
-              OOS Shop · 2026
+              OOS Shop Â· 2026
             </div>
           )}
         </div>

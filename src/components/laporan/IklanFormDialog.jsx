@@ -117,7 +117,7 @@ export default function IklanFormDialog({
             </Select>
             <p className="text-[10px] text-ash leading-relaxed">
               Iklan <strong>Plugin</strong> mengurangi profit Plugin;{" "}
-              <strong>Jasa</strong> mengurangi profit Jasa — dipotong sebelum
+              <strong>Jasa</strong> mengurangi profit Jasa â€” dipotong sebelum
               dibagi Andri/Asrud/Modal.
             </p>
           </div>

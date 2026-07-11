@@ -21,7 +21,7 @@ export default function RecentTransactions({ items, limit = 5 }) {
           <CardDescription>5 transaksi terakhir di periode ini</CardDescription>
         </div>
         <Link href="/penjualan" className="text-xs font-semibold text-primary hover:underline">
-          Lihat semua →
+          Lihat semua â†’
         </Link>
       </CardHeader>
       <CardContent>
@@ -35,7 +35,7 @@ export default function RecentTransactions({ items, limit = 5 }) {
                 <li key={s.id} className="flex items-center justify-between gap-2.5">
                   <div className="min-w-0 flex-1">
                     <p className="text-xs font-medium truncate">{productLabel(s)}</p>
-                    <p className="text-[10px] text-ash">{s.nama_pembeli} · {formatDate(s.tanggal)}</p>
+                    <p className="text-[10px] text-ash">{s.nama_pembeli} Â· {formatDate(s.tanggal)}</p>
                   </div>
                   <div className="text-right shrink-0">
                     <p className="text-xs font-bold text-primary">{formatRupiah(totals.totalJual)}</p>

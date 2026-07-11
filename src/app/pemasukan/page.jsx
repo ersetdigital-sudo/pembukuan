@@ -26,7 +26,7 @@ export default function PemasukanPage() {
     <div>
       <PageHeader
         title="Pemasukan"
-        subtitle={`${sorted.length} entri · 12 bulan terakhir`}
+        subtitle={`${sorted.length} entri Â· 12 bulan terakhir`}
       >
         <div className="text-right">
           <p className="text-[10px] uppercase tracking-wider text-ash font-semibold">Total</p>
@@ -37,7 +37,7 @@ export default function PemasukanPage() {
       <div className="relative mb-4 max-w-md">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ash" />
         <Input
-          placeholder="Cari keterangan…"
+          placeholder="Cari keteranganâ€¦"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="pl-9"

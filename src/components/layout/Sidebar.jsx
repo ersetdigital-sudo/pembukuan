@@ -81,7 +81,7 @@ export default function Sidebar({ open = false, onClose = () => {} }) {
 
   return (
     <>
-      {/* Backdrop — only on mobile */}
+      {/* Backdrop â€” only on mobile */}
       <div
         onClick={onClose}
         aria-hidden="true"
@@ -111,7 +111,7 @@ export default function Sidebar({ open = false, onClose = () => {} }) {
                 OOS SHOP
               </div>
               <div className="truncate text-[10px] font-mono uppercase tracking-[0.5px] text-on-dark-mute">
-                Sales Recap · 2026
+                Sales Recap Â· 2026
               </div>
             </div>
           </div>
@@ -145,7 +145,7 @@ export default function Sidebar({ open = false, onClose = () => {} }) {
 
         {/* Footer */}
         <div className="border-t border-hairline-strong/20 px-5 py-3 text-[10px] text-on-dark-mute/50">
-          Sanity design · v1.0
+          Sanity design Â· v1.0
         </div>
       </aside>
     </>
