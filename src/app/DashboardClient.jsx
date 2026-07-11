@@ -239,7 +239,7 @@ export default function DashboardPage() {
             : `Rugi ${formatPercent(totalPenjualan > 0 ? Math.abs((totalProfit / totalPenjualan) * 100) : 0).replace('.', ',')} dari penjualan`
           }
           icon={TrendingUp}
-          color="emerald"
+          color={totalProfit >= 0 ? "emerald" : "danger"}
           valueClass={totalProfit >= 0 ? "text-success" : "text-danger"}
         />
         <StatCard
