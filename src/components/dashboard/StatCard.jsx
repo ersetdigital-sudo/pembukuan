@@ -1,14 +1,14 @@
 import { cn } from "@/lib/utils/cn";
 import { Card } from "@/components/ui/Card";
 
-// Sub-caption pill uses status tokens — icon chip itself stays black/white chrome
-const PILL = {
-  emerald: "bg-success/10 text-success",
-  primary: "bg-secondary text-ash",
-  secondary: "bg-secondary text-ash",
-  warning: "bg-warning/10 text-warning",
-  danger: "bg-danger/10 text-danger",
-  sky: "bg-info/10 text-info",
+// Sub-caption text color uses status tokens — icon chip itself stays black/white chrome
+const SUB_COLOR = {
+  emerald: "text-success",
+  primary: "text-stone",
+  secondary: "text-stone",
+  warning: "text-warning",
+  danger: "text-danger",
+  sky: "text-info",
 };
 
 export default function StatCard({
@@ -20,33 +20,33 @@ export default function StatCard({
   valueClass = "",
 }) {
   return (
-    <Card className="p-5 md:p-6 flex flex-col gap-3">
-      <div className="flex items-center justify-between gap-2">
-        <p className="text-body-sm font-medium text-ash leading-none truncate">
+    <Card className="p-4 flex items-center gap-3">
+      <div className="h-9 w-9 rounded-sm bg-primary text-on-primary grid place-items-center shrink-0">
+        {Icon && <Icon className="h-4 w-4" strokeWidth={2} />}
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-[11px] font-medium text-ash leading-none truncate">
           {title}
         </p>
-        <div className="h-9 w-9 rounded-sm bg-primary text-on-primary grid place-items-center shrink-0">
-          {Icon && <Icon className="h-4 w-4" strokeWidth={2} />}
-        </div>
-      </div>
-      <p
-        className={cn(
-          "text-heading-md font-bold leading-tight break-words tabular-nums",
-          valueClass || "text-ink"
-        )}
-      >
-        {value}
-      </p>
-      {sub && (
-        <span
+        <p
           className={cn(
-            "inline-flex self-start items-center rounded-full px-2.5 py-1 text-[11px] font-medium leading-none truncate max-w-full",
-            PILL[color] || PILL.primary
+            "text-heading-sm font-bold mt-1 leading-tight break-words tabular-nums truncate",
+            valueClass || "text-ink"
           )}
         >
-          {sub}
-        </span>
-      )}
+          {value}
+        </p>
+        {sub && (
+          <p
+            className={cn(
+              "text-[11px] font-medium mt-0.5 leading-tight truncate",
+              SUB_COLOR[color] || SUB_COLOR.primary
+            )}
+          >
+            {sub}
+          </p>
+        )}
+      </div>
     </Card>
   );
 }
