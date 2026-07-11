@@ -702,7 +702,7 @@ export default function LaporanPage() {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-xs text-ash truncate max-w-[200px]">
-                      {e.keterangan || """"}
+                      {e.keterangan || "-"}
                     </TableCell>
                     <TableCell className="text-right font-bold text-secondary tabular-nums">
                       {formatRupiah(e.jumlah)}

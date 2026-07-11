@@ -189,7 +189,7 @@ export default function SaleFormDialog({
           <div className="flex items-center gap-2 text-xs text-ash bg-secondary/10 rounded-lg px-3 py-2 mx-5 mt-4">
             <Sparkles className="w-3.5 h-3.5 text-secondary flex-shrink-0" />
             <span>
-              Tempel data Shopee ke <strong>Nama Pembeli</strong> "" nama & no HP otomatis terisi!
+              Tempel data Shopee ke <strong>Nama Pembeli</strong> - nama & no HP otomatis terisi!
             </span>
           </div>
         )}
