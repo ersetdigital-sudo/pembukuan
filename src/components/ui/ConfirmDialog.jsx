@@ -33,7 +33,7 @@ const PALETTE = {
 };
 
 /**
- * Reusable confirm dialog "” replaces window.confirm() dengan UI
+ * Reusable confirm dialog "" replaces window.confirm() dengan UI
  * yang match design system. Modern, compact, responsive.
  *
  * Props:

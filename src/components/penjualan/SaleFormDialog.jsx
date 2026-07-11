@@ -167,7 +167,7 @@ export default function SaleFormDialog({
       ...form,
       fee_mp: Number(form.fee_mp) || 0,
       produk,
-      // Legacy compat "” pakai produk pertama
+      // Legacy compat "" pakai produk pertama
       nama_produk: produk[0]?.nama_produk || "",
       kategori_produk: produk[0]?.kategori_produk || "",
       qty: produk[0]?.qty || 1,
@@ -189,7 +189,7 @@ export default function SaleFormDialog({
           <div className="flex items-center gap-2 text-xs text-ash bg-secondary/10 rounded-lg px-3 py-2 mx-5 mt-4">
             <Sparkles className="w-3.5 h-3.5 text-secondary flex-shrink-0" />
             <span>
-              Tempel data Shopee ke <strong>Nama Pembeli</strong> "” nama & no HP otomatis terisi!
+              Tempel data Shopee ke <strong>Nama Pembeli</strong> "" nama & no HP otomatis terisi!
             </span>
           </div>
         )}
@@ -302,7 +302,7 @@ export default function SaleFormDialog({
             <div className="flex-1 h-px bg-border" />
           </div>
 
-          {/* Daftar produk "” dynamic rows */}
+          {/* Daftar produk "" dynamic rows */}
           <div className="space-y-3">
             {items.map((item, idx) => (
               <div

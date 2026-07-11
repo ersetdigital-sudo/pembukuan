@@ -81,7 +81,7 @@ export default function Sidebar({ open = false, onClose = () => {} }) {
 
   return (
     <>
-      {/* Backdrop "” only on mobile */}
+      {/* Backdrop "" only on mobile */}
       <div
         onClick={onClose}
         aria-hidden="true"

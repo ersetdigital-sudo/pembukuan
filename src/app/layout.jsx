@@ -19,9 +19,9 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata = {
-  title: "OOS SHOP "” Sales Recap",
+  title: "OOS SHOP - Sales Recap",
   description:
-    "Sales recap dashboard "” OOS SHOP X ASRUD 2026. Built on the Sanity design system.",
+    "Sales recap dashboard - OOS SHOP X ASRUD 2026. Built on the Sanity design system.",
 };
 
 export default function RootLayout({ children }) {

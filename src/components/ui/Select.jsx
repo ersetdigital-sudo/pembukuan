@@ -34,7 +34,7 @@ export function SelectTrigger({ className = "", children }) {
   );
 }
 
-export function SelectValue({ placeholder = "Pilih"¦", children }) {
+export function SelectValue({ placeholder = "Pilih...", children }) {
   const ctx = useContext(SelectContext);
   // If children are passed (e.g. a resolved label like "Juni"), render them.
   // Otherwise fall back to the raw value (or placeholder).

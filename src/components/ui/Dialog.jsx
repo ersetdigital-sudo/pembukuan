@@ -35,7 +35,7 @@ export function Dialog({ open, onOpenChange, children }) {
         onClick={() => onOpenChange?.(false)}
         aria-hidden="true"
       />
-      {/* Content slot "” children render the actual DialogContent */}
+      {/* Content slot "" children render the actual DialogContent */}
       {children}
     </div>
   );

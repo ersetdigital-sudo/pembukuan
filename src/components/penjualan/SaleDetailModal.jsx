@@ -31,7 +31,7 @@ import { Badge } from "@/components/ui/Badge";
 import { MP_BADGE } from "@/lib/constants";
 import { formatRupiah, formatDate } from "@/lib/utils/format";
 
-// â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â"€â"€ Helpers â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 function getSaleTotals(s) {
   if (s.produk && s.produk.length > 0) {
     const totalJual = s.produk.reduce(
@@ -78,7 +78,7 @@ function SectionTitle({ icon: Icon, children }) {
   );
 }
 
-// â”€â”€ Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â"€â"€ Component â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 export default function SaleDetailModal({
   sale,
   open,
@@ -121,7 +121,7 @@ export default function SaleDetailModal({
         </DialogHeader>
 
         <div className="px-5 py-4 space-y-4">
-          {/* Hero profit card "” gradient */}
+          {/* Hero profit card "" gradient */}
           <div
             className={`relative overflow-hidden rounded-xl p-4  ${
               profitPositive
@@ -155,7 +155,7 @@ export default function SaleDetailModal({
             </div>
           </div>
 
-          {/* Quick stats "” 2 col grid */}
+          {/* Quick stats "" 2 col grid */}
           <div className="grid grid-cols-2 gap-2">
             <div className="rounded-xl border border-hairline bg-surface-card p-3">
               <div className="flex items-center gap-1.5 text-ash">
@@ -228,7 +228,7 @@ export default function SaleDetailModal({
                     <p className="text-xs font-bold text-primary truncate min-w-0">
                       {produkList.length > 1
                         ? `Produk ${i + 1}`
-                        : p.nama_produk || ""”"}
+                        : p.nama_produk || "-"}
                     </p>
                     {p.kategori_produk && (
                       <Badge className="bg-secondary/10 text-secondary border border-secondary/30">
@@ -314,7 +314,7 @@ export default function SaleDetailModal({
           </div>
         </div>
 
-        {/* Footer actions "” Edit & Hapus berfungsi */}
+        {/* Footer actions "" Edit & Hapus berfungsi */}
         <DialogFooter>
           {onDelete && (
             <Button

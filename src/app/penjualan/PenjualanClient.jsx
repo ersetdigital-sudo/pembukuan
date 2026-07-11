@@ -473,7 +473,7 @@ function CompactStat({ title, value, icon: Icon, iconBg, iconColor }) {
   );
 }
 
-// â”€â”€ Mobile-only card view (pengganti tabel di mobile) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â"€â"€ Mobile-only card view (pengganti tabel di mobile) â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 function MobileSaleCard({ sale, totals, produk, onDetail, onEdit, onDelete }) {
   const profitPositive = totals.profit >= 0;
   return (
