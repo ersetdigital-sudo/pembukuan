@@ -5,16 +5,16 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils/cn";
 import {
   LayoutDashboard,
-  FileBarChart,
-  Star,
+  ShoppingCart,
+  ShoppingBag,
   User,
 } from "lucide-react";
 
 const MOBILE_NAV = [
-  { href: "/", label: "Home", icon: LayoutDashboard },
-  { href: "/laporan", label: "Analytics", icon: FileBarChart },
-  { href: "/penjualan", label: "Shortcuts", icon: Star },
-  { href: "/stok", label: "Profile", icon: User },
+  { href: "/", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/penjualan", label: "Penjualan", icon: ShoppingCart },
+  { href: "/pembelian", label: "Pembelian", icon: ShoppingBag },
+  { href: "/profil", label: "Profil", icon: User },
 ];
 
 export default function MobileBottomNav() {

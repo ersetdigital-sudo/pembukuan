@@ -29,9 +29,9 @@ export default function MobileTopbar({ onOpen }) {
     <header className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-hairline bg-surface-bone px-4 py-3 lg:hidden">
       <button
         type="button"
-        onClick={onOpen}
+        onClick={() => onOpen?.()}
         aria-label="Buka menu navigasi"
-        className="grid h-9 w-9 shrink-0 place-items-center rounded-md text-ink transition-colors hover:bg-hairline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+        className="grid h-9 w-9 shrink-0 place-items-center rounded-md text-ink transition-colors hover:bg-hairline active:bg-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
       >
         <Menu className="h-5 w-5" />
       </button>
