@@ -17,21 +17,19 @@ export default function ProfitSharingCard({ sharing, periodLabel }) {
 
   return (
     <Card className="p-0 overflow-hidden">
-      {/* Header */}
       <CardHeader className="pb-2 flex items-center justify-between gap-2">
         <div className="min-w-0">
-          <p className="text-button-sm font-mono uppercase tracking-[0.5px] text-ash">
-            Rekap Transfer · {periodLabel}
+          <p className="text-[11px] font-medium uppercase tracking-wider text-ash">
+            Rekap Transfer - {periodLabel}
           </p>
           <CardTitle className="mt-0.5">Pembagian Profit</CardTitle>
         </div>
-        <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-primary/10 text-primary">
+        <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary/5 text-ink">
           <Wallet className="h-4 w-4" />
         </div>
       </CardHeader>
 
-      <CardContent className="pt-0 space-y-3">
-        {/* Andri */}
+      <CardContent className="pt-0 space-y-4">
         <TransferBlock
           name="Andri"
           initials="A"
@@ -40,13 +38,11 @@ export default function ProfitSharingCard({ sharing, periodLabel }) {
             { label: "Plugin (40%)", value: pluginAndri },
             { label: "Jasa (40%)", value: jasaAndri },
           ]}
-          tone="secondary"
+          tone="primary"
         />
 
-        {/* Divider */}
-        <div className="h-px bg-hairline" />
+        <div className="h-px bg-divider" />
 
-        {/* Asrud */}
         <TransferBlock
           name="Asrud"
           initials="As"
@@ -64,65 +60,60 @@ export default function ProfitSharingCard({ sharing, periodLabel }) {
 }
 
 function TransferBlock({ name, initials, total, details, tone }) {
-  const isSecondary = tone === "secondary";
   const hasShare = details.reduce((s, d) => s + (d.value || 0), 0) > 0;
   const totalPositive = total >= 0;
 
   const toneMap = {
-    secondary: {
-      avatar: "bg-secondary/10 text-secondary",
-      bar: "from-secondary to-blue-400",
-      pct: "text-secondary",
-      badge: "bg-secondary/10 text-secondary",
+    primary: {
+      avatar: "bg-primary text-on-primary",
+      bar: "from-ink to-ash",
+      pct: "text-ink",
     },
     success: {
-      avatar: "bg-success/10 text-success",
-      bar: "from-success to-emerald-400",
+      avatar: "bg-success text-white",
+      bar: "from-success to-emerald-300",
       pct: "text-success",
-      badge: "bg-success/10 text-success",
     },
   };
-  const t = isSecondary ? toneMap.secondary : toneMap.success;
+  const t = toneMap[tone] || toneMap.primary;
 
   return (
     <div>
-      {/* Person header */}
-      <div className="flex items-center justify-between gap-2 mb-2">
-        <div className="flex items-center gap-2 min-w-0">
-          <div className={`grid h-7 w-7 shrink-0 place-items-center rounded-full text-[10px] font-bold ${t.avatar}`}>
+      <div className="flex items-center justify-between gap-2 mb-3">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className={`grid h-8 w-8 shrink-0 place-items-center rounded-full text-[11px] font-bold ${t.avatar}`}>
             {initials}
           </div>
           <div className="min-w-0">
-            <p className="text-xs font-bold text-ink truncate">{name}</p>
-            <p className="text-[10px] text-ash">Transfer ke</p>
+            <p className="text-body-sm font-bold text-ink truncate">{name}</p>
+            <p className="text-[11px] text-stone">Transfer ke</p>
           </div>
         </div>
-        <span className={`shrink-0 font-mono text-xs font-bold tabular-nums ${totalPositive ? "text-ink" : "text-danger"}`}>
+        <span className={`shrink-0 font-mono text-body-sm font-bold tabular-nums ${totalPositive ? "text-ink" : "text-danger"}`}>
           {formatRupiah(total)}
         </span>
       </div>
 
-      {/* Detail rows */}
-      <ul className="space-y-2 pl-9">
+      <ul className="space-y-2.5 pl-[42px]">
         {details.map((d) => {
           const pct = hasShare && total > 0 ? (d.value / total) * 100 : 0;
           const positive = d.value >= 0;
           return (
             <li key={d.label}>
               <div className="flex items-center justify-between gap-2">
-                <span className="text-[11px] text-ash truncate">{d.label}</span>
-                <span className={`shrink-0 font-mono text-[11px] font-bold tabular-nums ${positive ? "text-ink" : "text-danger"}`}>
+                <span className="text-[12px] text-ash truncate">{d.label}</span>
+                <span className={`shrink-0 font-mono text-[12px] font-bold tabular-nums ${positive ? "text-ink" : "text-danger"}`}>
                   {formatRupiah(d.value)}
                 </span>
               </div>
-              <div className="mt-1 flex items-center gap-2">
-                <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-background-bone">
+              <div className="mt-1.5 flex items-center gap-2">
+                <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-secondary">
                   <div
-                    className={`h-full rounded-full bg-gradient-to-r ${positive ? t.bar : "from-danger to-red-400"} animate-bar-fill`}
+                    className={`h-full rounded-full bg-gradient-to-r ${positive ? t.bar : "from-danger to-red-300"} animate-bar-fill`}
                     style={{ width: `${Math.min(Math.max(pct, 0), 100)}%` }}
                   />
                 </div>
-                <span className={`shrink-0 w-8 text-right text-[10px] font-bold tabular-nums ${t.pct}`}>
+                <span className={`shrink-0 w-8 text-right text-[11px] font-bold tabular-nums ${t.pct}`}>
                   {pct.toFixed(0)}%
                 </span>
               </div>

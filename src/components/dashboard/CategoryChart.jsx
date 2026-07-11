@@ -9,9 +9,9 @@ const DonutTooltip = ({ active, payload }) => {
   if (!active || !payload?.length) return null;
   const { name, value, payload: inner } = payload[0];
   return (
-    <div className="bg-surface-card border border-hairline rounded-md px-3 py-2 text-xs">
-      <p className="font-semibold">{name}</p>
-      <p className="text-primary font-bold">{formatRupiah(value)}</p>
+    <div className="bg-surface-card rounded-sm shadow-elevated px-4 py-3 text-body-sm">
+      <p className="font-bold">{name}</p>
+      <p className="text-ink font-bold">{formatRupiah(value)}</p>
       <p className="text-ash">{inner.pct}% dari total</p>
     </div>
   );

@@ -30,19 +30,19 @@ export default function PembelianPage() {
         subtitle={`${sorted.length} entri · restock & pembelian operasional`}
       >
         <div className="text-right">
-          <p className="text-button-sm font-mono uppercase tracking-[0.5px] text-ash">Total</p>
+          <p className="text-[11px] font-medium text-ash">Total</p>
           <p className="text-lg font-bold text-primary">{formatRupiah(total)}</p>
         </div>
       </PageHeader>
 
       <div className="grid grid-cols-2 gap-3 mb-4">
-        <div className="rounded-md border border-hairline bg-surface-card p-3">
-          <p className="text-button-sm font-mono uppercase tracking-[0.5px] text-ash">Total QTY</p>
-          <p className="text-lg font-bold mt-1">{formatNumber(totalQty)}</p>
+        <div className="rounded-sm bg-surface-card shadow-card p-4">
+          <p className="text-[11px] font-medium text-ash">Total QTY</p>
+          <p className="text-heading-sm mt-1">{formatNumber(totalQty)}</p>
         </div>
-        <div className="rounded-md border border-hairline bg-surface-card p-3">
-          <p className="text-button-sm font-mono uppercase tracking-[0.5px] text-ash">Total Belanja</p>
-          <p className="text-lg font-bold text-primary mt-1">{formatRupiah(total)}</p>
+        <div className="rounded-sm bg-surface-card shadow-card p-4">
+          <p className="text-[11px] font-medium text-ash">Total Belanja</p>
+          <p className="text-heading-sm text-ink mt-1">{formatRupiah(total)}</p>
         </div>
       </div>
 

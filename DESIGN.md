@@ -1,647 +1,567 @@
 ---
-name: Sanity
+name: Uber
 colors:
-  primary: "#f36458"
-  secondary: "#0052ef"
-  background: "#f7f7f7"
-  background-canvas: "#f7f7f7"
-  background-bone: "#ffffff"
+  primary: "#000000"
+  primary-deep: "#1a1a1a"
+  secondary: "#efefef"
+  background: "#ffffff"
+  background-canvas: "#fafafa"
+  background-bone: "#f0f0f0"
   surface: "#ffffff"
   surface-card: "#ffffff"
-  surface-dark: "#212121"
-  surface-deep: "#0b0b0b"
-  foreground: "#0b0b0b"
-  ink: "#0b0b0b"
-  body: "#0b0b0b"
-  charcoal: "#0b0b0b"
-  mute: "#b9b9b9"
-  ash: "#797979"
-  stone: "#b9b9b9"
+  surface-dark: "#000000"
+  surface-deep: "#1a1a1a"
+  foreground: "#000000"
+  ink: "#000000"
+  body: "#000000"
+  charcoal: "#222222"
+  ash: "#4b4b4b"
+  stone: "#afafaf"
   on-primary: "#ffffff"
-  on-secondary: "#ffffff"
-  on-background: "#0b0b0b"
-  on-surface: "#0b0b0b"
-  on-dark: "#ffffff"
-  on-dark-mute: "#b9b9b9"
-  hairline: "#ededed"
-  hairline-strong: "#212121"
-  divider: "#ededed"
-  divider-dark: "#212121"
-  hero-warm: "#f36458"
-  hero-glow: "#55beff"
-  hero-pink: "#e600ff"
-  badge-success: "#19d600"
+  on-secondary: "#000000"
+  on-background: "#000000"
+  on-surface: "#000000"
+  on-dark: "#fcfcfc"
+  on-dark-mute: "rgba(252,252,252,0.72)"
+  hairline: "#efefef"
+  hairline-strong: "#000000"
+  divider: "#e0e0e0"
+  link: "#0000ee"
+  ring-focus: "rgba(0,0,0,0.5)"
+  hero-warm: "#ea2804"
+  hero-glow: "#ff6a3d"
+  hero-pink: "#f4a8a0"
+  badge-success: "#34d399"
   badge-warning: "#f59e0b"
-  badge-info: "#55beff"
-  link: "#0052ef"
-  ring-focus: "rgba(0, 82, 239, 0.15)"
+  badge-info: "#3b82f6"
 colors-dark:
-  primary: "#f36458"
-  secondary: "#0052ef"
-  background: "#0b0b0b"
-  background-canvas: "#0b0b0b"
-  background-bone: "#212121"
-  surface: "#212121"
-  surface-card: "#212121"
-  surface-dark: "#0b0b0b"
-  surface-deep: "#000000"
+  primary: "#ffffff"
+  primary-deep: "#d9d9d9"
+  secondary: "#2a2a2a"
+  background: "#000000"
+  background-canvas: "#111111"
+  background-bone: "#0d0d0d"
+  surface: "#111111"
+  surface-card: "#111111"
+  surface-dark: "#0a0a0a"
+  surface-deep: "#050505"
   foreground: "#ffffff"
   ink: "#ffffff"
-  body: "#b9b9b9"
-  charcoal: "#ffffff"
-  mute: "#797979"
-  ash: "#b9b9b9"
-  stone: "#797979"
-  on-primary: "#ffffff"
+  body: "#e8e8e8"
+  charcoal: "#d4d4d4"
+  ash: "#afafaf"
+  stone: "#7a7a7a"
+  on-primary: "#000000"
   on-secondary: "#ffffff"
   on-background: "#ffffff"
   on-surface: "#ffffff"
-  on-dark: "#ffffff"
-  on-dark-mute: "#b9b9b9"
-  hairline: "#212121"
-  hairline-strong: "#797979"
-  divider: "#212121"
-  divider-dark: "#353535"
-  hero-warm: "#f36458"
-  hero-glow: "#55beff"
-  hero-pink: "#e600ff"
-  badge-success: "#19d600"
+  on-dark: "#fcfcfc"
+  on-dark-mute: "rgba(252,252,252,0.72)"
+  hairline: "#3a3a3a"
+  hairline-strong: "#ffffff"
+  divider: "#3a3a3a"
+  link: "#6666ff"
+  ring-focus: "rgba(255,255,255,0.5)"
+  hero-warm: "#ea2804"
+  hero-glow: "#ff6a3d"
+  hero-pink: "#f4a8a0"
+  badge-success: "#34d399"
   badge-warning: "#f59e0b"
-  badge-info: "#55beff"
-  link: "#55beff"
-  ring-focus: "rgba(0, 82, 239, 0.3)"
+  badge-info: "#3b82f6"
 typography:
-  display-xl:
-    fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, sans-serif"
-    fontSize: "80px"
+  display-xxl:
+    fontFamily: "'DM Sans', system-ui, -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+    fontSize: "4rem"
     fontWeight: 700
-    lineHeight: 1.00
-    letterSpacing: "-3.6px"
+    lineHeight: 1.0
+    letterSpacing: "-0.02em"
+  display-xl:
+    fontFamily: "'DM Sans', system-ui, -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+    fontSize: "3.25rem"
+    fontWeight: 700
+    lineHeight: 1.22
+    letterSpacing: "-0.02em"
   display-lg:
-    fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, sans-serif"
-    fontSize: "48px"
-    fontWeight: 600
-    lineHeight: 1.08
-    letterSpacing: "-1.68px"
+    fontFamily: "'DM Sans', system-ui, -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+    fontSize: "2.25rem"
+    fontWeight: 700
+    lineHeight: 1.22
+    letterSpacing: "-0.02em"
+  display-md:
+    fontFamily: "'DM Sans', system-ui, -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+    fontSize: "2rem"
+    fontWeight: 700
+    lineHeight: 1.22
+    letterSpacing: "-0.02em"
   heading-lg:
-    fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, sans-serif"
-    fontSize: "38px"
-    fontWeight: 600
-    lineHeight: 1.10
-    letterSpacing: "-1.14px"
+    fontFamily: "'DM Sans', system-ui, -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+    fontSize: "2.25rem"
+    fontWeight: 700
+    lineHeight: 1.22
+    letterSpacing: "-0.02em"
   heading-md:
-    fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, sans-serif"
-    fontSize: "24px"
+    fontFamily: "'DM Sans', system-ui, -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+    fontSize: "1.5rem"
+    fontWeight: 700
+    lineHeight: 1.22
+    letterSpacing: "normal"
+  heading-sm:
+    fontFamily: "'DM Sans', system-ui, -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+    fontSize: "1.25rem"
+    fontWeight: 700
+    lineHeight: 1.22
+    letterSpacing: "normal"
+  subtitle:
+    fontFamily: "'DM Sans', system-ui, -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+    fontSize: "1.125rem"
     fontWeight: 500
-    lineHeight: 1.24
-    letterSpacing: "-0.24px"
+    lineHeight: 1.5
+    letterSpacing: "normal"
   body-lg:
-    fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, sans-serif"
-    fontSize: "18px"
+    fontFamily: "'DM Sans', system-ui, -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+    fontSize: "1.125rem"
     fontWeight: 400
-    lineHeight: 1.50
-    letterSpacing: "-0.18px"
+    lineHeight: 1.5
+    letterSpacing: "normal"
   body-md:
-    fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, sans-serif"
-    fontSize: "16px"
+    fontFamily: "'DM Sans', system-ui, -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+    fontSize: "1rem"
     fontWeight: 400
-    lineHeight: 1.50
+    lineHeight: 1.5
     letterSpacing: "normal"
   body-sm:
-    fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, sans-serif"
-    fontSize: "15px"
+    fontFamily: "'DM Sans', system-ui, -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+    fontSize: "0.875rem"
     fontWeight: 400
-    lineHeight: 1.50
+    lineHeight: 1.5
     letterSpacing: "normal"
   button-md:
-    fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, sans-serif"
-    fontSize: "16px"
-    fontWeight: 600
+    fontFamily: "'DM Sans', system-ui, -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+    fontSize: "1rem"
+    fontWeight: 500
     lineHeight: 1.0
     letterSpacing: "normal"
   button-sm:
-    fontFamily: "'IBM Plex Mono', ui-monospace, monospace"
-    fontSize: "11px"
-    fontWeight: 600
+    fontFamily: "'DM Sans', system-ui, -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+    fontSize: "0.875rem"
+    fontWeight: 500
     lineHeight: 1.0
-    letterSpacing: "0.5px"
+    letterSpacing: "normal"
   caption:
-    fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, sans-serif"
-    fontSize: "13px"
-    fontWeight: 400
-    lineHeight: 1.50
-    letterSpacing: "-0.13px"
+    fontFamily: "'DM Sans', system-ui, -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+    fontSize: "0.875rem"
+    fontWeight: 500
+    lineHeight: 1.5
+    letterSpacing: "normal"
   code-md:
-    fontFamily: "'IBM Plex Mono', ui-monospace, monospace"
-    fontSize: "15px"
+    fontFamily: "ui-monospace, 'Cascadia Code', 'JetBrains Mono', Consolas, monospace"
+    fontSize: "0.875rem"
     fontWeight: 400
-    lineHeight: 1.50
+    lineHeight: 1.5
     letterSpacing: "normal"
   code-sm:
-    fontFamily: "'IBM Plex Mono', ui-monospace, monospace"
-    fontSize: "13px"
-    fontWeight: 500
-    lineHeight: 1.50
+    fontFamily: "ui-monospace, 'Cascadia Code', 'JetBrains Mono', Consolas, monospace"
+    fontSize: "0.75rem"
+    fontWeight: 400
+    lineHeight: 1.67
     letterSpacing: "normal"
 spacing:
-  xxs: "2px"
+  xxs: "4px"
+  xs: "8px"
+  sm: "12px"
+  md: "16px"
+  lg: "24px"
+  xl: "32px"
+  xxl: "48px"
+  xxxl: "64px"
+  section: "96px"
+  band: "160px"
+rounded:
+  none: "0px"
   xs: "4px"
   sm: "8px"
   md: "12px"
   lg: "16px"
-  xl: "24px"
-  xxl: "32px"
-  xxxl: "48px"
-  section: "96px"
-  band: "120px"
-rounded:
-  none: "0"
-  xs: "3px"
-  sm: "5px"
-  md: "6px"
-  lg: "12px"
-  full: "99999px"
+  full: "9999px"
 components:
   button-primary:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.on-primary}"
     typography: "{typography.button-md}"
     rounded: "{rounded.full}"
-    padding: "8px 16px"
+    padding: "12px 24px"
     height: "44px"
-  button-primary-hover:
-    backgroundColor: "{colors.secondary}"
+  button-primary-pressed:
+    backgroundColor: "{colors.primary-deep}"
     textColor: "{colors.on-primary}"
     typography: "{typography.button-md}"
     rounded: "{rounded.full}"
-    padding: "8px 16px"
+    padding: "12px 24px"
     height: "44px"
   button-secondary:
-    backgroundColor: "{colors.surface-dark}"
-    textColor: "{colors.on-dark-mute}"
-    typography: "{typography.button-md}"
-    rounded: "{rounded.full}"
-    padding: "8px 12px"
-    height: "44px"
-  button-ghost:
-    backgroundColor: "{colors.surface-dark}"
-    textColor: "{colors.on-dark-mute}"
-    typography: "{typography.button-md}"
-    rounded: "{rounded.sm}"
-    padding: "0px 12px"
-    height: "44px"
-  text-input:
-    backgroundColor: "{colors.surface-dark}"
-    textColor: "{colors.on-dark-mute}"
-    typography: "{typography.body-md}"
-    rounded: "{rounded.xs}"
-    padding: "8px 12px"
-    height: "44px"
-  search-input:
-    backgroundColor: "{colors.surface-dark}"
-    textColor: "{colors.on-dark-mute}"
-    typography: "{typography.body-md}"
-    rounded: "{rounded.xs}"
-    padding: "0px 12px"
-    height: "44px"
-  card-default:
-    backgroundColor: "{colors.surface-card}"
-    textColor: "{colors.on-dark}"
-    typography: "{typography.body-md}"
-    rounded: "{rounded.md}"
-    padding: "24px"
-    height: "auto"
-  card-feature:
-    backgroundColor: "{colors.surface-dark}"
-    textColor: "{colors.on-dark}"
-    typography: "{typography.heading-md}"
-    rounded: "{rounded.lg}"
-    padding: "32px 48px"
-    height: "auto"
-  nav-bar:
-    backgroundColor: "{colors.surface-dark}"
-    textColor: "{colors.on-dark-mute}"
-    typography: "{typography.button-md}"
-    rounded: "{rounded.none}"
-    height: "60px"
-  badge:
-    backgroundColor: "{colors.background-bone}"
-    textColor: "{colors.surface-dark}"
-    typography: "{typography.caption}"
-    rounded: "{rounded.full}"
-    padding: "8px"
-    height: "auto"
-  badge-filled:
-    backgroundColor: "{colors.surface-dark}"
-    textColor: "{colors.on-dark}"
-    typography: "{typography.caption}"
-    rounded: "{rounded.full}"
-    padding: "8px"
-    height: "auto"
-  modal:
-    backgroundColor: "{colors.surface-dark}"
-    textColor: "{colors.on-dark}"
-    typography: "{typography.body-md}"
-    rounded: "{rounded.md}"
-    padding: "32px"
-    height: "auto"
-  alert:
-    backgroundColor: "{colors.surface-card}"
-    textColor: "{colors.on-dark}"
-    typography: "{typography.body-md}"
-    rounded: "{rounded.md}"
-    padding: "16px"
-    height: "auto"
-  progress:
     backgroundColor: "{colors.surface}"
-    textColor: "{colors.primary}"
-    typography: "{typography.caption}"
+    textColor: "{colors.ink}"
+    typography: "{typography.button-md}"
     rounded: "{rounded.full}"
-    height: "8px"
-  tabs:
-    backgroundColor: "transparent"
-    textColor: "{colors.on-dark-mute}"
+    padding: "12px 24px"
+    height: "44px"
+  button-chip:
+    backgroundColor: "{colors.secondary}"
+    textColor: "{colors.ink}"
     typography: "{typography.button-sm}"
     rounded: "{rounded.full}"
+    padding: "14px 16px"
     height: "44px"
-  checkbox:
-    backgroundColor: "{colors.surface-dark}"
-    textColor: "{colors.on-dark}"
-    typography: "{typography.body-md}"
-    rounded: "{rounded.xs}"
-    height: "20px"
-  radio:
-    backgroundColor: "{colors.surface-dark}"
-    textColor: "{colors.on-dark}"
-    typography: "{typography.body-md}"
+  button-floating:
+    backgroundColor: "{colors.surface-card}"
+    textColor: "{colors.ink}"
+    typography: "{typography.button-md}"
     rounded: "{rounded.full}"
+    padding: "14px"
+    height: "44px"
+  category-pill:
+    backgroundColor: "{colors.secondary}"
+    textColor: "{colors.ink}"
+    typography: "{typography.button-sm}"
+    rounded: "{rounded.full}"
+    padding: "14px 16px"
+    height: "44px"
+  category-pill-active:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.on-primary}"
+    typography: "{typography.button-sm}"
+    rounded: "{rounded.full}"
+    padding: "14px 16px"
+    height: "44px"
+  text-input:
+    backgroundColor: "{colors.surface-card}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.sm}"
+    padding: "14px 16px"
+    height: "44px"
+  card:
+    backgroundColor: "{colors.surface-card}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.sm}"
+    padding: "24px"
+    height: "auto"
+  nav-bar:
+    backgroundColor: "{colors.background}"
+    textColor: "{colors.ink}"
+    typography: "{typography.button-sm}"
+    rounded: "{rounded.none}"
+    height: "60px"
+  tab:
+    backgroundColor: "{colors.secondary}"
+    textColor: "{colors.ink}"
+    typography: "{typography.button-sm}"
+    rounded: "{rounded.full}"
+    padding: "10px 20px"
+    height: "40px"
+  tab-active:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.on-primary}"
+    typography: "{typography.button-sm}"
+    rounded: "{rounded.full}"
+    padding: "10px 20px"
+    height: "40px"
+  badge:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.on-primary}"
+    typography: "{typography.caption}"
+    rounded: "{rounded.full}"
+    padding: "2px 8px"
     height: "20px"
 ---
 
 ## Overview
 
-Sanity presents itself as a nocturnal command center — a developer-content platform rendered in dark, precise, and deeply structured tones. The entire experience sits on a near-black canvas ({colors.surface-dark}) that reads less like a "dark mode toggle" and more like the natural state of a tool built for people who live in terminals. Where most CMS marketing pages reach for friendly pastels and soft illustration, Sanity leans into the gravity of its own product: structured content deserves a structured stage.
+The Uber design language is a masterclass in **confident minimalism** — a black-and-white universe where every pixel serves a purpose and nothing decorates without earning its place. The entire experience is built on a stark duality: jet black ({colors.primary}) and pure white ({colors.background}), with virtually no mid-tone grays diluting the message. This is not the sterile minimalism of a startup that has not finished designing — it is the deliberate restraint of a brand so established it can afford to whisper.
 
-The emotional response is one of precision engineering. Every pixel feels intentional. The typography communicates authority through tight letter-spacing and compressed display sizes. Vivid accent colors — coral-red ({colors.primary}), electric blue ({colors.secondary}), neon green ({colors.badge-success}) — punctuate an otherwise achromatic canvas with surgical precision. The signature typographic voice is Space Grotesk, a geometric sans-serif with tight negative tracking that gives headlines a compressed, engineered quality. This is paired with IBM Plex Mono ({typography.code-md.fontFamily}) for code and technical labels, creating a dual-register voice: editorial authority meets developer credibility.
+What makes this system truly distinctive is its use of **pill-shaped interactive elements** using {rounded.full} border-radius, creating a tactile, thumb-friendly interface language. Navigation chips, CTA buttons, and category selectors all share this capsule shape. The signature typeface family — approximated here as {typography.display-xxl.fontFamily} — carries a geometric, engineered quality. Headlines in bold weight (700) at sizes up to {typography.display-xxl.fontSize} carry the weight of a billboard: authoritative, direct, unapologetic.
 
-**Key characteristics:**
-- Near-black canvas ({colors.surface-dark}) as the default, natural environment — not a dark "mode" but the primary identity
-- Space Grotesk with extreme negative tracking at display sizes, creating a precision-engineered typographic voice
-- Pure achromatic gray scale — no warm or cool undertones, pure neutral discipline
-- Vivid accent punctuation: coral-red ({colors.primary}), electric blue ({colors.secondary}), and neon green ({colors.badge-success}) against the dark field
-- Pill-shaped primary buttons ({rounded.full}) contrasting with subtle rounded rectangles ({rounded.xs} to {rounded.md}) for secondary actions
-- IBM Plex Mono as the technical counterweight to the editorial display face
-- Hover states that shift to electric blue ({colors.secondary}) across all interactive elements — a consistent "activation" signal
+The system alternates between white content sections and a full-black footer ({colors.surface-dark}), with card-based layouts using the gentlest possible shadows at {elevation.level1} value to create subtle lift without breaking the flat aesthetic. The emotional response is one of **efficiency, clarity, and uncompromising purpose** — every element feels like it belongs on a transit map: clear, scannable at speed, and ruthlessly functional.
+
+---
 
 ## Colors
 
-Sanity's palette is an exercise in controlled restraint. The achromatic grayscale forms the foundation — every neutral is a pure, untinted gray with no warm or cool bias. Against this disciplined backdrop, a small set of vivid accents lands with the impact of signal lights in a dark control room.
+The Uber palette is deliberately restrained. The interface lives in a strict black-and-white duality where {colors.primary} (true black) and {colors.background} (pure white) define every surface. This creates a system where color, when it does appear (in illustrations, photography, or hero accents), commands absolute attention.
 
 ### Brand & Accent
 
-The brand is anchored by a single warm accent: coral-red ({colors.primary}). This is the primary CTA color — used for "Get Started" buttons and main conversion points. It is the only warm note in an otherwise cool system. The interactive layer uses electric blue ({colors.secondary}) as a universal hover and active state across *all* interactive elements — buttons, links, inputs, and navigation items all shift to this blue on hover. This consistency creates a predictable "activation" language: if it turns blue, you can click it.
+**Primary — Uber Black ({colors.primary})**: The defining brand color. Used for primary buttons, headlines, navigation text, and the footer. Not "near-black" or "off-black," but true, uncompromising black. Its pressed state deepens to {colors.primary-deep} for tactile feedback.
 
-Success states use a vivid green ({colors.badge-success}). Error signals use pure red ({colors.danger}). Warning states use amber ({colors.badge-warning}). Informational accents use light blue ({colors.badge-info}).
+**Secondary — Chip Gray ({colors.secondary})**: A neutral, ultra-light gray used as the background for secondary buttons, filter chips, and navigation pills. In dark mode, it deepens to {colors-dark.secondary} to maintain contrast.
+
+**Hero Accents**: While the UI chrome stays monochrome, hero sections introduce warm accent tones: {colors.hero-warm} as a fiery orange-red, {colors.hero-glow} as a warm peach, and {colors.hero-pink} as a soft blush. These appear exclusively in illustrations and gradient hero backgrounds — never on interactive elements.
 
 ### Surface
 
-The surface hierarchy is communicated entirely through color shifts rather than shadows. In the default (light) mode:
-
-| Surface Level | Color | Use |
-|--------------|-------|-----|
-| Canvas | {colors.background-canvas} | Page-level background |
-| Bone | {colors.background-bone} | Inset surfaces, card groups |
-| Surface | {colors.surface} | Default surface |
-| Card | {colors.surface-card} | Card backgrounds |
-| Dark | {colors.surface-dark} | Elevated dark surfaces |
-| Deep | {colors.surface-deep} | Deepest footer surfaces |
-
-In dark mode, the hierarchy inverts and compresses:
-
-| Surface Level | Light | Dark |
-|--------------|-------|------|
-| Canvas | {colors.background-canvas} | {colors-dark.background-canvas} |
-| Bone | {colors.background-bone} | {colors-dark.background-bone} |
-| Surface | {colors.surface} | {colors-dark.surface} |
-| Card | {colors.surface-card} | {colors-dark.surface-card} |
-| Dark | {colors.surface-dark} | {colors-dark.surface-dark} |
-| Deep | {colors.surface-deep} | {colors-dark.surface-deep} |
-
-Borders use a precise hairline system: {colors.hairline} for subtle containment, {colors.hairline-strong} for emphasized edges, {colors.divider} for section dividers, and {colors.divider-dark} for dividers on dark surfaces.
+| Token | Light Mode | Dark Mode | Usage |
+|-------|-----------|-----------|-------|
+| background | {colors.background} | {colors-dark.background} | Page canvas |
+| background-canvas | {colors.background-canvas} | {colors-dark.background-canvas} | Page-level backdrop |
+| background-bone | {colors.background-bone} | {colors-dark.background-bone} | Inset card groups |
+| surface | {colors.surface} | {colors-dark.surface} | Default surface |
+| surface-card | {colors.surface-card} | {colors-dark.surface-card} | Card surfaces |
+| surface-dark | {colors.surface-dark} | {colors-dark.surface-dark} | Footer, dark sections |
+| surface-deep | {colors.surface-deep} | {colors-dark.surface-deep} | Deepest surface |
 
 ### Text
 
-The text hierarchy uses five distinct levels for maximum information density control:
+| Token | Light Mode | Dark Mode | Usage |
+|-------|-----------|-----------|-------|
+| ink / foreground | {colors.ink} | {colors-dark.ink} | Primary text |
+| body | {colors.body} | {colors-dark.body} | Long-form body copy |
+| charcoal | {colors.charcoal} | {colors-dark.charcoal} | Captions, metadata |
+| ash | {colors.ash} | {colors-dark.ash} | Secondary/supporting text |
+| stone | {colors.stone} | {colors-dark.stone} | Disabled, placeholder text |
+| on-dark | {colors.on-dark} | {colors-dark.on-dark} | Text on dark surfaces |
+| on-dark-mute | {colors.on-dark-mute} | {colors-dark.on-dark-mute} | Secondary text on dark |
 
-| Level | Light | Dark | Use |
-|-------|-------|------|-----|
-| Ink | {colors.ink} | {colors-dark.ink} | Primary headings, high-emphasis text |
-| Body | {colors.body} | {colors-dark.body} | Long-form paragraphs, descriptions |
-| Charcoal | {colors.charcoal} | {colors-dark.charcoal} | Captions, metadata |
-| Ash | {colors.ash} | {colors-dark.ash} | Secondary text, timestamps |
-| Stone | {colors.stone} | {colors-dark.stone} | Disabled text, placeholders |
-
-Text on dark surfaces uses {colors.on-dark} for primary copy and {colors.on-dark-mute} for secondary copy — ensuring legibility against the near-black canvas.
+The text hierarchy is intentionally narrow — from pure black ({colors.ink}) for headings down to a quiet mid-gray ({colors.stone}) for disabled states. In dark mode, the hierarchy inverts to warm whites and light grays, ensuring readability without pure white harshness.
 
 ### Semantic
 
-| Role | Color | Use |
-|------|-------|-----|
-| Link | {colors.link} (light) / {colors-dark.link} (dark) | Inline links |
-| Focus ring | {colors.ring-focus} (light) / {colors-dark.ring-focus} (dark) | Input focus, keyboard navigation |
-| Hero warm | {colors.hero-warm} | Hero gradient start |
-| Hero glow | {colors.hero-glow} | Hero gradient mid-point |
-| Hero pink | {colors.hero-pink} | Hero gradient end |
+- **Success**: {colors.badge-success} — Clean, confident green for positive states
+- **Warning**: {colors.badge-warning} — Amber for cautionary indicators
+- **Danger**: {colors.danger} — Red for destructive actions and errors
+- **Info**: {colors.badge-info} — Blue for informational badges
+- **Link**: {colors.link} (light) / {colors-dark.link} (dark) — Standard link blue
+- **Ring Focus**: {colors.ring-focus} (light) / {colors-dark.ring-focus} (dark) — Focus indicator for keyboard navigation
 
-The hero gradient ({colors.hero-warm} → {colors.hero-glow} → {colors.hero-pink}) creates a signature atmospheric band used in full-bleed hero sections. This is the one place where multiple saturated colors converge.
+### The Zero-Gradient Rule
+
+Uber's design is **entirely gradient-free**. The black/white duality and flat color blocks create all visual hierarchy. No gradients appear anywhere in the system — every surface is a solid color, every transition is a hard edge or a shadow.
+
+---
 
 ## Typography
 
 ### Font Family
 
-Sanity uses a dual-register font system: **Space Grotesk** serves as both display and body typeface, while **IBM Plex Mono** handles all code and technical content.
+The system uses a single primary typeface family — **DM Sans** — for both display and body roles, with a dedicated monospace family for code. DM Sans was chosen as a proxy for the proprietary geometric sans-serif that defines the Uber identity. Its square-proportioned, engineered letterforms carry the same authoritative, functional character.
 
-- **Display / Body**: `{typography.body-md.fontFamily}` — A geometric sans-serif with slightly condensed proportions, ideal for tight letter-spacing at display sizes while remaining legible at body copy scale. Space Grotesk channels the precision of engineering drawings.
-- **Code / Technical**: `{typography.code-md.fontFamily}` — A monospace face designed for code readability, with clear distinction between similar characters (0/O, 1/l/I). Used for code blocks, technical labels, and uppercase system readouts.
-- **Fallback stack**: `ui-sans-serif, system-ui, sans-serif` for Space Grotesk; `ui-monospace, monospace` for IBM Plex Mono.
-
-*Note: Sanity's original brand uses a custom typeface (waldenburgNormal). Space Grotesk serves as the recommended open-source substitute that best preserves the geometric, slightly condensed character. IBM Plex Mono is available on Google Fonts under the SIL Open Font License.*
+- **Display / Body**: `{typography.display-xxl.fontFamily}`
+- **Mono**: `{typography.code-md.fontFamily}`
 
 ### Hierarchy
 
 | Token | Font Family | Size | Weight | Line Height | Letter Spacing | Use |
-|-------|-------------|------|--------|-------------|----------------|-----|
-| {typography.display-xl} | Space Grotesk | {typography.display-xl.fontSize} | {typography.display-xl.fontWeight} | {typography.display-xl.lineHeight} | {typography.display-xl.letterSpacing} | Hero headlines, maximum impact |
-| {typography.display-lg} | Space Grotesk | {typography.display-lg.fontSize} | {typography.display-lg.fontWeight} | {typography.display-lg.lineHeight} | {typography.display-lg.letterSpacing} | Large section headers |
-| {typography.heading-lg} | Space Grotesk | {typography.heading-lg.fontSize} | {typography.heading-lg.fontWeight} | {typography.heading-lg.lineHeight} | {typography.heading-lg.letterSpacing} | Primary section anchors |
-| {typography.heading-md} | Space Grotesk | {typography.heading-md.fontSize} | {typography.heading-md.fontWeight} | {typography.heading-md.lineHeight} | {typography.heading-md.letterSpacing} | Card titles, subsection headers |
-| {typography.body-lg} | Space Grotesk | {typography.body-lg.fontSize} | {typography.body-lg.fontWeight} | {typography.body-lg.lineHeight} | {typography.body-lg.letterSpacing} | Intro paragraphs, feature descriptions |
-| {typography.body-md} | Space Grotesk | {typography.body-md.fontSize} | {typography.body-md.fontWeight} | {typography.body-md.lineHeight} | {typography.body-md.letterSpacing} | Standard body text |
-| {typography.body-sm} | Space Grotesk | {typography.body-sm.fontSize} | {typography.body-sm.fontWeight} | {typography.body-sm.lineHeight} | {typography.body-sm.letterSpacing} | Compact body text |
-| {typography.button-md} | Space Grotesk | {typography.button-md.fontSize} | {typography.button-md.fontWeight} | {typography.button-md.lineHeight} | {typography.button-md.letterSpacing} | Button labels, interactive text |
-| {typography.button-sm} | IBM Plex Mono | {typography.button-sm.fontSize} | {typography.button-sm.fontWeight} | {typography.button-sm.lineHeight} | {typography.button-sm.letterSpacing} | Uppercase labels, tab navigation, filter controls |
-| {typography.caption} | Space Grotesk | {typography.caption.fontSize} | {typography.caption.fontWeight} | {typography.caption.lineHeight} | {typography.caption.letterSpacing} | Metadata, descriptions, tags |
-| {typography.code-md} | IBM Plex Mono | {typography.code-md.fontSize} | {typography.code-md.fontWeight} | {typography.code-md.lineHeight} | {typography.code-md.letterSpacing} | Code blocks, technical content |
-| {typography.code-sm} | IBM Plex Mono | {typography.code-sm.fontSize} | {typography.code-sm.fontWeight} | {typography.code-sm.lineHeight} | {typography.code-sm.letterSpacing} | Inline code, small technical labels |
+|-------|-----------|------|--------|-------------|----------------|-----|
+| display-xxl | {typography.display-xxl.fontFamily} | {typography.display-xxl.fontSize} | {typography.display-xxl.fontWeight} | {typography.display-xxl.lineHeight} | {typography.display-xxl.letterSpacing} | Hero headlines, maximum impact |
+| display-xl | {typography.display-xl.fontFamily} | {typography.display-xl.fontSize} | {typography.display-xl.fontWeight} | {typography.display-xl.lineHeight} | {typography.display-xl.letterSpacing} | Billboard presence, above-fold hero |
+| display-lg | {typography.display-lg.fontFamily} | {typography.display-lg.fontSize} | {typography.display-lg.fontWeight} | {typography.display-lg.lineHeight} | {typography.display-lg.letterSpacing} | Major section anchors |
+| display-md | {typography.display-md.fontFamily} | {typography.display-md.fontSize} | {typography.display-md.fontWeight} | {typography.display-md.lineHeight} | {typography.display-md.letterSpacing} | Card titles, feature headings |
+| heading-lg | {typography.heading-lg.fontFamily} | {typography.heading-lg.fontSize} | {typography.heading-lg.fontWeight} | {typography.heading-lg.lineHeight} | {typography.heading-lg.letterSpacing} | Section headings |
+| heading-md | {typography.heading-md.fontFamily} | {typography.heading-md.fontSize} | {typography.heading-md.fontWeight} | {typography.heading-md.lineHeight} | {typography.heading-md.letterSpacing} | Secondary section headers |
+| heading-sm | {typography.heading-sm.fontFamily} | {typography.heading-sm.fontSize} | {typography.heading-sm.fontWeight} | {typography.heading-sm.lineHeight} | {typography.heading-sm.letterSpacing} | Compact headings, list titles |
+| subtitle | {typography.subtitle.fontFamily} | {typography.subtitle.fontSize} | {typography.subtitle.fontWeight} | {typography.subtitle.lineHeight} | {typography.subtitle.letterSpacing} | Navigation links, prominent UI text |
+| body-lg | {typography.body-lg.fontFamily} | {typography.body-lg.fontSize} | {typography.body-lg.fontWeight} | {typography.body-lg.lineHeight} | {typography.body-lg.letterSpacing} | Large body text, featured content |
+| body-md | {typography.body-md.fontFamily} | {typography.body-md.fontSize} | {typography.body-md.fontWeight} | {typography.body-md.lineHeight} | {typography.body-md.letterSpacing} | Standard body text |
+| body-sm | {typography.body-sm.fontFamily} | {typography.body-sm.fontSize} | {typography.body-sm.fontWeight} | {typography.body-sm.lineHeight} | {typography.body-sm.letterSpacing} | Compact body, secondary info |
+| button-md | {typography.button-md.fontFamily} | {typography.button-md.fontSize} | {typography.button-md.fontWeight} | {typography.button-md.lineHeight} | {typography.button-md.letterSpacing} | Primary/secondary buttons |
+| button-sm | {typography.button-sm.fontFamily} | {typography.button-sm.fontSize} | {typography.button-sm.fontWeight} | {typography.button-sm.lineHeight} | {typography.button-sm.letterSpacing} | Small buttons, chips |
+| caption | {typography.caption.fontFamily} | {typography.caption.fontSize} | {typography.caption.fontWeight} | {typography.caption.lineHeight} | {typography.caption.letterSpacing} | Metadata, descriptions, small links |
+| code-md | {typography.code-md.fontFamily} | {typography.code-md.fontSize} | {typography.code-md.fontWeight} | {typography.code-md.lineHeight} | {typography.code-md.letterSpacing} | Inline code, code blocks |
+| code-sm | {typography.code-sm.fontFamily} | {typography.code-sm.fontSize} | {typography.code-sm.fontWeight} | {typography.code-sm.lineHeight} | {typography.code-sm.letterSpacing} | Fine print, legal text |
 
 ### Principles
 
-- **Extreme negative tracking at scale**: Display headings at {typography.display-lg.fontSize}+ use aggressive negative letter-spacing ({typography.display-xl.letterSpacing}), creating a tight, engineered quality that distinguishes Sanity from looser editorial typography.
-- **Single font, multiple registers**: Space Grotesk handles both editorial display and functional UI text. The weight range is narrow (400–600), keeping the voice consistent.
-- **Tight headings, relaxed body**: Headings use {typography.display-xl.lineHeight}–{typography.heading-md.lineHeight} line-height (extremely tight), while body text breathes at {typography.body-md.lineHeight}. This contrast creates clear visual hierarchy.
-- **Uppercase for technical labels**: {typography.button-sm} uses IBM Plex Mono with `text-transform: uppercase` and tight line-heights, creating a "system readout" aesthetic for technical metadata.
+- **Bold headlines, medium body**: All display and heading tokens use weight {typography.display-xxl.fontWeight} (bold) exclusively — every headline hits with billboard force. Body and UI text uses {typography.body-md.fontWeight} to {typography.button-md.fontWeight}, creating clear hierarchy through weight contrast.
+- **Tight heading line-heights**: All display and heading tokens use line-heights between {typography.display-xxl.lineHeight} and {typography.display-xl.lineHeight} — compact and punchy, designed for scanning rather than reading.
+- **Functional typography**: There is no decorative type treatment. No excessive letter-spacing, no text-transform, no ornamental sizing. Every text element serves a direct communication purpose.
+- **Single font, strict roles**: DM Sans serves both display and body roles. Heading tokens use bold weight ({typography.display-xxl.fontWeight}); UI and body use medium ({typography.button-md.fontWeight}) to normal ({typography.body-md.fontWeight}). The weight contrast defines the hierarchy.
 
 ### Note on Font Substitutes
 
-When Space Grotesk is unavailable, `ui-sans-serif, system-ui, sans-serif` provides an adequate system-native fallback. The key characteristic to preserve is the geometric, slightly condensed letterform structure — avoid rounded or humanist sans-serif substitutes (e.g., Nunito, Lato). Inter is an acceptable substitute that maintains the precise, engineering-grade aesthetic. IBM Plex Mono is freely available on Google Fonts and should be loaded explicitly for code contexts.
+DM Sans serves as the substitute for the proprietary UberMove and UberMoveText typefaces. If DM Sans is unavailable, the fallback stack `system-ui, -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif` provides a geometric sans-serif safety net. For implementations requiring maximum fidelity, Inter or a variable version of DM Sans at matching weights (400, 500, 700) provides the closest character match.
+
+---
 
 ## Layout & Spacing
 
-Sanity's spacing system is built on an 8px base unit. The semantic spacing scale maps functional spacing needs to consistent values:
+### Spacing Scale
 
-| Token | Value | Use |
-|-------|-------|-----|
-| {spacing.xxs} | {spacing.xxs} | Hairline gaps, micro internal padding |
-| {spacing.xs} | {spacing.xs} | Tight component internal spacing |
-| {spacing.sm} | {spacing.sm} | Base unit — button padding, input padding, badge padding |
-| {spacing.md} | {spacing.md} | Standard component gap, button horizontal padding |
-| {spacing.lg} | {spacing.lg} | Section internal padding, card spacing |
-| {spacing.xl} | {spacing.xl} | Large component padding, card internal spacing |
-| {spacing.xxl} | {spacing.xxl} | Section padding, container gutters |
-| {spacing.xxxl} | {spacing.xxxl} | Large section vertical spacing |
-| {spacing.section} | {spacing.section} | Hero vertical padding, major section breaks |
-| {spacing.band} | {spacing.band} | Maximum section separation |
+The spacing system follows an **8px grid** — a compact, information-dense scale built for efficiency. Every dimension derives from the base unit of 4px with 8px increments for most spacing decisions.
 
-**Grid & Container:**
-- Max content width: ~1440px
-- Page gutter: {spacing.xxl} on desktop, {spacing.lg} on mobile
-- Content sections use full-bleed backgrounds with centered, max-width content
-- Multi-column layouts: 2–3 columns on desktop, single column on mobile
-- Card grids: CSS Grid with consistent gaps of {spacing.xl}–{spacing.lg}
+| Token | Value | Usage |
+|-------|-------|-------|
+| xxs | {spacing.xxs} | Micro spacing, icon margins |
+| xs | {spacing.xs} | Tight element gaps, inline spacing |
+| sm | {spacing.sm} | Compact groups, button-to-edge |
+| md | {spacing.md} | Default element spacing |
+| lg | {spacing.lg} | Card internal padding |
+| xl | {spacing.xl} | Section internal spacing |
+| xxl | {spacing.xxl} | Feature spacing, large component gaps |
+| xxxl | {spacing.xxxl} | Section margins |
+| section | {spacing.section} | Between major content sections |
+| band | {spacing.band} | Maximum separation, hero margins |
 
-**Whitespace Philosophy:**
-Sanity uses aggressive vertical spacing between sections ({spacing.xxxl}–{spacing.section}) to create breathing room on the dark canvas. Within sections, spacing is tighter ({spacing.lg}–{spacing.xl}), creating dense information clusters separated by generous voids. This rhythm gives the page a "slides" quality — each section feels like its own focused frame.
+### Grid & Container
+
+The layout uses a centered container model with a maximum width of approximately 1136px. Heroes use a split layout (text left, visual right). Feature sections use 2-column card grids or full-width single-column layouts. The footer spans full-width with a multi-column link grid on {colors.surface-dark}.
+
+### Whitespace Philosophy
+
+Uber's whitespace is **efficient, not airy** — functional enough to separate, never enough to feel empty. This is transit-system spacing: compact, clear, purpose-driven. Cards pack information tightly with minimal internal spacing, relying on shadow and radius to define boundaries. Major sections get generous vertical spacing ({spacing.section} to {spacing.band}), but within sections, elements are closely grouped.
+
+---
 
 ## Elevation & Depth
 
-Sanity's depth system is almost entirely **colorimetric** rather than shadow-based. Elevation is communicated through surface color shifts: {colors.surface-dark} (ground) → {colors.surface} (elevated) → {colors.surface-card} (prominent) → {colors.background-bone} (inverted/highest). This approach is native to dark interfaces where traditional drop shadows would be invisible.
+Uber uses shadow purely as a structural tool, never decoratively. Shadows are always black at very low opacity, creating the bare minimum lift needed to separate content layers. Depth is communicated more through the black/white section contrast than through shadow elevation.
 
 ### Level Table
 
-| Level | Light Treatment | Dark Treatment | Use Case |
-|-------|----------------|----------------|----------|
-| Level 0 | {elevation.level0} | {elevation.level0} | Default state — dark surfaces create depth through color alone |
-| Level 1 | `{elevation.level1}` (light) | `0 0 0 1px #212121` (dark) | Subtle containment, border-like shadow for minimal separation |
-| Level 2 | `{elevation.level2}` (light) | `0 0 0 2px rgba(0, 82, 239, 0.2)` (dark) | Focus rings, interactive feedback, elevated elements |
-| Level 3 | `{elevation.level3}` (light) | `0 0 0 1px #353535, 0 8px 32px rgba(0,0,0,0.4)` (dark) | Modals, dropdowns, overlays |
+| Level | Treatment | Use Case |
+|-------|-----------|----------|
+| Level 0 | {elevation.level0} | Page background, inline content, text sections |
+| Level 1 | {elevation.level1} | Standard content cards, feature blocks |
+| Level 2 | {elevation.level2} | Elevated cards, overlay elements |
+| Level 3 | {elevation.level3} | Floating action buttons, map controls |
+| Level 4 | {elevation.level4} | Active/pressed button states |
 
-Border-based containment (1px solid {colors.hairline} or {colors.hairline-strong}) serves as the primary spatial separator, with the border darkness calibrated to be visible but not dominant. The system avoids "floating card" aesthetics — everything feels mounted to the surface rather than hovering above it.
+Shadow opacity stays in the 0.08–0.16 range — always black, never colored. Blur radii are moderate (8–16px), enough to feel natural but never dramatic. There are no colored shadows, no layered shadow stacks, and no ambient glow effects.
 
 ### Decorative Depth
 
-Full-bleed hero sections use a gradient band spanning {colors.hero-warm} → {colors.hero-glow} → {colors.hero-pink} as an atmospheric backdrop. This gradient is the one decorative element that breaks the achromatic discipline — a controlled moment of visual richness reserved for brand storytelling sections. Dark overlay surfaces use `rgba(0, 0, 0, 0.4)` (light) / `rgba(0, 0, 0, 0.7)` (dark) for modal scrims and backdrop treatments.
+Beyond the elevation level system, depth is created through stark section contrast. The transition from white content sections ({colors.background}) to the full-black footer ({colors.surface-dark}) creates the most dramatic depth shift in the system — a hard edge that separates information zones without shadow. This black anchor grounds the page with a high-contrast environment where on-dark text ({colors.on-dark}) and muted on-dark text ({colors.on-dark-mute}) maintain readability.
+
+---
 
 ## Shapes
 
 ### Border Radius Scale
 
-Sanity's shape language uses a deliberately limited radius scale that jumps from subtle rounding to full pill with no intermediate values between 12px and 99999px:
+The shape language is dominated by the **full pill** — {rounded.full} border-radius — as the defining interactive shape. All buttons, chips, navigation items, and toggles use this capsule form, creating a tactile, thumb-friendly interface.
 
-| Token | Value | Use Case |
-|-------|-------|----------|
-| {rounded.none} | {rounded.none} | Hero bands, full-bleed sections, nav bars |
-| {rounded.xs} | {rounded.xs} | Inputs, textareas, search fields, subtle rounding |
-| {rounded.sm} | {rounded.sm} | Ghost buttons, small cards, secondary interactions |
-| {rounded.md} | {rounded.md} | Standard cards, containers, modals, alerts |
-| {rounded.lg} | {rounded.lg} | Large cards, feature containers, form wrappers |
-| {rounded.full} | {rounded.full} | Primary buttons, badges, pills, tabs, progress bars, avatars |
-
-**The Pill Gap Principle:** Sanity deliberately avoids rounded corners between 13px and 99998px. The system jumps directly from {rounded.lg} (large cards) to {rounded.full} (pill shape). This creates a clear binary: either you have geometrically precise corners ({rounded.xs}–{rounded.lg}) or you are fully pill-shaped ({rounded.full}). There is no ambiguous middle ground.
+| Token | Value | Usage |
+|-------|-------|-------|
+| none | {rounded.none} | Hero bands, full-bleed sections, nav bars |
+| xs | {rounded.xs} | Inline tags, subtle micro-elements |
+| sm | {rounded.sm} | Content cards, input fields, standard containers |
+| md | {rounded.md} | Featured cards, larger containers |
+| lg | {rounded.lg} | Modals, panels, prominent containers |
+| full | {rounded.full} | All buttons, chips, navigation pills, badges |
 
 ### Photography Geometry
 
-- **Card thumbnails**: 16:9 aspect ratio, {rounded.md} corners, full-bleed within card container
-- **Hero imagery**: 21:9 or full-bleed edge-to-edge, {rounded.none} corners
-- **Contributor avatars**: Circular ({rounded.full}), 40–48px
-- **Logo lockups**: Intrinsic aspect ratio, {rounded.none}
-- **Screenshots / code samples**: {rounded.md} corners with 1px {colors.hairline} border, full-width within content column
-- **Image behavior**: Responsive with `max-width: 100%`, automatic height, no forced aspect ratios below 768px viewport
+- **Hero imagery**: Full-bleed hero backgrounds spanning viewport width. On smaller viewports, images scale proportionally and may crop to maintain aspect ratio.
+- **Card imagery**: Images within cards use {rounded.sm} corners at all sizes, matching the card radius for seamless containment.
+- **Illustration style**: Warm, stylized scenes of people and cityscapes — used in feature sections as full-width or contained illustrations with {rounded.sm} to {rounded.md} corners.
+- **Avatar / circular controls**: Use 50% border-radius (mapped to {rounded.full}) for perfect circles.
+
+---
 
 ## Components
 
-Components are grouped by functional category. Each spec follows the format: Background color, text color, typography token, border radius, padding, and height.
-
 ### Buttons & Interaction
 
-**Button Primary (CTA Pill)**
-- Background {colors.primary}, text {colors.on-primary}, type {typography.button-md}
-- Rounded: {rounded.full}, padding {spacing.sm} {spacing.lg}, height 44px
-- *Hover*: Background shifts to {colors.secondary} (electric blue), text remains {colors.on-primary}
-- *Active/Pressed*: Background shifts to the active shade of {colors.secondary}
-- *Disabled*: Opacity 0.4, no hover effect
+**Primary Black CTA** (`{component.button-primary}`)
+- Background `{colors.primary}`, text `{colors.on-primary}`, type `{typography.button-md}`
+- rounded: `{rounded.full}`, padding 12px 24px, height 44px
+- The primary action button — bold, high-contrast, unmissable
+- Pressed state (`{component.button-primary-pressed}`): Background shifts to `{colors.primary-deep}`
 
-**Button Secondary (Dark Pill)**
-- Background {colors.surface-dark}, text {colors.on-dark-mute}, type {typography.button-md}
-- Rounded: {rounded.full}, padding {spacing.sm} {spacing.md}, height 44px
-- *Hover*: Background shifts to {colors.secondary}, text shifts to {colors.on-primary}
-- *Active/Pressed*: Background active shade of {colors.secondary}
+**Secondary White** (`{component.button-secondary}`)
+- Background `{colors.surface}`, text `{colors.ink}`, type `{typography.button-md}`
+- rounded: `{rounded.full}`, padding 12px 24px, height 44px
+- Used on dark surfaces or as a secondary action alongside Primary Black
+- Hover: surface-hover treatment
 
-**Button Ghost (Subtle)**
-- Background {colors.surface-dark}, text {colors.on-dark-mute}, type {typography.button-md}
-- Rounded: {rounded.sm}, padding 0 {spacing.md}, height 44px
-- *Hover*: Background shifts to {colors.secondary}, text shifts to {colors.on-primary}
-- *Active*: Background active shade of {colors.secondary}
-
-**Outlined Button**
-- Background {colors.background-bone}, text {colors.surface-deep}, type {typography.button-md}
-- Rounded: {rounded.full}, padding {spacing.sm}, height 44px
-- Border: 1px solid {colors.surface-deep}
-- *Hover*: Background shifts to {colors.secondary}, text shifts to {colors.on-primary}
+**Floating Action** (`{component.button-floating}`)
+- Background `{colors.surface-card}`, text `{colors.ink}`, type `{typography.button-md}`
+- rounded: `{rounded.full}`, padding 14px, height 44px
+- Elevation: Level 3 shadow for lift
+- Hover: subtle hover state; Active: press shadow
 
 ### Inputs & Selection
 
-**Text Input / Textarea**
-- Background {colors.surface-dark}, text {colors.on-dark-mute}, type {typography.body-md}
-- Rounded: {rounded.xs}, padding {spacing.sm} {spacing.md}, height 44px
-- Border: 1px solid {colors.hairline}
-- *Focus*: Ring {colors.ring-focus} at 2px width, background shifts subtly
-- *Placeholder*: Color {colors.ash}
-- *Disabled*: Opacity 0.4
-
-**Search Input**
-- Background {colors.surface-dark}, text {colors.on-dark-mute}, type {typography.body-md}
-- Rounded: {rounded.xs}, padding 0 {spacing.md}, height 44px
-- *Focus*: Same ring treatment as text input
-
-**Checkbox**
-- Background {colors.surface-dark}, text {colors.on-dark}, type {typography.body-md}
-- Rounded: {rounded.xs} (square with micro rounding), height 20px
-- Shape: {shape.checkbox} (square)
-- *Checked*: Background {colors.secondary}
-- *Focus*: {colors.ring-focus} ring
-
-**Radio**
-- Background {colors.surface-dark}, text {colors.on-dark}, type {typography.body-md}
-- Rounded: {rounded.full} (circular), height 20px
-- Shape: {shape.radio} (circle)
-- *Checked*: Inner dot in {colors.secondary}
-- *Focus*: {colors.ring-focus} ring
-
-**Switch**
-- Rounded: {rounded.full} (pill track), height 24px
-- Track background: {colors.mute}
-- *Checked track*: {colors.secondary}
-- *Thumb*: {colors.background-bone}
+**Text Input** (`{component.text-input}`)
+- Background `{colors.surface-card}`, text `{colors.ink}`, type `{typography.body-md}`
+- rounded: `{rounded.sm}`, padding 14px 16px, height 44px
+- Border: 1px solid {colors.hairline-strong} — one of the few places visible borders appear
+- Focus: `{colors.ring-focus}` ring indicator
 
 ### Chips & Controls
 
-**Badge (Neutral Subtle)**
-- Background {colors.background-bone}, text {colors.surface-dark}, type {typography.caption}
-- Rounded: {rounded.full}, padding {spacing.sm}, height auto
-- Shape: {shape.badge} (pill)
+**Chip / Filter Button** (`{component.button-chip}`)
+- Background `{colors.secondary}`, text `{colors.ink}`, type `{typography.button-sm}`
+- rounded: `{rounded.full}`, padding 14px 16px, height 44px
+- For navigation chips, category selectors, filter toggles
+- Active: inset Level 4 press shadow
 
-**Badge (Neutral Filled)**
-- Background {colors.surface-dark}, text {colors.on-dark}, type {typography.caption}
-- Rounded: {rounded.full}, padding {spacing.sm}, height auto
+**Category Pill Navigation** (`{component.category-pill}`, `{component.category-pill-active}`)
+- Default: Background `{colors.secondary}`, text `{colors.ink}`, type `{typography.button-sm}`
+- Active: Background `{colors.primary}`, text `{colors.on-primary}` — inverts for clear state
+- rounded: `{rounded.full}`, padding 14px 16px, height 44px
+- Horizontal row of pills for top-level navigation categories
 
-**Badge (Success / Warning / Info)**
-- Background {colors.badge-success} / {colors.badge-warning} / {colors.badge-info}, text {colors.on-dark}, type {typography.caption}
-- Rounded: {rounded.full}, padding {spacing.xs} {spacing.sm}, height auto
-
-**Tabs**
-- Background transparent, text {colors.on-dark-mute}, type {typography.button-sm}
-- Rounded: {rounded.full}, height 44px
-- *Active tab*: Background {colors.secondary}, text {colors.on-primary}
-- Shape: {shape.tabs} (pill)
+**Badge** (`{component.badge}`)
+- Background `{colors.primary}`, text `{colors.on-primary}`, type `{typography.caption}`
+- rounded: `{rounded.full}`, padding 2px 8px, height 20px
+- Status and count indicators
 
 ### Data & Containers
 
-**Card (Default)**
-- Background {colors.surface-card}, text {colors.on-dark}, type {typography.body-md}
-- Rounded: {rounded.md}, padding {spacing.xl}, height auto
-- Border: 1px solid {colors.hairline}
+**Card** (`{component.card}`)
+- Background `{colors.surface-card}`, text `{colors.ink}`, type `{typography.body-md}`
+- rounded: `{rounded.sm}`, padding 24px, height auto
+- No border by default — cards are defined by Level 1 shadow, not stroke
+- Image-led cards use full-bleed imagery with text overlay or below
+- Content-dense with minimal internal padding
 
-**Card (Feature / Large)**
-- Background {colors.surface-dark}, text {colors.on-dark}, type {typography.heading-md}
-- Rounded: {rounded.lg}, padding {spacing.xxl} {spacing.xxxl}, height auto
-- Border: none or 1px solid {colors.hairline}
-
-**Modal**
-- Background {colors.surface-dark}, text {colors.on-dark}, type {typography.body-md}
-- Rounded: {rounded.md}, padding {spacing.xxl}, height auto
-- Shape: {shape.modal} (rounded)
-- *Overlay*: {colors.surface-deep} at 60% opacity
-
-**Table**
-- Background transparent, text {colors.on-dark-mute}, type {typography.body-sm}
-- Rounded: {rounded.none}, cell padding {spacing.md}
-- *Header*: {typography.button-sm} uppercase, text {colors.ash}
-- *Row hover*: Background shift to {colors.surface}
-- *Border*: 1px solid {colors.hairline} between rows
+**Tab** (`{component.tab}`, `{component.tab-active}`)
+- Default: Background `{colors.secondary}`, text `{colors.ink}`, type `{typography.button-sm}`
+- Active: Background `{colors.primary}`, text `{colors.on-primary}`
+- rounded: `{rounded.full}`, padding 10px 20px, height 40px
 
 ### Feedback Components
 
-**Alert (Info / Success / Warning / Danger)**
-- Background {colors.surface-card}, text {colors.on-dark}, type {typography.body-md}
-- Rounded: {rounded.md}, padding {spacing.lg}, height auto
-- Shape: {shape.alert} (rounded)
-- *Left accent border*: {colors.badge-info} / {colors.badge-success} / {colors.badge-warning} / {colors.danger} at 3px width
-
-**Tooltip**
-- Background {colors.surface-deep}, text {colors.on-dark}, type {typography.caption}
-- Rounded: {rounded.sm}, padding {spacing.xs} {spacing.sm}
-- Z-index: {zIndex.tooltip} (600)
-
-**Progress Bar**
-- Background {colors.surface}, fill {colors.primary}, type {typography.caption}
-- Rounded: {rounded.full}, height 8px
-- Shape: {shape.progress} (pill)
+- **Alerts**: Background in semantic palette color with matching on-color text. Border-radius follows {rounded.sm}. Left border accent for visual categorization.
+- **Loading states**: Minimal — spinner or skeleton with {colors.surface} background and {colors.stone} accent.
+- **Tooltips**: Dark background ({colors.surface-dark}), {colors.on-dark} text, sharp corners ({rounded.none}) or subtle rounding ({rounded.xs}).
 
 ### Navigation
 
-**Navigation Bar (Top)**
-- Background {colors.surface-dark}, text {colors.on-dark-mute}, type {typography.button-md}
-- Rounded: {rounded.none}, height 60px
-- *Link hover*: Text shifts to {colors.secondary}
-- Bottom border: 1px solid {colors.hairline}
-- *Logo*: Left-aligned, brand wordmark in {colors.on-dark}
-- *CTA button*: Right-aligned {component.button-primary}
+**Navigation Bar** (`{component.nav-bar}`)
+- Background `{colors.background}`, text `{colors.ink}`, type `{typography.button-sm}`
+- rounded: `{rounded.none}`, height 60px
+- Sticky top navigation. Logo uses brand mark at 24x24px in {colors.ink}
+- Mobile: hamburger menu pattern with circular 50% radius toggle
 
-**Dropdown / Menu**
-- Background {colors.surface-card}, text {colors.on-dark-mute}, type {typography.body-md}
-- Rounded: {rounded.md}, padding {spacing.sm} 0
-- *Item hover*: Background {colors.secondary}, text {colors.on-primary}
-- Z-index: {zIndex.dropdown} (100)
-
-**Footer**
-- Background {colors.surface-deep}, text {colors.on-dark-mute}, type {typography.body-sm}
-- Rounded: {rounded.none}
-- *Section headers*: {typography.button-sm} uppercase, text {colors.on-dark}
-- *Link hover*: Text shifts to {colors.secondary}
+---
 
 ## Do's and Don'ts
 
 ### Do
 
-- Use the achromatic gray scale as the foundation — maintain pure neutral discipline with no warm or cool tinting
-- Apply electric blue ({colors.secondary}) consistently as the universal hover/active state across all interactive elements
-- Use extreme negative letter-spacing ({typography.display-xl.letterSpacing}) on display headings {typography.display-lg.fontSize} and above
-- Keep primary CTAs as full-pill shapes ({rounded.full}) with coral-red ({colors.primary})
-- Use IBM Plex Mono uppercase ({typography.button-sm}) for technical labels, tags, and system metadata
-- Communicate depth through surface color (dark-to-light) rather than shadows
-- Maintain generous vertical section spacing ({spacing.xxxl}–{spacing.section}) on the dark canvas
-- Keep the {rounded.full} pill reserved for primary buttons, badges, and tabs — never use it for cards or containers
+- **Do** use true black ({colors.primary}) and pure white ({colors.background}) as the primary palette — the stark contrast is the identity
+- **Do** use {rounded.full} border-radius for all buttons, chips, and pill-shaped navigation elements — the full-pill shape is a core identity element
+- **Do** keep all display and heading text at weight {typography.display-xxl.fontWeight} for billboard-level impact
+- **Do** use whisper-soft shadows (Level 1–2, 0.12–0.16 opacity) for card elevation — barely visible lift
+- **Do** maintain the compact, information-dense layout style — the system prioritizes efficiency over airiness
+- **Do** use warm, human-centric illustrations to soften the monochrome interface
+- **Do** apply {rounded.sm} for content cards and {rounded.md} for featured containers
+- **Do** use body text at {typography.body-md.fontSize} weight {typography.body-md.fontWeight} for body copy and {typography.button-md.fontWeight} for navigation UI
+- **Do** pair black primary buttons with white secondary buttons for dual-action layouts
 
 ### Don't
 
-- Don't introduce warm or cool color tints to the neutral scale — Sanity's grays are pure achromatic
-- Don't use drop shadows for elevation — dark interfaces demand colorimetric depth
-- Don't apply border-radius between {rounded.lg} and {rounded.full} — the system jumps from 12px directly to 99999px
-- Don't mix the coral-red CTA ({colors.primary}) with the electric blue interactive color ({colors.secondary}) in the same element
-- Don't use heavy font weights (700+) — the system maxes out at 600 and only for {typography.button-sm} (11px uppercase) labels
-- Don't place light text on light surfaces or dark text on dark surfaces without checking the gray-on-gray contrast ratio
-- Don't use traditional offset box-shadows — ring shadows (`0 0 0 Npx`) or border-based containment only
-- Don't break the tight line-height on headings — {typography.display-xl.lineHeight}–{typography.heading-md.lineHeight} is the range, never go to 1.5+ for display text
+- **Don't** introduce color into the UI chrome — the interface is strictly black, white, and gray
+- **Don't** use rounded corners less than {rounded.full} on buttons — the full-pill shape is non-negotiable
+- **Don't** apply heavy shadows or drop shadows with high opacity — depth is whisper-subtle
+- **Don't** use serif fonts anywhere — typography is exclusively geometric sans-serif
+- **Don't** create airy, spacious layouts with excessive whitespace — the density is intentional
+- **Don't** use gradients or color overlays — every surface is a flat, solid color
+- **Don't** use decorative borders — borders are functional (inputs, dividers) or absent entirely
+- **Don't** soften the black/white contrast with off-whites or near-blacks — the duality is deliberate
+
+---
 
 ## Responsive Behavior
 
@@ -649,58 +569,65 @@ Components are grouped by functional category. Each spec follows the format: Bac
 
 | Name | Width | Key Changes |
 |------|-------|-------------|
-| Desktop XL | >= 1640px | Full layout, maximum content width (~1440px) |
-| Desktop | >= 1440px | Standard desktop layout |
-| Desktop Compact | >= 1200px | Slightly condensed desktop, reduced column gaps |
-| Laptop | >= 1100px | Reduced column widths, smaller card grids |
-| Tablet Landscape | >= 960px | 2-column layouts begin collapsing to single column |
-| Tablet | >= 768px | Transition zone, navigation collapses, elements stack |
-| Mobile Large | >= 720px | Near-tablet layout, reduced section spacing |
-| Mobile | >= 480px | Single-column, stacked layout, compact padding |
-| Mobile Small | >= 376px | Minimum supported width, tight gutters |
+| Mobile Small | 320px | Minimum layout, single column, stacked inputs, compact typography |
+| Mobile | 600px | Standard mobile, stacked layout, hamburger nav |
+| Tablet Small | 768px | Two-column grids begin, expanded card layouts |
+| Tablet | 1119px | Full tablet layout, side-by-side hero content |
+| Desktop Small | 1120px | Desktop grid activates, horizontal nav pills |
+| Desktop | 1136px | Full desktop layout, maximum container width, split hero |
 
 ### Touch Targets
 
-All interactive elements maintain a minimum touch target of 44px — this applies to buttons, input fields, tabs, chips, and links in navigation. On mobile (below 768px), chip and badge padding increases by {spacing.xs} to ensure comfortable tap areas. Ghost buttons maintain their 44px height but reduce horizontal padding to {spacing.sm}.
+- All pill buttons maintain minimum 44px height ({spacing.sm} vertical padding + line-height) for comfortable thumb tapping
+- Navigation chips use generous {spacing.sm} {spacing.md} padding for comfortable touch targets
+- Circular controls (menu toggle, close buttons) use 50% radius ensuring large, easy-to-hit targets
+- Card surfaces serve as full-area touch targets on mobile
 
 ### Collapsing Strategy
 
-- **Navigation**: Horizontal links collapse to hamburger menu below 768px; backdrop blur persists on mobile
-- **Hero typography**: Scales from {typography.display-xl.fontSize} → {typography.display-lg.fontSize} → {typography.heading-lg.fontSize} across breakpoints, maintaining tight letter-spacing ratios
-- **Grid layouts**: 3-column → 2-column at ~960px, single-column below 768px
-- **Card grids**: Horizontal scrolling on mobile instead of wrapping (preserving card aspect ratios)
-- **Section spacing**: Vertical padding reduces by approximately 40% on mobile ({spacing.section} → {spacing.xxxl} → {spacing.xxl})
-- **Button sizing**: CTA pills maintain padding but reduce font size; ghost buttons stay fixed
-- **Code blocks**: Horizontal scroll with preserved monospace formatting
+- **Navigation**: Horizontal pill nav collapses to hamburger menu with circular toggle
+- **Hero**: Split layout (text + visual) stacks to single column — text above, visual below
+- **Input fields**: Side-by-side pickup/destination inputs stack vertically
+- **Feature cards**: 2-column grid collapses to full-width stacked cards
+- **Headings**: {typography.display-xxl.fontSize} display scales down through intermediate sizes
+- **Footer**: Multi-column link grid collapses to stacked single column
+- **Category pills**: Horizontal scroll with overflow on smaller screens
 
 ### Image Behavior
 
-- Images use `max-width: 100%` with automatic height calculation
-- Card thumbnails use fixed 16:9 aspect ratio above 768px; switch to full-width with auto-height below
-- Hero imagery uses full-bleed with `object-fit: cover` for desktop; `object-fit: contain` may be used on mobile to prevent cropping
-- High-DPI (2x/3x) assets are served for retina displays; SVG preferred for icons and logos
-- Gradient hero treatments scale fluidly with viewport — the {colors.hero-warm} → {colors.hero-glow} → {colors.hero-pink} band repositions but never collapses
+- Illustrations scale proportionally within their containers
+- Hero imagery maintains aspect ratio, may crop on smaller viewports
+- QR code sections hide on mobile (app download shifts to direct store links)
+- Card imagery maintains {rounded.sm} to {rounded.md} border-radius at all sizes
+
+---
 
 ## Iteration Guide
 
-1. **Start dark**: Begin with {colors.surface-dark} background, {colors.on-dark} primary text, {colors.on-dark-mute} secondary text. This is the natural state of the system — light mode is the variant, not the default.
-2. **Add structure**: Use {colors.surface} surfaces and {colors.hairline} borders for containment — no shadows. Depth comes from color, not offset shadows.
-3. **Apply typography**: Space Grotesk with tight letter-spacing on headings ({typography.display-xl.letterSpacing}–{typography.heading-md.letterSpacing}), {typography.body-md.lineHeight} line-height on body. Use {typography.button-sm} for uppercase technical labels.
-4. **Color punctuation**: Add {colors.primary} for CTAs and {colors.secondary} for all hover/interactive states. The coral-red and electric blue are the only saturated colors — use them sparingly.
-5. **Refine spacing**: {spacing.sm} base unit, {spacing.xl}–{spacing.xxl} within sections, {spacing.xxxl}–{spacing.section} between sections. Maintain generous vertical rhythm.
-6. **Technical details**: Add IBM Plex Mono uppercase labels ({typography.button-sm}) for tags, metadata, and system readouts. Set `text-transform: uppercase` with {typography.button-sm.letterSpacing} letter-spacing.
-7. **Polish**: Ensure all interactive elements hover to {colors.secondary}, all primary buttons are pills ({rounded.full}), ghost/secondary buttons use {rounded.sm}, and borders are hairline (1px).
-8. **Validate dark mode**: Check that every color token has a corresponding dark mode value. Verify the surface hierarchy compresses correctly ({colors.surface-dark} ground → {colors.surface-card} elevated).
-9. **Test contrast**: Ensure {colors.on-dark-mute} against {colors.surface-dark} meets WCAG AA for body text. Test {colors.on-dark} against all surface levels.
-10. **Review component specs**: Confirm every component uses the spec format (Background `{token}`, text `{token}`, type `{typography.token}`, rounded: `{token}`, padding Xpx, height Xpx).
+1. **Focus on one component at a time** — Build each component to spec before moving to the next. Reference token paths directly.
+
+2. **Reference the strict black/white palette** — Use `{colors.primary}` not "make it dark". Always specify {rounded.full} radius for buttons and pills — this is non-negotiable for the identity.
+
+3. **Describe font explicitly** — "DM Sans Bold (700) for the heading, DM Sans Medium (500) for the label." Use `{typography.display-xl}`, `{typography.body-md}`, and `{typography.button-md}` tokens.
+
+4. **For shadows, use whisper-shadow language** — Reference `{elevation.level1}` or `{elevation.level2}` — never heavy drop shadows. Depth is communicated through contrast, not drama.
+
+5. **Keep layouts compact and information-dense** — The system is efficient, not airy. Use `{spacing.md}` to `{spacing.lg}` for internal spacing and `{spacing.section}` between sections.
+
+6. **Illustrations should be warm and human** — Describe stylized people in warm tones, not abstract shapes. Reference `{colors.hero-warm}` and `{colors.hero-pink}` as accent guidance.
+
+7. **Pair black CTAs with white secondaries** — For dual-action layouts, use `{component.button-primary}` for the primary action and `{component.button-secondary}` for the secondary. The inversion is deliberate.
+
+8. **Run validation after each edit** — Verify token paths resolve to actual values in `design-token.json`. Never introduce raw hex values that bypass the token system.
+
+---
 
 ## Known Gaps
 
-- **Pressed/active variants**: Only button-primary has a dedicated pressed variant documented. Other interactive components (badges, tabs, cards) lack explicit pressed/active state documentation beyond the shared "hover to {colors.secondary}" rule.
-- **Focus-ring only components**: Several components (checkbox, radio, switch) rely on the shared {colors.ring-focus} ring for keyboard focus but lack explicit disabled, error, and read-only state documentation.
-- **Dark mode card elevation**: The shift from {elevation.level1} (light, `0 1px 3px rgba(0,0,0,0.08)`) to dark mode's border-based depth (equivalent to {colors.hairline}) changes the visual language from shadow-based to border-based — this transition is documented at the token level but not validated across all component surfaces.
-- **Footer component**: The footer is partially described (background {colors.surface-deep}, link behavior) but lacks full component spec with padding, typography for all link levels, and responsive collapsing behavior.
-- **Table component**: Column type variations (numeric, text, image) and sort-state styling are not documented. Responsive table behavior (horizontal scroll vs. card-format on mobile) is not specified.
-- **Tooltip positioning**: Tooltip arrow/direction variants and trigger behaviors (hover vs. click vs. focus) are not documented.
-- **Animation durations**: While {animation.duration.fast} (150ms), {animation.duration.normal} (200ms), {animation.duration.slow} (300ms), and {animation.duration.slower} (500ms) are defined, no per-component animation or transition specifications exist.
-- **Auth-gated surfaces**: Pages and component variants behind authentication (logged-in dashboard, content editor, settings panels) are not extracted or documented.
+- **Focus ring variants**: Only a single focus ring token (`{colors.ring-focus}`) is documented. Pressed and disabled states for individual components rely on elevation Level 4 inset shadow rather than dedicated component-level tokens.
+- **Footer component spec**: The full-black footer (`{colors.surface-dark}`) is a major surface but lacks a dedicated component token with its padding, typography, and link hierarchy defined.
+- **Hero section component**: The split-layout hero (text + visual) is a key layout pattern but lacks a dedicated component entry. It currently lives as a layout convention rather than a token-driven component.
+- **Modal and overlay components**: Dialog, bottom sheet, and modal surfaces are not extracted as distinct components. They currently inherit card and surface tokens without dedicated padding or typography tokens.
+- **Popup / tooltip arrow styling**: Tooltip pointer/stem geometry is not documented. Arrow direction and positioning rely on implicit layout conventions.
+- **Animation timing on components**: While `{animation.duration.fast}` and `{animation.duration.normal}` exist in the token set, component-level animation behaviors (hover transitions, press feedback timing) are not documented per component.
+- **Dark mode illustration colors**: Hero accent colors (`{colors.hero-warm}`, `{colors.hero-glow}`, `{colors.hero-pink}`) and badge colors (`{colors.badge-success}`, `{colors.badge-warning}`, `{colors.badge-info}`) remain identical across light and dark modes. This may need revisiting for dark-mode-specific illustration palettes.

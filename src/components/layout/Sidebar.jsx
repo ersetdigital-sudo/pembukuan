@@ -52,10 +52,10 @@ function NavItem({ href, label, icon: Icon, onNavigate }) {
       href={href}
       onClick={onNavigate}
       className={cn(
-        "group flex items-center gap-3 rounded-sm px-3 py-2 text-sm font-medium transition-colors",
+        "group flex items-center gap-3 rounded-sm px-3 py-2.5 text-body-sm font-medium transition-all duration-150",
         active
-          ? "bg-secondary text-on-primary"
-          : "text-on-dark-mute hover:bg-on-dark/10 hover:text-on-dark"
+          ? "bg-white/15 text-on-dark"
+          : "text-on-dark/70 hover:bg-white/10 hover:text-on-dark"
       )}
     >
       <Icon className="h-[18px] w-[18px] shrink-0" />
@@ -81,12 +81,12 @@ export default function Sidebar({ open = false, onClose = () => {} }) {
 
   return (
     <>
-      {/* Backdrop "" only on mobile */}
+      {/* Backdrop */}
       <div
         onClick={onClose}
         aria-hidden="true"
         className={cn(
-          "fixed inset-0 z-40 bg-surface-deep/60 backdrop-blur-sm transition-opacity duration-200 lg:hidden",
+          "fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-200 lg:hidden",
           open ? "opacity-100" : "pointer-events-none opacity-0"
         )}
       />
@@ -100,18 +100,18 @@ export default function Sidebar({ open = false, onClose = () => {} }) {
           "lg:translate-x-0"
         )}
       >
-        {/* Brand + mobile close */}
-        <div className="flex items-center justify-between gap-2 border-b border-hairline-strong/20 px-5 py-5">
-          <div className="flex min-w-0 items-center gap-2.5">
-            <div className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-primary text-lg font-bold text-on-primary">
+        {/* Brand */}
+        <div className="flex items-center justify-between gap-2 border-b border-white/10 px-5 py-5">
+          <div className="flex min-w-0 items-center gap-3">
+            <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white text-lg font-bold text-black">
               O
             </div>
             <div className="min-w-0 leading-tight">
-              <div className="truncate text-base font-bold tracking-tight">
+              <div className="truncate text-body-sm font-bold tracking-tight">
                 OOS SHOP
               </div>
-              <div className="truncate text-[10px] font-mono uppercase tracking-[0.5px] text-on-dark-mute">
-                Sales Recap · 2026
+              <div className="truncate text-[11px] text-on-dark/50">
+                Sales Recap 2026
               </div>
             </div>
           </div>
@@ -119,17 +119,17 @@ export default function Sidebar({ open = false, onClose = () => {} }) {
             type="button"
             onClick={onClose}
             aria-label="Tutup menu"
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-sm text-on-dark-mute hover:bg-on-dark/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/30 lg:hidden"
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-on-dark/70 hover:bg-white/10 lg:hidden"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
         {/* Nav */}
-        <nav className="scroll-thin-dark flex-1 space-y-5 overflow-y-auto px-3 py-4">
+        <nav className="scroll-thin-dark flex-1 space-y-6 overflow-y-auto px-3 py-5">
           {NAV.map((section) => (
             <div key={section.group}>
-              <div className="mb-1.5 px-3 text-button-sm font-mono uppercase tracking-[0.5px] text-on-dark-mute/60">
+              <div className="mb-2 px-3 text-[11px] font-medium uppercase tracking-wider text-on-dark/40">
                 {section.group}
               </div>
               <ul className="space-y-0.5">
@@ -144,8 +144,8 @@ export default function Sidebar({ open = false, onClose = () => {} }) {
         </nav>
 
         {/* Footer */}
-        <div className="border-t border-hairline-strong/20 px-5 py-3 text-[10px] text-on-dark-mute/50">
-          Sanity design · v1.0
+        <div className="border-t border-white/10 px-5 py-3 text-[11px] text-on-dark/40">
+          Uber design v1.0
         </div>
       </aside>
     </>

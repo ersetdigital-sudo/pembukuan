@@ -236,13 +236,13 @@ export default function PenjualanClient() {
       {/* Search bar */}
       {sorted.length > 0 && (
         <div className="mb-4 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ash pointer-events-none" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone pointer-events-none" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Cari pembeli atau produk..."
-            className="w-full md:max-w-sm pl-9 pr-4 py-2 rounded-xs border border-hairline bg-surface text-sm text-ink placeholder:text-stone focus:outline-none focus:ring-2 focus:ring-secondary/30"
+            className="w-full md:max-w-sm pl-9 pr-4 py-2.5 rounded-full border border-hairline bg-secondary text-body-sm text-ink placeholder:text-stone focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
           />
         </div>
       )}
@@ -256,7 +256,7 @@ export default function PenjualanClient() {
             <EmptyState message={`Tidak ada hasil untuk "${query}"`} />
           ) : (
             <>
-              <div className="hidden md:block rounded-md border border-hairline bg-surface-card overflow-hidden">
+              <div className="hidden md:block rounded-sm bg-surface-card shadow-card overflow-hidden">
             <div className="overflow-x-auto scroll-thin">
               <table className="w-full text-sm border-collapse">
                 <thead className="bg-surface/80 border-b-2 border-hairline">
@@ -455,17 +455,17 @@ export default function PenjualanClient() {
 
 function CompactStat({ title, value, icon: Icon, iconBg, iconColor }) {
   return (
-    <div className="h-full rounded-md border border-hairline bg-surface-card p-2.5 sm:p-3 flex items-center gap-2.5 sm:gap-3 transition-colors">
+    <div className="h-full rounded-sm bg-surface-card shadow-card hover:shadow-card-hover transition-shadow duration-200 p-4 flex items-center gap-3">
       <div
-        className={`h-8 w-8 sm:h-10 sm:w-10 rounded-md grid place-items-center shrink-0 ${iconBg} ${iconColor}`}
+        className={`h-10 w-10 rounded-full grid place-items-center shrink-0 ${iconBg} ${iconColor}`}
       >
-        <Icon className="h-4 w-4 sm:h-5 sm:w-5" strokeWidth={2.25} />
+        <Icon className="h-4.5 w-4.5" strokeWidth={2} />
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-button-sm font-mono uppercase tracking-[0.5px] text-ash leading-none truncate">
+        <p className="text-[11px] font-medium text-ash leading-none truncate">
           {title}
         </p>
-        <p className="text-sm sm:text-lg font-bold mt-1 sm:mt-1.5 leading-tight text-ink tabular-nums tracking-tight break-words">
+        <p className="text-heading-sm mt-1 leading-tight text-ink tabular-nums break-words">
           {value}
         </p>
       </div>
@@ -477,7 +477,7 @@ function CompactStat({ title, value, icon: Icon, iconBg, iconColor }) {
 function MobileSaleCard({ sale, totals, produk, onDetail, onEdit, onDelete }) {
   const profitPositive = totals.profit >= 0;
   return (
-    <div className="rounded-md border border-hairline bg-surface-card overflow-hidden">
+    <div className="rounded-sm bg-surface-card shadow-card overflow-hidden">
       {/* Header: date + marketplace + actions */}
       <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-hairline/40 bg-surface/30">
         <div className="flex items-center gap-2 min-w-0 flex-1">

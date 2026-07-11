@@ -128,7 +128,7 @@ function Toaster({ toasts, remove }) {
                       ? "#DC2626"
                       : t.type === "warning"
                       ? "#EAB308"
-                      : "#f36458",
+                      : "#000000",
                 }}
               />
             )}

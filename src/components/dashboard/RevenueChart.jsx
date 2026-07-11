@@ -9,8 +9,8 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-surface-card border border-hairline rounded-md px-3 py-2 text-xs">
-      <p className="font-semibold text-ink mb-1">{label}</p>
+    <div className="bg-surface-card rounded-sm shadow-elevated px-4 py-3 text-body-sm">
+      <p className="font-bold text-ink mb-1">{label}</p>
       {payload.map((p, i) => (
         <p key={i} className="font-medium" style={{ color: p.color }}>
           {p.name}: {formatRupiah(p.value)}
@@ -36,9 +36,9 @@ export default function RevenueChart({ data, title = "Tren Bulanan", subtitle })
               <YAxis tick={{ fontSize: 10 }} tickFormatter={(v) => `${(v / 1_000_000).toFixed(1)}jt`} axisLine={false} tickLine={false} />
               <Tooltip content={<CustomTooltip />} />
               <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 11 }} />
-              <Bar dataKey="penjualan" name="Penjualan" fill="#212121" radius={[3, 3, 0, 0]} />
-              <Bar dataKey="profit" name="Profit" fill="#19d600" radius={[3, 3, 0, 0]} />
-              <Bar dataKey="biaya" name="Biaya" fill="#f36458" radius={[3, 3, 0, 0]} />
+              <Bar dataKey="penjualan" name="Penjualan" fill="#000000" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="profit" name="Profit" fill="#34d399" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="biaya" name="Biaya" fill="#afafaf" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

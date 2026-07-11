@@ -2,189 +2,128 @@
 inclusion: always
 ---
 
-# Sanity Design System — Project Style Guide
+# Uber Design System - Project Style Guide
 
-Semua kode UI yang ditulis atau dimodifikasi di project ini WAJIB mengikuti Sanity design system berikut. Jangan gunakan warna, font, spacing, atau border-radius di luar token yang sudah didefinisikan.
+Semua kode UI yang ditulis atau dimodifikasi di project ini WAJIB mengikuti Uber design system berikut. Jangan gunakan warna, font, spacing, atau border-radius di luar token yang sudah didefinisikan.
+
+## Filosofi
+
+Confident minimalism - black & white universe, whisper-soft shadows, pill-shaped interactions, information-dense layouts. Setiap pixel harus punya purpose. Tidak ada dekorasi tanpa fungsi.
 
 ## Color Tokens
 
-### Light Mode
 | Token | Value | Penggunaan |
 |-------|-------|------------|
-| primary | #f36458 | CTA utama, accent brand |
-| secondary | #0052ef | Hover state, link aktif |
-| background | #f7f7f7 | Background halaman |
-| background-canvas | #f7f7f7 | Canvas level background |
-| background-bone | #ffffff | Inset surfaces, card groups |
+| primary | #000000 | CTA utama, headlines, sidebar |
+| primary-deep | #1a1a1a | Pressed state |
+| secondary | #efefef | Chip/filter bg, secondary buttons |
+| background | #ffffff | Page canvas |
+| background-canvas | #fafafa | Page-level backdrop |
+| background-bone | #f0f0f0 | Inset card groups |
 | surface | #ffffff | Default surface |
 | surface-card | #ffffff | Card backgrounds |
-| surface-dark | #212121 | Elevated dark surfaces, nav |
-| surface-deep | #0b0b0b | Footer, deepest surfaces |
-| foreground | #0b0b0b | Primary foreground |
-| ink | #0b0b0b | Primary headings |
-| body | #0b0b0b | Body text |
-| charcoal | #0b0b0b | Captions, metadata |
-| mute | #b9b9b9 | Disabled/muted elements |
-| ash | #797979 | Secondary text |
-| stone | #b9b9b9 | Placeholders |
-| on-primary | #ffffff | Text di atas primary |
-| on-secondary | #ffffff | Text di atas secondary |
-| on-background | #0b0b0b | Text di atas background |
-| on-surface | #0b0b0b | Text di atas surface |
-| on-dark | #ffffff | Text di atas dark surface |
-| on-dark-mute | #b9b9b9 | Secondary text di dark surface |
-| hairline | #ededed | Border halus |
-| hairline-strong | #212121 | Border tegas |
-| divider | #ededed | Section divider |
-| divider-dark | #212121 | Divider di dark surface |
-| hero-warm | #f36458 | Hero gradient start |
-| hero-glow | #55beff | Hero gradient mid |
-| hero-pink | #e600ff | Hero gradient end |
-| badge-success | #19d600 | Status sukses |
+| surface-dark | #000000 | Footer, dark sections, sidebar |
+| surface-deep | #1a1a1a | Deepest surfaces |
+| ink | #000000 | Primary headings |
+| body | #000000 | Body text |
+| charcoal | #222222 | Captions, metadata |
+| ash | #4b4b4b | Secondary text |
+| stone | #afafaf | Disabled, placeholders |
+| on-primary | #ffffff | Text di atas primary black |
+| on-dark | #fcfcfc | Text di atas dark surface |
+| on-dark-mute | rgba(252,252,252,0.72) | Secondary text di dark |
+| hairline | #efefef | Border halus |
+| hairline-strong | #000000 | Border tegas (inputs) |
+| divider | #e0e0e0 | Section divider |
+| badge-success | #34d399 | Status sukses |
 | badge-warning | #f59e0b | Status warning |
-| badge-info | #55beff | Status info |
-| link | #0052ef | Inline links |
-| ring-focus | rgba(0, 82, 239, 0.15) | Focus ring |
-
-### Dark Mode
-| Token | Value |
-|-------|-------|
-| primary | #f36458 |
-| secondary | #0052ef |
-| background | #0b0b0b |
-| background-canvas | #0b0b0b |
-| background-bone | #212121 |
-| surface | #212121 |
-| surface-card | #212121 |
-| surface-dark | #0b0b0b |
-| surface-deep | #000000 |
-| foreground | #ffffff |
-| ink | #ffffff |
-| body | #b9b9b9 |
-| charcoal | #ffffff |
-| mute | #797979 |
-| ash | #b9b9b9 |
-| stone | #797979 |
-| on-primary | #ffffff |
-| on-secondary | #ffffff |
-| on-background | #ffffff |
-| on-surface | #ffffff |
-| on-dark | #ffffff |
-| on-dark-mute | #b9b9b9 |
-| hairline | #212121 |
-| hairline-strong | #797979 |
-| divider | #212121 |
-| divider-dark | #353535 |
-| hero-warm | #f36458 |
-| hero-glow | #55beff |
-| hero-pink | #e600ff |
-| badge-success | #19d600 |
-| badge-warning | #f59e0b |
-| badge-info | #55beff |
-| link | #55beff |
-| ring-focus | rgba(0, 82, 239, 0.3) |
+| badge-info | #3b82f6 | Status info |
+| danger | #dc2626 | Error/destructive |
 
 ## Typography
 
-### Font Families
-- **Display & Body**: `'Space Grotesk', ui-sans-serif, system-ui, sans-serif`
-- **Code & Technical**: `'IBM Plex Mono', ui-monospace, monospace`
+### Font
+- **Satu font untuk semua**: `DM Sans` (400, 500, 700)
+- **Mono**: `ui-monospace, Cascadia Code, JetBrains Mono, Consolas`
 
-### Scale
-| Token | Size | Weight | Line Height | Letter Spacing | Penggunaan |
-|-------|------|--------|-------------|----------------|------------|
-| display-xl | 80px | 700 | 1.00 | -3.6px | Hero headlines |
-| display-lg | 48px | 600 | 1.08 | -1.68px | Section headers besar |
-| heading-lg | 38px | 600 | 1.10 | -1.14px | Section anchors |
-| heading-md | 24px | 500 | 1.24 | -0.24px | Card titles, subsection |
-| body-lg | 18px | 400 | 1.50 | -0.18px | Intro paragraphs |
-| body-md | 16px | 400 | 1.50 | normal | Standard body text |
-| body-sm | 15px | 400 | 1.50 | normal | Compact body text |
-| button-md | 16px | 600 | 1.0 | normal | Button labels |
-| button-sm | 11px (IBM Plex Mono) | 600 | 1.0 | 0.5px | Uppercase labels, tabs |
-| caption | 13px | 400 | 1.50 | -0.13px | Metadata, tags |
-| code-md | 15px (IBM Plex Mono) | 400 | 1.50 | normal | Code blocks |
-| code-sm | 13px (IBM Plex Mono) | 500 | 1.50 | normal | Inline code |
-
-### Prinsip Typography
-- Display headings pakai negative letter-spacing yang agresif
-- Hanya gunakan weight 400-700 (Space Grotesk)
-- Uppercase + IBM Plex Mono untuk technical labels (button-sm)
-- Heading line-height ketat (1.0-1.24), body longgar (1.50)
+### Prinsip
+- Headlines SELALU bold (700) - billboard impact
+- Body & UI text pakai 400-500
+- Tidak ada decorative type treatment (no uppercase labels, no letter-spacing tricks)
+- Line-height ketat di headings (1.0-1.22), longgar di body (1.5)
 
 ## Spacing (Base: 8px)
 
-| Token | Value | Penggunaan |
-|-------|-------|------------|
-| xxs | 2px | Micro gaps |
-| xs | 4px | Tight internal spacing |
-| sm | 8px | Button padding, badge padding |
-| md | 12px | Standard component gap |
-| lg | 16px | Card spacing, section padding |
-| xl | 24px | Large padding |
-| xxl | 32px | Section padding, gutters |
-| xxxl | 48px | Large section spacing |
-| section | 96px | Hero padding, major breaks |
-| band | 120px | Maximum separation |
+| Token | Value |
+|-------|-------|
+| xxs | 4px |
+| xs | 8px |
+| sm | 12px |
+| md | 16px |
+| lg | 24px |
+| xl | 32px |
+| xxl | 48px |
+| xxxl | 64px |
 
 ## Border Radius
 
 | Token | Value | Penggunaan |
 |-------|-------|------------|
-| none | 0 | Nav bars, full-bleed sections |
-| xs | 3px | Inputs, subtle rounding |
-| sm | 5px | Ghost buttons, small cards |
-| md | 6px | Standard cards, modals |
-| lg | 12px | Large cards, feature containers |
-| full | 99999px | Primary buttons, badges, pills, tabs |
+| none | 0px | Nav bars, full-bleed |
+| xs | 4px | Micro elements |
+| sm | 8px | Cards, inputs, containers |
+| md | 12px | Featured cards |
+| lg | 16px | Modals, panels |
+| full | 9999px | SEMUA buttons, chips, pills, badges, tabs |
 
-**Aturan**: TIDAK ADA radius antara 13px dan 99998px. Langsung dari `lg` (12px) ke `full` (pill).
+**ATURAN**: Buttons SELALU rounded-full (pill shape). Cards SELALU rounded-sm (8px).
+
+## Elevation (Whisper Shadows)
+
+| Level | Shadow | Penggunaan |
+|-------|--------|------------|
+| 0 | none | Inline content |
+| 1 (card) | 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06) | Standard cards |
+| 2 (card-hover) | 0 4px 12px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.08) | Hover state |
+| 3 (elevated) | 0 8px 24px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08) | Dropdowns, popovers |
+| 4 (float) | 0 12px 32px rgba(0,0,0,0.16), 0 4px 12px rgba(0,0,0,0.08) | FAB, floating |
+
+**ATURAN**: Shadow opacity MAKSIMAL 0.16. Tidak ada colored shadows. Tidak ada glow effects.
 
 ## Component Specs
 
 ### Buttons
-- **Primary**: bg primary, text on-primary, rounded full, height 44px, hover → bg secondary
-- **Secondary**: bg surface-dark, text on-dark-mute, rounded full, height 44px, hover → bg secondary
-- **Ghost**: bg surface-dark, text on-dark-mute, rounded sm, height 44px, hover → bg secondary
-- **Outlined**: bg background-bone, text surface-deep, border 1px surface-deep, rounded full, height 44px
-
-### Inputs
-- **Text Input**: bg surface-dark, text on-dark-mute, rounded xs, height 44px, focus ring ring-focus
-- **Search Input**: bg surface-dark, text on-dark-mute, rounded xs, height 44px
+- **Primary**: bg-primary text-on-primary rounded-full h-[44px] px-6 font-medium. Hover: bg-primary-deep
+- **Secondary**: bg-surface text-ink rounded-full h-[44px] px-6 border border-hairline shadow-card. Hover: shadow-card-hover
+- **Chip**: bg-secondary text-ink rounded-full h-[44px] px-4 text-body-sm font-medium
+- **Ghost**: text-ink rounded-full hover:bg-secondary
 
 ### Cards
-- **Default**: bg surface-card, border 1px hairline, rounded md, padding xl
-- **Feature**: bg surface-dark, rounded lg, padding xxl xxxl
+- bg-surface-card rounded-sm shadow-card p-6. Hover: shadow-card-hover transition-shadow
+- NO borders by default - cards defined by shadow
+- Information-dense, minimal internal padding
 
-### Navigation
-- **Nav Bar**: bg surface-dark, text on-dark-mute, height 60px, rounded none
-- **Link hover**: text → secondary
+### Inputs
+- bg-surface-card text-ink rounded-sm h-[44px] px-4 border border-hairline-strong
+- Focus: ring-focus (black 50% opacity)
+
+### Sidebar
+- bg-surface-dark text-on-dark h-full
+- Nav items: rounded-sm hover:bg-white/10
+- Active: bg-white/15 text-on-dark font-medium
 
 ### Badges
-- **Neutral**: bg background-bone, text surface-dark, rounded full
-- **Filled**: bg surface-dark, text on-dark, rounded full
-- **Success/Warning/Info**: bg badge-success/warning/info, text on-dark, rounded full
-
-### Feedback
-- **Modal**: bg surface-dark, rounded md, padding xxl, overlay 60% opacity
-- **Alert**: bg surface-card, rounded md, left accent 3px (sesuai severity)
-- **Tooltip**: bg surface-deep, text on-dark, rounded sm
-- **Progress**: bg surface, fill primary, rounded full, height 8px
-
-## Elevation (Colorimetric, bukan shadow)
-
-- **Level 0**: Tidak ada shadow — depth via warna surface
-- **Level 1**: Border-based containment (1px hairline)
-- **Level 2**: Focus ring (ring-focus)
-- **Level 3**: Modal overlay + border
+- bg-primary text-on-primary rounded-full px-2 py-0.5 text-caption font-medium
 
 ## Aturan Implementasi
 
-1. **WAJIB** gunakan CSS custom properties atau Tailwind config yang merujuk ke token di atas
-2. **DILARANG** hardcode warna/spacing/font di luar token system
-3. **Hover state** semua interactive elements → warna secondary (#0052ef)
-4. **Dark mode** adalah default identity — bukan toggle
-5. **Font loading**: Space Grotesk + IBM Plex Mono via Google Fonts
-6. **Button primary** selalu pill (rounded-full), secondary actions bisa rounded-sm/md
-7. **Spacing** harus kelipatan dari token (jangan pakai angka arbitrary)
-8. **Card** tidak floating — pakai border hairline, bukan box-shadow
+1. **WAJIB** pakai shadow-card di semua card - BUKAN border
+2. **DILARANG** pakai gradient apapun - semua surface flat solid color
+3. **DILARANG** pakai border di card - depth via shadow only
+4. **WAJIB** rounded-full untuk semua buttons dan interactive pills
+5. **WAJIB** rounded-sm (8px) untuk semua cards dan containers
+6. **DILARANG** pakai warna selain black/white/gray di UI chrome
+7. **Font**: DM Sans only, weight 400/500/700
+8. **Shadows**: Whisper-soft only (max 0.16 opacity)
+9. **Layout**: Information-dense, compact, efficient - bukan airy
+10. **Hover pada card**: transition dari shadow-card ke shadow-card-hover
