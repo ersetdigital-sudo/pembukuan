@@ -298,8 +298,9 @@ function KategoriBlock({ label, partners, total, onUpdate, onAdd, onRemove }) {
                 type="number"
                 min="0"
                 max="100"
-                value={p.percentage}
+                value={p.percentage || ""}
                 onChange={(e) => onUpdate(idx, "percentage", e.target.value)}
+                onFocus={(e) => e.target.select()}
                 className="pr-6 text-right"
               />
               <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[12px] text-ash pointer-events-none">
