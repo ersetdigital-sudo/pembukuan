@@ -262,27 +262,27 @@ export default function PenjualanClient() {
               <div className="hidden md:block rounded-sm overflow-hidden shadow-card">
             <div className="overflow-x-auto scroll-thin">
               <table className="w-full text-sm border-collapse">
-                <thead className="bg-surface-dark text-white">
+                <thead className="border-b border-hairline">
                   <tr>
-                    <th className="text-left px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-white/90 border-r border-white/10">
+                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-ash">
                       Tanggal
                     </th>
-                    <th className="text-left px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-white/90 border-r border-white/10">
+                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-ash">
                       Pembeli
                     </th>
-                    <th className="text-left px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-white/90 border-r border-white/10">
+                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-ash">
                       Marketplace
                     </th>
-                    <th className="text-left px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-white/90 border-r border-white/10">
+                    <th className="text-left px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-ash">
                       Produk
                     </th>
-                    <th className="text-right px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-white/90 border-r border-white/10">
+                    <th className="text-right px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-ash">
                       Fee MP
                     </th>
-                    <th className="text-right px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-white/90 border-r border-white/10">
+                    <th className="text-right px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-ash">
                       Total Jual
                     </th>
-                    <th className="text-right px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-white/90 border-r border-white/10">
+                    <th className="text-right px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-ash">
                       Profit
                     </th>
                     <th className="w-28"></th>
@@ -295,22 +295,20 @@ export default function PenjualanClient() {
                   return (
                     <tr
                       key={s.id}
-                      className={`border-b border-hairline transition-colors hover:bg-secondary/50 ${
-                        idx % 2 === 0 ? "bg-white" : "bg-background-canvas"
-                      }`}
+                      className="border-b border-hairline transition-colors hover:bg-secondary/30"
                     >
-                      <td className="px-4 py-3 text-xs text-ash border-r border-hairline whitespace-nowrap">
+                      <td className="px-4 py-2.5 text-xs text-ash whitespace-nowrap">
                         {formatDate(s.tanggal)}
                       </td>
-                      <td className="px-4 py-3 font-medium text-ink border-r border-hairline align-middle whitespace-nowrap">
+                      <td className="px-4 py-3 font-medium text-ink align-middle whitespace-nowrap">
                         {s.nama_pembeli}
                       </td>
-                      <td className="px-4 py-3 border-r border-hairline">
+                      <td className="px-4 py-3">
                         <Badge className={MP_BADGE[s.marketplace] || ""}>
                           {s.marketplace}
                         </Badge>
                       </td>
-                      <td className="px-4 py-3 border-r border-hairline align-middle">
+                      <td className="px-4 py-3 align-middle">
                         <div className="flex items-baseline gap-1.5 text-xs leading-snug min-w-0">
                           <span className="font-medium text-ink truncate min-w-0">
                             {produk[0]?.nama_produk}
@@ -332,17 +330,17 @@ export default function PenjualanClient() {
                           )}
                         </div>
                       </td>
-                      <td className="px-4 py-3 text-right text-xs font-semibold border-r border-hairline whitespace-nowrap">
+                      <td className="px-4 py-3 text-right text-xs font-semibold whitespace-nowrap">
                         {s.fee_mp ? (
                           <span className="text-charcoal">{formatRupiah(s.fee_mp)}</span>
                         ) : (
                           <span className="text-ash">-</span>
                         )}
                       </td>
-                      <td className="px-4 py-3 text-right font-semibold text-ink border-r border-hairline whitespace-nowrap">
+                      <td className="px-4 py-3 text-right font-semibold text-ink whitespace-nowrap">
                         {formatRupiah(totals.totalJual)}
                       </td>
-                      <td className={`px-4 py-3 text-right font-bold border-r border-hairline whitespace-nowrap ${
+                      <td className={`px-4 py-3 text-right font-bold whitespace-nowrap ${
                         totals.profit >= 0 ? "text-success" : "text-danger"
                       }`}>
                         {formatRupiah(totals.profit)}
