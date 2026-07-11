@@ -14,6 +14,7 @@ import {
   Receipt,
   Wallet,
   Package,
+  Settings,
 } from "lucide-react";
 
 const NAV = [
@@ -40,6 +41,12 @@ const NAV = [
     items: [
       { href: "/laporan", label: "Laporan", icon: FileBarChart },
       { href: "/stok", label: "Stok", icon: Boxes },
+    ],
+  },
+  {
+    group: "Pengaturan",
+    items: [
+      { href: "/settings", label: "Settings", icon: Settings },
     ],
   },
 ];

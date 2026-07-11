@@ -136,17 +136,38 @@ export function aggregateByCustomer(sales, profitFn) {
 
 /**
  * Compute profit split between owners.
- * - Plugin profit:  Andri 40% / Asrud 40% / Modal & Dev 20%
- * - Jasa profit:    Andri 40% / Asrud 60%
- * - Asrud receives more in Jasa because they also handle Modal & Pengembangan.
+ * Reads percentages from settings config (dynamic).
+ * Falls back to hardcoded defaults if no config provided.
  *
- * @param {Array} sales     — sales in the period
+ * @param {Array} sales       — sales in the period
  * @param {Function} profitFn — profitBersih function from makeProfitBersihFn
- * @param {Array} [iklans]   — advertising expenses [{kategori: "Plugin"|"Jasa", jumlah}]
- *                            Subtotal per sub-kategori is subtracted from the matching
- *                            profit bucket BEFORE the Andri/Asrud/Modal split.
+ * @param {Array} [iklans]    — advertising expenses [{kategori: "Plugin"|"Jasa", jumlah}]
+ * @param {Object} [sharingConfig] — profit sharing config from settings
+ *                                   { plugin: { partners: [...] }, jasa: { partners: [...] } }
  */
-export function computeProfitSharing(sales, profitFn, iklans = []) {
+export function computeProfitSharing(sales, profitFn, iklans = [], sharingConfig = null) {
+  // Import dynamically to avoid circular deps; fallback if not available
+  let config = sharingConfig;
+  if (!config) {
+    try {
+      const { getProfitSharingConfig } = require("@/hooks/useSettings");
+      config = getProfitSharingConfig();
+    } catch {
+      config = null;
+    }
+  }
+
+  // Default percentages if no config
+  const pluginPartners = config?.plugin?.partners || [
+    { name: "Andri", initials: "A", percentage: 40 },
+    { name: "Asrud", initials: "As", percentage: 40 },
+    { name: "Modal & Dev", initials: "M", percentage: 20 },
+  ];
+  const jasaPartners = config?.jasa?.partners || [
+    { name: "Andri", initials: "A", percentage: 40 },
+    { name: "Asrud", initials: "As", percentage: 60 },
+  ];
+
   let profitPluginRaw = 0;
   let profitJasaRaw = 0;
 
@@ -178,12 +199,25 @@ export function computeProfitSharing(sales, profitFn, iklans = []) {
   const profitPlugin = profitPluginRaw - iklanPlugin;
   const profitJasa = profitJasaRaw - iklanJasa;
 
-  const pluginAndri = profitPlugin * 0.4;
-  const pluginAsrud = profitPlugin * 0.4;
-  const pluginModal = profitPlugin * 0.2;
+  // Compute shares dynamically from config
+  const pluginShares = {};
+  pluginPartners.forEach((p) => {
+    const key = p.name.toLowerCase().replace(/[^a-z]/g, "");
+    pluginShares[key] = profitPlugin * (p.percentage / 100);
+  });
 
-  const jasaAndri = profitJasa * 0.4;
-  const jasaAsrud = profitJasa * 0.6;
+  const jasaShares = {};
+  jasaPartners.forEach((p) => {
+    const key = p.name.toLowerCase().replace(/[^a-z]/g, "");
+    jasaShares[key] = profitJasa * (p.percentage / 100);
+  });
+
+  // Legacy-compatible output (Andri/Asrud/Modal)
+  const pluginAndri = pluginShares.andri || 0;
+  const pluginAsrud = pluginShares.asrud || 0;
+  const pluginModal = pluginShares.modaldev || pluginShares.modal || 0;
+  const jasaAndri = jasaShares.andri || 0;
+  const jasaAsrud = jasaShares.asrud || 0;
 
   const transferAndri = pluginAndri + jasaAndri;
   const transferAsrud = pluginAsrud + jasaAsrud + pluginModal;
@@ -204,5 +238,10 @@ export function computeProfitSharing(sales, profitFn, iklans = []) {
     transferAndri,
     transferAsrud,
     totalModal,
+    // New: full dynamic shares for display
+    pluginPartners,
+    jasaPartners,
+    pluginShares,
+    jasaShares,
   };
 }
