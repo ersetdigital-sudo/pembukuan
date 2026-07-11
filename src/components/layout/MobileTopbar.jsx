@@ -26,33 +26,28 @@ export default function MobileTopbar({ onOpen }) {
   const showBrand = title === "OOS SHOP";
 
   return (
-    <header
-      className="sticky top-0 z-30 flex items-center gap-3 border-b border-hairline bg-surface/95 px-4 py-3 backdrop-blur lg:hidden"
-    >
+    <header className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-hairline bg-surface-bone px-4 py-3 lg:hidden">
       <button
         type="button"
         onClick={onOpen}
         aria-label="Buka menu navigasi"
-        className="grid h-9 w-9 shrink-0 place-items-center rounded-xs text-ink transition-colors hover:bg-surface-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/30"
+        className="grid h-9 w-9 shrink-0 place-items-center rounded-md text-ink transition-colors hover:bg-hairline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
       >
         <Menu className="h-5 w-5" />
       </button>
 
-      <div className="flex min-w-0 flex-1 items-center gap-2.5">
-        <div className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-primary text-sm font-bold text-on-primary">
+      <div className="flex min-w-0 flex-1 items-center gap-2.5 px-3">
+        <div className="grid h-6 w-6 shrink-0 place-items-center rounded-sm bg-primary text-xs font-bold text-on-primary">
           O
         </div>
         <div className="min-w-0 leading-tight">
-          <div className="truncate text-sm font-bold text-ink">
+          <div className="truncate text-sm font-semibold text-ink">
             {title}
           </div>
-          {!showBrand && (
-            <div className="truncate text-[10px] font-mono uppercase tracking-[0.5px] text-ash">
-              OOS Shop · 2026
-            </div>
-          )}
         </div>
       </div>
+
+      <div className="h-6 w-6 shrink-0 rounded-md bg-primary/10" />
     </header>
   );
 }

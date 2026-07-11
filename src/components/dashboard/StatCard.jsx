@@ -19,29 +19,31 @@ export default function StatCard({
   valueClass = "",
 }) {
   return (
-    <Card className="p-2 sm:p-3 flex items-center gap-2">
-      <div
-        className={cn(
-          "h-7 w-7 sm:h-9 sm:w-9 rounded-md grid place-items-center shrink-0",
-          ICON_BG[color] || ICON_BG.primary
-        )}
-      >
-        {Icon && <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />}
+    <Card className="p-4 sm:p-6 flex flex-col gap-3 hover:shadow-md transition-shadow">
+      <div className="flex items-start justify-between">
+        <div
+          className={cn(
+            "h-10 w-10 sm:h-12 sm:w-12 rounded-lg grid place-items-center shrink-0",
+            ICON_BG[color] || ICON_BG.primary
+          )}
+        >
+          {Icon && <Icon className="h-5 w-5 sm:h-6 sm:w-6" />}
+        </div>
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-button-sm font-mono uppercase tracking-[0.5px] text-ash leading-none truncate">
+        <p className="text-xs sm:text-sm font-medium uppercase tracking-wide text-ash mb-1 leading-none">
           {title}
         </p>
         <p
           className={cn(
-            "text-sm sm:text-lg font-bold mt-0.5 sm:mt-1 leading-tight break-words",
+            "text-lg sm:text-2xl font-bold leading-tight break-words",
             valueClass || "text-ink"
           )}
         >
           {value}
         </p>
         {sub && (
-          <p className="text-[10px] text-ash mt-0.5 leading-tight truncate">
+          <p className="text-xs sm:text-sm text-ash mt-2 leading-tight">
             {sub}
           </p>
         )}

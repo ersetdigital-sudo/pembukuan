@@ -52,13 +52,13 @@ function NavItem({ href, label, icon: Icon, onNavigate }) {
       href={href}
       onClick={onNavigate}
       className={cn(
-        "group flex items-center gap-3 rounded-sm px-3 py-2 text-sm font-medium transition-colors",
+        "group flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-all",
         active
-          ? "bg-secondary text-on-primary"
-          : "text-on-dark-mute hover:bg-on-dark/10 hover:text-on-dark"
+          ? "bg-primary text-on-primary shadow-sm"
+          : "text-on-dark-mute hover:bg-on-dark/15 hover:text-on-dark"
       )}
     >
-      <Icon className="h-[18px] w-[18px] shrink-0" />
+      <Icon className="h-5 w-5 shrink-0" />
       <span className="flex-1">{label}</span>
     </Link>
   );

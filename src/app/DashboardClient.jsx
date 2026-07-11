@@ -221,7 +221,7 @@ export default function DashboardPage() {
       </PageHeader>
 
       {/* KPIs */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
         <StatCard
           title="Total Penjualan"
           value={formatRupiah(totalPenjualan)}
@@ -249,7 +249,7 @@ export default function DashboardPage() {
 
 
       {/* Chart */}
-      <div className="mb-4">
+      <div className="mb-4 sm:mb-6">
         <RevenueChart
           data={monthlyData}
           title={`Tren Bulanan ${year}`}
@@ -258,7 +258,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Donut charts side by side */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
         <CategoryChart
           data={catData}
           title="Profit per Kategori"
@@ -272,13 +272,13 @@ export default function DashboardPage() {
       </div>
 
       {/* Top products + Top customers */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
         <TopProducts items={productList} limit={5} />
         <TopCustomers items={customerList} limit={5} />
       </div>
 
       {/* Recent transactions + Profit sharing */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4">
         <div className="lg:col-span-2">
           <RecentTransactions items={recentSales} limit={5} />
         </div>
