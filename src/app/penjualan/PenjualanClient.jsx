@@ -257,30 +257,30 @@ export default function PenjualanClient() {
             <EmptyState message={`Tidak ada hasil untuk "${query}"`} />
           ) : (
             <>
-              <div className="hidden md:block rounded-sm bg-surface-card shadow-card overflow-hidden">
+              <div className="hidden md:block rounded-sm overflow-hidden shadow-card">
             <div className="overflow-x-auto scroll-thin">
               <table className="w-full text-sm border-collapse">
-                <thead className="bg-surface/80 border-b-2 border-hairline">
+                <thead className="bg-surface-dark text-white">
                   <tr>
-                    <th className="text-left px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-ink border-r border-hairline last:border-r-0">
+                    <th className="text-left px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-white/90 border-r border-white/10">
                       Tanggal
                     </th>
-                    <th className="text-left px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-ink border-r border-hairline">
+                    <th className="text-left px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-white/90 border-r border-white/10">
                       Pembeli
                     </th>
-                    <th className="text-left px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-ink border-r border-hairline">
+                    <th className="text-left px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-white/90 border-r border-white/10">
                       Marketplace
                     </th>
-                    <th className="text-left px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-ink border-r border-hairline">
+                    <th className="text-left px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-white/90 border-r border-white/10">
                       Produk
                     </th>
-                    <th className="text-right px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-ink border-r border-hairline">
+                    <th className="text-right px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-white/90 border-r border-white/10">
                       Fee MP
                     </th>
-                    <th className="text-right px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-ink border-r border-hairline">
+                    <th className="text-right px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-white/90 border-r border-white/10">
                       Total Jual
                     </th>
-                    <th className="text-right px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-ink border-r border-hairline">
+                    <th className="text-right px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-white/90 border-r border-white/10">
                       Profit
                     </th>
                     <th className="w-28"></th>
@@ -293,22 +293,22 @@ export default function PenjualanClient() {
                   return (
                     <tr
                       key={s.id}
-                      className={`border-b border-hairline transition-colors hover:bg-secondary/5 ${
-                        idx % 2 === 0 ? "bg-surface-card" : "bg-surface/30"
+                      className={`border-b border-hairline transition-colors hover:bg-secondary/50 ${
+                        idx % 2 === 0 ? "bg-white" : "bg-background-canvas"
                       }`}
                     >
-                      <td className="px-3 py-2 text-xs text-ash border-r border-hairline whitespace-nowrap">
+                      <td className="px-4 py-3 text-xs text-ash border-r border-hairline whitespace-nowrap">
                         {formatDate(s.tanggal)}
                       </td>
-                      <td className="px-3 py-2 font-medium text-ink border-r border-hairline align-middle whitespace-nowrap">
+                      <td className="px-4 py-3 font-medium text-ink border-r border-hairline align-middle whitespace-nowrap">
                         {s.nama_pembeli}
                       </td>
-                      <td className="px-3 py-2 border-r border-hairline">
+                      <td className="px-4 py-3 border-r border-hairline">
                         <Badge className={MP_BADGE[s.marketplace] || ""}>
                           {s.marketplace}
                         </Badge>
                       </td>
-                      <td className="px-3 py-2 border-r border-hairline align-middle">
+                      <td className="px-4 py-3 border-r border-hairline align-middle">
                         <div className="flex items-baseline gap-1.5 text-xs leading-snug min-w-0">
                           <span className="font-medium text-ink truncate min-w-0">
                             {produk[0]?.nama_produk}
@@ -330,22 +330,22 @@ export default function PenjualanClient() {
                           )}
                         </div>
                       </td>
-                      <td className="px-3 py-2 text-right text-xs font-semibold border-r border-hairline whitespace-nowrap">
+                      <td className="px-4 py-3 text-right text-xs font-semibold border-r border-hairline whitespace-nowrap">
                         {s.fee_mp ? (
                           <span className="text-charcoal">{formatRupiah(s.fee_mp)}</span>
                         ) : (
                           <span className="text-ash">-</span>
                         )}
                       </td>
-                      <td className="px-3 py-2 text-right font-semibold text-ink border-r border-hairline whitespace-nowrap">
+                      <td className="px-4 py-3 text-right font-semibold text-ink border-r border-hairline whitespace-nowrap">
                         {formatRupiah(totals.totalJual)}
                       </td>
-                      <td className={`px-3 py-2 text-right font-bold border-r border-hairline whitespace-nowrap ${
+                      <td className={`px-4 py-3 text-right font-bold border-r border-hairline whitespace-nowrap ${
                         totals.profit >= 0 ? "text-success" : "text-danger"
                       }`}>
                         {formatRupiah(totals.profit)}
                       </td>
-                      <td className="px-2 py-2">
+                      <td className="px-3 py-3">
                         <div className="flex items-center justify-end gap-0.5">
                           <button
                             type="button"
