@@ -19,6 +19,7 @@ import RecentTransactions from "@/components/dashboard/RecentTransactions";
 import ProfitSharingCard from "@/components/dashboard/ProfitSharingCard";
 
 import { useSupabaseData } from "@/hooks/useSupabaseData";
+import { useSettings } from "@/hooks/useSettings";
 import { formatRupiah, formatNumber, formatPercent } from "@/lib/utils/format";
 import { MONTHS } from "@/lib/constants";
 import {
@@ -38,6 +39,7 @@ export default function DashboardPage() {
 
   const data = useSupabaseData();
   const { sales, expenses, incomes } = data;
+  const { profitSharing: sharingConfig } = useSettings();
 
   // Filtered sales & expenses for the selected period
   const periodSales = useMemo(
@@ -198,8 +200,8 @@ export default function DashboardPage() {
 
   // Profit sharing
   const sharing = useMemo(
-    () => computeProfitSharing(periodSales, profitFn),
-    [periodSales, profitFn]
+    () => computeProfitSharing(periodSales, profitFn, [], sharingConfig),
+    [periodSales, profitFn, sharingConfig]
   );
 
   const periodLabel =

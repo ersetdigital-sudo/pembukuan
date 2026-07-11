@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/Select";
-import { MARKETPLACES } from "@/lib/constants";
+import { MARKETPLACES as DEFAULT_MARKETPLACES } from "@/lib/constants";
 
 const defaultForm = {
   tanggal: new Date().toISOString().split("T")[0],
@@ -78,6 +78,7 @@ export default function SaleFormDialog({
   editData,
   isSaving = false,
   stocks = [],
+  marketplaces = DEFAULT_MARKETPLACES,
 }) {
   const [form, setForm] = useState(defaultForm);
   const [items, setItems] = useState([{ ...defaultItem }]);
@@ -246,7 +247,7 @@ export default function SaleFormDialog({
                   <SelectValue placeholder="Pilih marketplace" />
                 </SelectTrigger>
                 <SelectContent>
-                  {MARKETPLACES.map((m) => (
+                  {marketplaces.map((m) => (
                     <SelectItem key={m} value={m}>
                       {m}
                     </SelectItem>

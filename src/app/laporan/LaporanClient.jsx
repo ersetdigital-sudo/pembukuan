@@ -26,14 +26,16 @@ import IklanFormDialog from "@/components/laporan/IklanFormDialog";
 import { useSupabaseData, invalidateCache } from "@/hooks/useSupabaseData";
 import { fetchTable, insertRow, updateRow, deleteRow } from "@/lib/supabase/api";
 import { formatRupiah, formatRupiahShort, formatNumber } from "@/lib/utils/format";
-import { MONTHS, MARKETPLACES, CHART_COLORS, MP_BADGE } from "@/lib/constants";
+import { MONTHS, MARKETPLACES as DEFAULT_MARKETPLACES, CHART_COLORS, MP_BADGE } from "@/lib/constants";
 import { makeProfitBersihFn, getSaleTotals, getSaleProducts, aggregateByMarketplace, aggregateByProduct, computeProfitSharing } from "@/lib/utils/sale";
+import { useSettings } from "@/hooks/useSettings";
 
 export default function LaporanPage() {
   const params = useSearchParams();
   const month = params?.get("m") ?? String(new Date().getMonth());
   const year = params?.get("y") ?? String(new Date().getFullYear());
   const { toast } = useToast();
+  const { marketplaces: MARKETPLACES, profitSharing: sharingConfig } = useSettings();
 
   const {
     sales,
@@ -132,8 +134,8 @@ export default function LaporanPage() {
 
   // Profit sharing (Iklan now reduces per-bucket profit BEFORE the Andri/Asrud split)
   const sharing = useMemo(
-    () => computeProfitSharing(periodSales, profitFn, periodIklans),
-    [periodSales, profitFn, periodIklans]
+    () => computeProfitSharing(periodSales, profitFn, periodIklans, sharingConfig),
+    [periodSales, profitFn, periodIklans, sharingConfig]
   );
 
   // Marketplace totals (precomputed so the table footer doesn't need an inline IIFE)

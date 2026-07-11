@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { Eye, Pencil, Trash2, Wallet, Tag, Star, TrendingUp, Plus, Search } from "lucide-react";
 import { toast as gooeyToast } from "gooey-toast";
 import { useSupabaseData, invalidateCache } from "@/hooks/useSupabaseData";
+import { useSettings } from "@/hooks/useSettings";
 import { fetchTable, insertRow, updateRow, deleteRow } from "@/lib/supabase/api";
 import { getSaleTotals, getSaleProducts } from "@/lib/utils/sale";
 import PageHeader from "@/components/layout/PageHeader";
@@ -29,6 +30,7 @@ export default function PenjualanClient() {
 
   // Supabase data with fallback
   const { sales: dbSales, stocks: dbStocks } = useSupabaseData();
+  const { marketplaces } = useSettings();
 
   // Local state for sales (allows adding new ones this session)
   const [sales, setSales] = useState([]);
@@ -415,6 +417,7 @@ export default function PenjualanClient() {
         editData={editData}
         isSaving={isSaving}
         stocks={stocks}
+        marketplaces={marketplaces}
       />
 
       {/* Detail modal */}
