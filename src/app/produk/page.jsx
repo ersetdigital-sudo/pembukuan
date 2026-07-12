@@ -10,6 +10,7 @@ import {
   Tag,
   Wrench,
   TrendingUp,
+  Upload,
 } from "lucide-react";
 import PageHeader from "@/components/layout/PageHeader";
 import EmptyState from "@/components/ui/EmptyState";
@@ -32,6 +33,7 @@ import { fetchTable, insertRow, updateRow, deleteRow } from "@/lib/supabase/api"
 import { formatRupiah, formatNumber } from "@/lib/utils/format";
 import { KATEGORI } from "@/lib/constants";
 import ProdukFormDialog from "./ProdukFormDialog";
+import ProdukImportDialog from "./ProdukImportDialog";
 
 export default function ProdukPage() {
   const { toast } = useToast();
@@ -49,6 +51,8 @@ export default function ProdukPage() {
   const [editData, setEditData] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+  const [importOpen, setImportOpen] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
 
   const filtered = useMemo(() => {
     return products.filter((p) => {
@@ -133,6 +137,42 @@ export default function ProdukPage() {
     setEditData(null);
   };
 
+  const handleImport = async (importedRows) => {
+    setIsImporting(true);
+    let successCount = 0;
+    let failCount = 0;
+    const newProducts = [];
+
+    // Sequential insert keeps errors easy to attribute (bulk import table is
+    // small enough that this doesn't need to be parallelized).
+    for (const row of importedRows) {
+      const newProduct = { id: `pr-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`, ...row };
+      const res = await insertRow("stocks", newProduct);
+      if (!res.error) {
+        newProducts.push(res.data || newProduct);
+        successCount++;
+      } else {
+        newProducts.push(newProduct);
+        failCount++;
+      }
+    }
+
+    setProducts((prev) => [...prev, ...newProducts]);
+    invalidateCache();
+    setIsImporting(false);
+    setImportOpen(false);
+
+    if (failCount === 0) {
+      toast.success(`${successCount} produk berhasil diimpor`);
+    } else {
+      toast({
+        title: `${successCount} produk diimpor, ${failCount} gagal ke server`,
+        description: "Produk yang gagal tetap tampil di tabel lokal, coba refresh untuk cek ulang.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleConfirmDelete = async () => {
     if (!deleteId) return;
 
@@ -160,10 +200,16 @@ export default function ProdukPage() {
         title="Produk"
         subtitle={`${totalProducts} produk dalam katalog`}
       >
-        <Button variant="primary" size="sm" onClick={handleOpenAdd}>
-          <Plus className="h-4 w-4" />
-          Tambah Produk
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="secondary" size="sm" onClick={() => setImportOpen(true)}>
+            <Upload className="h-4 w-4" />
+            Import
+          </Button>
+          <Button variant="primary" size="sm" onClick={handleOpenAdd}>
+            <Plus className="h-4 w-4" />
+            Tambah Produk
+          </Button>
+        </div>
       </PageHeader>
 
       {/* Stat cards — samain style dengan dashboard */}
@@ -397,6 +443,13 @@ export default function ProdukPage() {
         onSave={handleSave}
         editData={editData}
         isSaving={isSaving}
+      />
+
+      <ProdukImportDialog
+        open={importOpen}
+        onOpenChange={setImportOpen}
+        onImport={handleImport}
+        isImporting={isImporting}
       />
 
       <ConfirmDialog
