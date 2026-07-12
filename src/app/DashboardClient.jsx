@@ -176,10 +176,22 @@ export default function DashboardPage() {
       pct: totalProfit > 0 ? Math.round((value / totalProfit) * 100) : 0,
     }));
 
-  // Top products
+  // Top products — use gross profit (jual - beli) so it doesn't go negative from expenses
   const productList = useMemo(
-    () => aggregateByProduct(periodSales, profitFn).sort((a, b) => b[1].qty - a[1].qty),
-    [periodSales, profitFn]
+    () => {
+      const map = {};
+      periodSales.forEach((s) => {
+        const produk = getSaleProducts(s);
+        produk.forEach((p) => {
+          if (!p.nama_produk) return;
+          if (!map[p.nama_produk]) map[p.nama_produk] = { qty: 0, profit: 0, kategori: p.kategori_produk || "" };
+          map[p.nama_produk].qty += p.qty;
+          map[p.nama_produk].profit += (p.harga_jual - p.harga_beli) * p.qty;
+        });
+      });
+      return Object.entries(map).sort((a, b) => b[1].qty - a[1].qty);
+    },
+    [periodSales]
   );
 
   // Top customers
