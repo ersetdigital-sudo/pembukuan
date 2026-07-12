@@ -37,16 +37,25 @@ function normalizeKategori(raw) {
   return "";
 }
 
-/** Parse raw CSV rows into validated product objects. */
-function parseRows(rows) {
+/**
+ * Parse raw CSV rows into validated product objects.
+ * `existingNames` is a Set of lowercased product names already in the
+ * database — used to reject duplicates so the same product can't be
+ * imported twice. Duplicates within the file itself (two rows with the
+ * same name) are also flagged, keeping only the first occurrence valid.
+ */
+function parseRows(rows, existingNames) {
   // First row is the header — skip it if it looks like our template header
   const first = rows[0]?.map((c) => c.trim().toLowerCase()) || [];
   const looksLikeHeader = first[0]?.includes("nama") || first[0]?.includes("produk");
   const dataRows = looksLikeHeader ? rows.slice(1) : rows;
 
+  const seenInFile = new Set();
+
   return dataRows.map((cols, idx) => {
     const [namaRaw, katRaw, stokRaw, beliRaw, jualRaw, ketRaw] = cols;
     const nama_produk = (namaRaw || "").trim();
+    const namaKey = nama_produk.toLowerCase();
     const kategori = normalizeKategori(katRaw);
     const stok = parseLooseNumber(stokRaw);
     const harga_beli = parseLooseNumber(beliRaw);
@@ -57,6 +66,16 @@ function parseRows(rows) {
     if (!nama_produk) errors.push("Nama produk kosong");
     if (!kategori) errors.push('Kategori harus "Plugin" atau "Jasa"');
     if (!jualRaw || harga_jual <= 0) errors.push("Harga jual harus > 0");
+
+    if (nama_produk) {
+      if (existingNames.has(namaKey)) {
+        errors.push("Produk sudah ada di database");
+      } else if (seenInFile.has(namaKey)) {
+        errors.push("Nama produk duplikat di file ini");
+      } else {
+        seenInFile.add(namaKey);
+      }
+    }
 
     return {
       rowNumber: idx + 2, // +2: 1-indexed + header row
@@ -72,10 +91,20 @@ function parseRows(rows) {
   });
 }
 
-export default function ProdukImportDialog({ open, onOpenChange, onImport, isImporting = false }) {
+export default function ProdukImportDialog({
+  open,
+  onOpenChange,
+  onImport,
+  isImporting = false,
+  existingProductNames = [],
+}) {
   const [rows, setRows] = useState([]);
   const [fileName, setFileName] = useState("");
   const fileInputRef = useRef(null);
+
+  const existingNames = new Set(
+    existingProductNames.map((n) => (n || "").trim().toLowerCase())
+  );
 
   const validRows = rows.filter((r) => r.valid);
   const invalidRows = rows.filter((r) => !r.valid);
@@ -103,7 +132,7 @@ export default function ProdukImportDialog({ open, onOpenChange, onImport, isImp
     setFileName(file.name);
     const text = await file.text();
     const parsed = parseCSV(text);
-    setRows(parseRows(parsed));
+    setRows(parseRows(parsed, existingNames));
   };
 
   const handleImport = () => {
@@ -138,6 +167,7 @@ export default function ProdukImportDialog({ open, onOpenChange, onImport, isImp
               <p className="text-xs text-ash mt-0.5">
                 Kolom: {TEMPLATE_HEADERS.join(", ")}. Kategori diisi "Plugin" atau "Jasa".
                 Kalau punya file Excel, buka lalu <strong>Save As → CSV</strong> sebelum upload.
+                Produk yang nama-nya sudah ada di database otomatis ditolak.
               </p>
               <Button
                 type="button"

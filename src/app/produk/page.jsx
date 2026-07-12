@@ -450,6 +450,7 @@ export default function ProdukPage() {
         onOpenChange={setImportOpen}
         onImport={handleImport}
         isImporting={isImporting}
+        existingProductNames={products.map((p) => p.nama_produk)}
       />
 
       <ConfirmDialog
