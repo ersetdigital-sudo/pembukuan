@@ -231,7 +231,7 @@ export default function SaleDetailModal({
                         : p.nama_produk || "-"}
                     </p>
                     {p.kategori_produk && (
-                      <Badge className="bg-secondary/10 text-secondary border border-secondary/30">
+                      <Badge className="bg-info/10 text-info border border-info/30">
                         {p.kategori_produk}
                       </Badge>
                     )}
@@ -258,7 +258,7 @@ export default function SaleDetailModal({
                       icon={Tag}
                       label="Harga Jual"
                       value={formatRupiah(p.harga_jual)}
-                      valueClass="text-secondary"
+                      valueClass="text-ink"
                     />
                     <InfoRow
                       icon={Wallet}
@@ -299,7 +299,7 @@ export default function SaleDetailModal({
               icon={Tag}
               label="Fee MP"
               value={formatRupiah(fee)}
-              valueClass="text-secondary font-bold"
+              valueClass="text-info font-bold"
             />
             <InfoRow
               icon={TrendingUp}
