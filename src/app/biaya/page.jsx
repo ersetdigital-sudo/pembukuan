@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { Search, Receipt, Tag, Briefcase, Plus, Pencil, Trash2 } from "lucide-react";
+import { Search, Receipt, Tag, Briefcase, Megaphone, Plus, Pencil, Trash2 } from "lucide-react";
 import { toast as gooeyToast } from "gooey-toast";
 import PageHeader from "@/components/layout/PageHeader";
 import EmptyState from "@/components/ui/EmptyState";
@@ -40,7 +40,7 @@ const defaultForm = {
 export default function BiayaPage() {
   const [search, setSearch] = useState("");
   const [kategori, setKategori] = useState("all");
-  const { expenses: dbExpenses, sales } = useSupabaseData();
+  const { expenses: dbExpenses, sales, iklans } = useSupabaseData();
   const { toast } = useToast();
 
   const [expenses, setExpenses] = useState([]);
@@ -66,6 +66,24 @@ export default function BiayaPage() {
     [sales]
   );
 
+  // Biaya Iklan juga bukan entry manual di halaman ini — datanya ditulis
+  // dari menu Laporan (tabel iklans, dengan sub-kategori Plugin/Jasa buat
+  // pembagian profit). Ditampilkan read-only di sini biar kelihatan.
+  const iklanEntries = useMemo(
+    () =>
+      (iklans || []).map((i) => ({
+        id: `iklan-${i.id}`,
+        tanggal: i.tanggal,
+        kategori: "Iklan",
+        keterangan: i.keterangan
+          ? `${i.keterangan} (${i.kategori})`
+          : `Iklan ${i.kategori || ""}`.trim(),
+        jumlah: i.jumlah || 0,
+        isAutoIklan: true,
+      })),
+    [iklans]
+  );
+
   // Dialog state
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editData, setEditData] = useState(null);
@@ -75,8 +93,11 @@ export default function BiayaPage() {
   const [confirmDelete, setConfirmDelete] = useState(null);
 
   const sorted = useMemo(
-    () => [...expenses, ...feeMPEntries].sort((a, b) => b.tanggal.localeCompare(a.tanggal)),
-    [expenses, feeMPEntries]
+    () =>
+      [...expenses, ...feeMPEntries, ...iklanEntries].sort((a, b) =>
+        b.tanggal.localeCompare(a.tanggal)
+      ),
+    [expenses, feeMPEntries, iklanEntries]
   );
 
   const filtered = useMemo(() => {
@@ -90,7 +111,8 @@ export default function BiayaPage() {
 
   const totalAll = sorted.reduce((s, e) => s + (e.jumlah || 0), 0);
   const totalFeeMP = sorted.filter((e) => e.kategori === "Fee Marketplace").reduce((s, e) => s + (e.jumlah || 0), 0);
-  const totalOps = totalAll - totalFeeMP;
+  const totalIklan = sorted.filter((e) => e.kategori === "Iklan").reduce((s, e) => s + (e.jumlah || 0), 0);
+  const totalOps = totalAll - totalFeeMP - totalIklan;
   const totalFiltered = filtered.reduce((s, e) => s + (e.jumlah || 0), 0);
 
   const setField = (key, val) => setForm((f) => ({ ...f, [key]: val }));
@@ -182,7 +204,7 @@ export default function BiayaPage() {
       </PageHeader>
 
       {/* Stat cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 mb-4 sm:mb-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 mb-4 sm:mb-5">
         <StatCard
           title="Total Semua"
           value={formatRupiah(totalAll)}
@@ -194,6 +216,12 @@ export default function BiayaPage() {
           value={formatRupiah(totalFeeMP)}
           icon={Tag}
           color="sky"
+        />
+        <StatCard
+          title="Iklan"
+          value={formatRupiah(totalIklan)}
+          icon={Megaphone}
+          color="warning"
         />
         <StatCard
           title="Operasional"
@@ -262,6 +290,8 @@ export default function BiayaPage() {
                     <TableCell>
                       {e.isAutoFee ? (
                         <span className="text-[10px] text-ash italic block text-right">dari Penjualan</span>
+                      ) : e.isAutoIklan ? (
+                        <span className="text-[10px] text-ash italic block text-right">dari Laporan</span>
                       ) : (
                         <div className="flex items-center justify-end gap-0.5">
                           <button
@@ -302,6 +332,8 @@ export default function BiayaPage() {
                   </div>
                   {e.isAutoFee ? (
                     <span className="text-[10px] text-ash italic shrink-0">dari Penjualan</span>
+                  ) : e.isAutoIklan ? (
+                    <span className="text-[10px] text-ash italic shrink-0">dari Laporan</span>
                   ) : (
                     <div className="flex items-center gap-0.5 shrink-0">
                       <button
