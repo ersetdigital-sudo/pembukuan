@@ -10,12 +10,12 @@
  * Body shape (JSON):
  * {
  *   "tanggal": "2026-07-13",              // optional, defaults to today (YYYY-MM-DD or DD/MM/YYYY)
- *   "nama_pembeli": "Pratu Andika Fendi",  // optional
- *   "no_hp": "6282115423635",              // optional
+ *   "nama_pembeli": "Pratu Andika Fendi",  // required
+ *   "no_hp": "6282115423635",              // required
  *   "marketplace": "Shopee",               // required, must exist in Settings > Marketplaces
- *   "invoice": "260713JRFHDAPJ",           // optional (marketplace order number, for reference)
+ *   "invoice": "260713JRFHDAPJ",           // required (marketplace order number)
  *   "fee_mp": 14701,                       // optional, Fee MP for this transaction
- *   "produk": [                            // required, at least 1 item
+ *   "produk": [                            // required, at least 1 item, each needs nama_produk + qty
  *     { "nama_produk": "Elementor Pro", "qty": 1 }
  *   ]
  * }
@@ -81,22 +81,30 @@ export async function POST(request) {
     produk: produkRaw,
   } = body || {};
 
-  if (!marketplace || typeof marketplace !== "string") {
-    return badRequest("`marketplace` is required");
-  }
+  // Required fields: nama_pembeli, no_hp, marketplace, invoice, and produk
+  // (each item needs nama_produk + qty). Collect ALL missing fields at once
+  // so the caller (Hermes) gets one clear error instead of fixing-and-retrying
+  // field by field.
+  const missing = [];
+  if (!nama_pembeli || !String(nama_pembeli).trim()) missing.push("nama_pembeli");
+  if (!no_hp || !String(no_hp).trim()) missing.push("no_hp");
+  if (!marketplace || typeof marketplace !== "string" || !marketplace.trim()) missing.push("marketplace");
+  if (!invoice || !String(invoice).trim()) missing.push("invoice");
   if (!Array.isArray(produkRaw) || produkRaw.length === 0) {
-    return badRequest("`produk` must be a non-empty array of { nama_produk, qty }");
+    missing.push("produk (non-empty array)");
+  } else {
+    produkRaw.forEach((p, i) => {
+      if (!p?.nama_produk || !String(p.nama_produk).trim()) missing.push(`produk[${i}].nama_produk`);
+      if (p?.qty == null || Number(p.qty) <= 0) missing.push(`produk[${i}].qty`);
+    });
+  }
+  if (missing.length > 0) {
+    return badRequest("Missing required fields", { missing });
   }
 
   const supabase = getServerSupabase();
   if (!supabase) {
     return Response.json({ error: "Supabase not configured on server" }, { status: 503 });
-  }
-
-  // Look up every requested product name against the catalog (case-insensitive).
-  const names = produkRaw.map((p) => (p?.nama_produk || "").trim()).filter(Boolean);
-  if (names.length !== produkRaw.length) {
-    return badRequest("Every produk entry needs a non-empty nama_produk");
   }
 
   const { data: stocks, error: stockErr } = await supabase
