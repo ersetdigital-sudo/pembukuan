@@ -40,11 +40,31 @@ const defaultForm = {
 export default function BiayaPage() {
   const [search, setSearch] = useState("");
   const [kategori, setKategori] = useState("all");
-  const { expenses: dbExpenses } = useSupabaseData();
+  const { expenses: dbExpenses, sales } = useSupabaseData();
   const { toast } = useToast();
 
   const [expenses, setExpenses] = useState([]);
   useEffect(() => { setExpenses(dbExpenses); }, [dbExpenses]);
+
+  // Fee MP bukan entry manual — nilainya disimpan per-transaksi di
+  // sales.fee_mp (diisi lewat form Tambah Transaksi atau "Import Fee").
+  // Di sini kita tampilkan sebagai baris read-only biar kelihatan di
+  // halaman Biaya, tanpa duplikat entry nyata di tabel expenses (yang
+  // bisa bikin Net Profit di Laporan ke-hitung dobel).
+  const feeMPEntries = useMemo(
+    () =>
+      (sales || [])
+        .filter((s) => (s.fee_mp || 0) > 0)
+        .map((s) => ({
+          id: `fee-${s.id}`,
+          tanggal: s.tanggal,
+          kategori: "Fee Marketplace",
+          keterangan: `Fee MP ${s.marketplace || ""} - ${s.nama_pembeli || "transaksi"}`.trim(),
+          jumlah: s.fee_mp || 0,
+          isAutoFee: true,
+        })),
+    [sales]
+  );
 
   // Dialog state
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -55,8 +75,8 @@ export default function BiayaPage() {
   const [confirmDelete, setConfirmDelete] = useState(null);
 
   const sorted = useMemo(
-    () => [...expenses].sort((a, b) => b.tanggal.localeCompare(a.tanggal)),
-    [expenses]
+    () => [...expenses, ...feeMPEntries].sort((a, b) => b.tanggal.localeCompare(a.tanggal)),
+    [expenses, feeMPEntries]
   );
 
   const filtered = useMemo(() => {
@@ -240,24 +260,28 @@ export default function BiayaPage() {
                       {formatRupiah(e.jumlah)}
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center justify-end gap-0.5">
-                        <button
-                          type="button"
-                          onClick={() => openEdit(e)}
-                          className="p-1.5 rounded-full text-ash hover:text-ink hover:bg-secondary transition-colors"
-                          aria-label="Edit"
-                        >
-                          <Pencil className="h-3.5 w-3.5" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setConfirmDelete(e)}
-                          className="p-1.5 rounded-full text-ash hover:text-danger hover:bg-danger/10 transition-colors"
-                          aria-label="Hapus"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </button>
-                      </div>
+                      {e.isAutoFee ? (
+                        <span className="text-[10px] text-ash italic block text-right">dari Penjualan</span>
+                      ) : (
+                        <div className="flex items-center justify-end gap-0.5">
+                          <button
+                            type="button"
+                            onClick={() => openEdit(e)}
+                            className="p-1.5 rounded-full text-ash hover:text-ink hover:bg-secondary transition-colors"
+                            aria-label="Edit"
+                          >
+                            <Pencil className="h-3.5 w-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setConfirmDelete(e)}
+                            className="p-1.5 rounded-full text-ash hover:text-danger hover:bg-danger/10 transition-colors"
+                            aria-label="Hapus"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -276,24 +300,28 @@ export default function BiayaPage() {
                     </span>
                     <Badge className={KAT_COLORS[e.kategori] || ""}>{e.kategori}</Badge>
                   </div>
-                  <div className="flex items-center gap-0.5 shrink-0">
-                    <button
-                      type="button"
-                      onClick={() => openEdit(e)}
-                      className="p-1.5 rounded-full text-ash hover:text-ink hover:bg-secondary transition-colors"
-                      aria-label="Edit"
-                    >
-                      <Pencil className="h-3.5 w-3.5" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setConfirmDelete(e)}
-                      className="p-1.5 rounded-full text-ash hover:text-danger hover:bg-danger/10 transition-colors"
-                      aria-label="Hapus"
-                    >
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </button>
-                  </div>
+                  {e.isAutoFee ? (
+                    <span className="text-[10px] text-ash italic shrink-0">dari Penjualan</span>
+                  ) : (
+                    <div className="flex items-center gap-0.5 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => openEdit(e)}
+                        className="p-1.5 rounded-full text-ash hover:text-ink hover:bg-secondary transition-colors"
+                        aria-label="Edit"
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setConfirmDelete(e)}
+                        className="p-1.5 rounded-full text-ash hover:text-danger hover:bg-danger/10 transition-colors"
+                        aria-label="Hapus"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  )}
                 </div>
                 <div className="px-3 py-2.5 flex items-center justify-between gap-2">
                   <p className="text-body-sm font-bold text-ink break-words min-w-0">
