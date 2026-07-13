@@ -7,10 +7,30 @@
  * simple product list.
  */
 
-/** Parse CSV text into an array of string-array rows. */
+/**
+ * Detect the delimiter used in a CSV file. Excel/WPS in Indonesian (and
+ * many European) locales export CSV with semicolons instead of commas,
+ * since comma is the decimal separator there. We pick whichever
+ * delimiter appears more often in the first non-empty line.
+ */
+function detectDelimiter(text) {
+  const firstLine = text.split(/\r?\n/).find((l) => l.trim() !== "") || "";
+  const commaCount = (firstLine.match(/,/g) || []).length;
+  const semicolonCount = (firstLine.match(/;/g) || []).length;
+  const tabCount = (firstLine.match(/\t/g) || []).length;
+  if (tabCount > commaCount && tabCount > semicolonCount) return "\t";
+  return semicolonCount > commaCount ? ";" : ",";
+}
+
+/**
+ * Parse CSV text into an array of string-array rows.
+ * Auto-detects the delimiter (comma, semicolon, or tab) so files
+ * exported from Indonesian-locale Excel/WPS (which use `;`) work too.
+ */
 export function parseCSV(text) {
   // Strip BOM if present (common with Excel-exported CSV files)
   const clean = text.replace(/^\uFEFF/, "");
+  const delimiter = detectDelimiter(clean);
   const rows = [];
   let row = [];
   let field = "";
@@ -34,7 +54,7 @@ export function parseCSV(text) {
 
     if (char === '"') {
       inQuotes = true;
-    } else if (char === ",") {
+    } else if (char === delimiter) {
       row.push(field);
       field = "";
     } else if (char === "\r") {
