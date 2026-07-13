@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { Eye, Pencil, Trash2, Wallet, Tag, Star, TrendingUp, Plus, Search } from "lucide-react";
+import { Eye, Pencil, Trash2, Wallet, Tag, Star, TrendingUp, Plus, Search, Upload } from "lucide-react";
 import { toast as gooeyToast } from "gooey-toast";
 import { useSupabaseData, invalidateCache } from "@/hooks/useSupabaseData";
 import { useSettings } from "@/hooks/useSettings";
@@ -17,6 +17,7 @@ import MonthPicker from "@/components/dashboard/MonthPicker";
 import StatCard from "@/components/dashboard/StatCard";
 import SaleFormDialog from "@/components/penjualan/SaleFormDialog";
 import SaleDetailModal from "@/components/penjualan/SaleDetailModal";
+import PenjualanImportDialog from "./PenjualanImportDialog";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import { useToast } from "@/components/ui/Toast";
 import { formatRupiah, formatDate, formatNumber } from "@/lib/utils/format";
@@ -46,6 +47,8 @@ export default function PenjualanClient() {
   const [detailSale, setDetailSale] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(null);
   const [query, setQuery] = useState("");
+  const [importOpen, setImportOpen] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
 
   const filtered = useMemo(
     () =>
@@ -159,6 +162,59 @@ export default function PenjualanClient() {
     setEditData(null);
   };
 
+  const handleImport = async (importedSales) => {
+    setIsImporting(true);
+    let successCount = 0;
+    let failCount = 0;
+    const newSales = [];
+
+    // Sequential insert keeps invoice numbering stable and errors easy to attribute.
+    // Use a local offset since `sales` state doesn't update mid-loop.
+    const yr = String(year).slice(-2);
+    const mm = String(month === "all" ? new Date().getMonth() : month).padStart(2, "0");
+    let seq = sales.length;
+
+    for (const data of importedSales) {
+      seq += 1;
+      const produk = data.produk[0];
+      const invoice = `INV/${yr}${mm}/${String(seq).padStart(3, "0")}`;
+      const newSale = {
+        id: `sale-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        invoice,
+        ...data,
+        // Legacy compat fields
+        nama_produk: produk.nama_produk,
+        kategori_produk: produk.kategori_produk,
+        qty: produk.qty,
+        harga_jual: produk.harga_jual,
+        harga_beli: produk.harga_beli,
+      };
+      const res = await insertRow("sales", newSale);
+      if (!res.error) {
+        newSales.push(res.data || newSale);
+        successCount++;
+      } else {
+        newSales.push(newSale);
+        failCount++;
+      }
+    }
+
+    setSales((prev) => [...newSales, ...prev]);
+    invalidateCache();
+    setIsImporting(false);
+    setImportOpen(false);
+
+    if (failCount === 0) {
+      gooeyToast.success({ title: `${successCount} transaksi berhasil diimpor` });
+    } else {
+      toast({
+        title: `${successCount} transaksi diimpor, ${failCount} gagal ke server`,
+        description: "Transaksi yang gagal tetap tampil di tabel lokal, coba refresh untuk cek ulang.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleDelete = (sale) => {
     setDetailSale(null);
     setConfirmDelete(sale);
@@ -196,14 +252,24 @@ export default function PenjualanClient() {
       >
         <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
           <MonthPicker month={month} year={year} />
-          <Button
-            variant="primary"
-            onClick={openTambah}
-            className="w-full sm:w-auto"
-          >
-            <Plus className="h-4 w-4" />
-            Tambah
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="secondary"
+              onClick={() => setImportOpen(true)}
+              className="flex-1 sm:flex-none"
+            >
+              <Upload className="h-4 w-4" />
+              Import
+            </Button>
+            <Button
+              variant="primary"
+              onClick={openTambah}
+              className="flex-1 sm:flex-none"
+            >
+              <Plus className="h-4 w-4" />
+              Tambah
+            </Button>
+          </div>
         </div>
       </PageHeader>
 
@@ -416,6 +482,17 @@ export default function PenjualanClient() {
         isSaving={isSaving}
         stocks={stocks}
         marketplaces={marketplaces}
+      />
+
+      {/* Import dialog */}
+      <PenjualanImportDialog
+        open={importOpen}
+        onOpenChange={setImportOpen}
+        onImport={handleImport}
+        isImporting={isImporting}
+        stocks={stocks}
+        marketplaces={marketplaces}
+        existingSales={sales}
       />
 
       {/* Detail modal */}

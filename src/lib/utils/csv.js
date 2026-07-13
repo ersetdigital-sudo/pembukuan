@@ -98,3 +98,42 @@ export function parseLooseNumber(value) {
   const num = parseInt(digits, 10);
   return Number.isFinite(num) ? num : 0;
 }
+
+/**
+ * Parse a date string in common spreadsheet formats into an ISO
+ * "YYYY-MM-DD" string. Supports:
+ *  - DD/MM/YYYY or D/M/YYYY (most common from Indonesian Excel exports)
+ *  - YYYY-MM-DD (ISO, already correct)
+ *  - DD-MM-YYYY
+ * Returns null if the value can't be parsed as a valid date.
+ */
+export function parseFlexibleDate(value) {
+  if (!value) return null;
+  const str = String(value).trim();
+
+  // Already ISO
+  const isoMatch = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if (isoMatch) {
+    const [, y, m, d] = isoMatch;
+    return isValidYMD(+y, +m, +d) ? `${y}-${pad(m)}-${pad(d)}` : null;
+  }
+
+  // DD/MM/YYYY or DD-MM-YYYY
+  const dmyMatch = str.match(/^(\d{1,2})[/\-](\d{1,2})[/\-](\d{4})$/);
+  if (dmyMatch) {
+    const [, d, m, y] = dmyMatch;
+    return isValidYMD(+y, +m, +d) ? `${y}-${pad(m)}-${pad(d)}` : null;
+  }
+
+  return null;
+}
+
+function pad(n) {
+  return String(n).padStart(2, "0");
+}
+
+function isValidYMD(y, m, d) {
+  if (m < 1 || m > 12 || d < 1 || d > 31) return false;
+  const date = new Date(y, m - 1, d);
+  return date.getFullYear() === y && date.getMonth() === m - 1 && date.getDate() === d;
+}
