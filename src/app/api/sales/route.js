@@ -16,7 +16,7 @@
  *   "invoice": "260713JRFHDAPJ",           // required (marketplace order number)
  *   "fee_mp": 14701,                       // optional, Fee MP for this transaction
  *   "produk": [                            // required, at least 1 item, each needs nama_produk + qty
- *     { "nama_produk": "Elementor Pro", "qty": 1 }
+ *     { "nama_produk": "Elementor Pro", "qty": 1, "masa_aktif": "1 Tahun" }  // masa_aktif optional
  *   ]
  * }
  *
@@ -122,6 +122,7 @@ export async function POST(request) {
   const produk = produkRaw.map((p) => {
     const nama_produk = (p.nama_produk || "").trim();
     const qty = Math.max(1, parseLooseNumber(p.qty) || 1);
+    const masa_aktif = (p.masa_aktif || "").trim();
     const match = stockLookup.get(nama_produk.toLowerCase());
     if (!match) {
       notFound.push(nama_produk);
@@ -130,6 +131,7 @@ export async function POST(request) {
     return {
       nama_produk: match.nama_produk,
       kategori_produk: match.kategori || "",
+      masa_aktif,
       qty,
       harga_jual: match.harga_jual || 0,
       harga_beli: match.harga_beli || 0,
@@ -158,6 +160,7 @@ export async function POST(request) {
     // by the manual form and the CSV importer.
     nama_produk: first.nama_produk,
     kategori_produk: first.kategori_produk,
+    masa_aktif: first.masa_aktif,
     qty: first.qty,
     harga_jual: first.harga_jual,
     harga_beli: first.harga_beli,
