@@ -9,6 +9,8 @@ import { fetchAllData } from "@/lib/supabase/api";
 let _cache = null;
 let _promise = null;
 
+const EMPTY_DATA = { stocks: [], sales: [], expenses: [], incomes: [], purchases: [], iklans: [] };
+
 /** Invalidate the global cache (call after insert/update/delete). */
 export function invalidateCache() {
   _cache = null;
@@ -17,11 +19,21 @@ export function invalidateCache() {
 
 /**
  * Returns the full dataset { stocks, sales, expenses, incomes, purchases, iklans }.
- * Loads from Supabase once, then caches. Falls back to mock data on any failure.
+ * Loads from Supabase once, then caches.
+ *
+ * IMPORTANT: while the real fetch is in flight, this returns EMPTY data
+ * (not mock data) so the UI shows 0 / loading state instead of flashing
+ * unrelated mock numbers that then "jump" to the real ones once the fetch
+ * resolves. Mock data is only used as a genuine fallback — either Supabase
+ * isn't configured at all (demo mode) or the fetch itself failed.
  */
 export function useSupabaseData() {
-  const [data, setData] = useState(() => _cache || getMockData());
-  const [loading, setLoading] = useState(() => !_cache);
+  const [data, setData] = useState(() => {
+    if (_cache) return _cache;
+    if (!supabase) return getMockData(); // no backend configured — demo mode
+    return EMPTY_DATA; // real backend configured, wait for the actual fetch
+  });
+  const [loading, setLoading] = useState(() => !_cache && !!supabase);
 
   useEffect(() => {
     if (!supabase || _cache) return;
@@ -38,7 +50,7 @@ export function useSupabaseData() {
         setData(d);
       })
       .catch(() => {
-        // already falls back inside fetchAllData, but keep mock here just in case
+        // Genuine fetch failure — fall back to mock so the app is still usable.
         setData(getMockData());
       })
       .finally(() => setLoading(false));
