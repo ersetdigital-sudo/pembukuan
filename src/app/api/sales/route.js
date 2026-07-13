@@ -13,6 +13,7 @@
  *   "tanggal": "2026-07-13",              // optional, defaults to today (YYYY-MM-DD or DD/MM/YYYY)
  *   "nama_pembeli": "Pratu Andika Fendi",  // required
  *   "no_hp": "6282115423635",              // required
+ *   "username_domain": "andika_fnd",       // optional — only send if mentioned (e.g. Shopee/social username)
  *   "marketplace": "Shopee",               // required, must exist in Settings > Marketplaces
  *   "invoice": "260713JRFHDAPJ",           // required (marketplace order number)
  *   "fee_mp": 14701,                       // optional, Fee MP for this transaction
@@ -30,6 +31,7 @@
  *   "invoice": "260713JRFHDAPJ",           // required — identifies which sale to edit
  *   "nama_pembeli": "...",                 // optional
  *   "no_hp": "...",                        // optional
+ *   "username_domain": "...",              // optional
  *   "marketplace": "...",                  // optional
  *   "fee_mp": 20000,                       // optional
  *   "produk": [ { "nama_produk": "...", "qty": 2 } ]  // optional — replaces the whole product list

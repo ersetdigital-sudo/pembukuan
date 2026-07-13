@@ -66,7 +66,15 @@ export default function PenjualanClient() {
   );
 
   const sorted = useMemo(
-    () => [...filtered].sort((a, b) => b.tanggal.localeCompare(a.tanggal)),
+    () =>
+      [...filtered].sort((a, b) => {
+        // Sort by tanggal first (newest date on top), then by created_date
+        // as a tiebreaker so multiple transactions on the same day still
+        // show the most recently added one (e.g. from Hermes) at the top.
+        const dateDiff = b.tanggal.localeCompare(a.tanggal);
+        if (dateDiff !== 0) return dateDiff;
+        return (b.created_date || "").localeCompare(a.created_date || "");
+      }),
     [filtered]
   );
 
@@ -139,6 +147,7 @@ export default function PenjualanClient() {
       const newSale = {
         id: `sale-${Date.now()}`,
         invoice: data.invoice || nextInvoice(),
+        created_date: new Date().toISOString(),
         ...data,
       };
       const res = await insertRow("sales", newSale);
@@ -184,6 +193,7 @@ export default function PenjualanClient() {
       const newSale = {
         id: `sale-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
         invoice,
+        created_date: new Date().toISOString(),
         ...data,
         // Legacy compat fields
         nama_produk: produk.nama_produk,
