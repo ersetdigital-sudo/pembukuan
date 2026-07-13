@@ -18,6 +18,7 @@ import StatCard from "@/components/dashboard/StatCard";
 import SaleFormDialog from "@/components/penjualan/SaleFormDialog";
 import SaleDetailModal from "@/components/penjualan/SaleDetailModal";
 import PenjualanImportDialog from "./PenjualanImportDialog";
+import FeeImportDialog from "./FeeImportDialog";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import { useToast } from "@/components/ui/Toast";
 import { formatRupiah, formatDate, formatNumber } from "@/lib/utils/format";
@@ -49,6 +50,8 @@ export default function PenjualanClient() {
   const [query, setQuery] = useState("");
   const [importOpen, setImportOpen] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
+  const [feeImportOpen, setFeeImportOpen] = useState(false);
+  const [isFeeImporting, setIsFeeImporting] = useState(false);
 
   const filtered = useMemo(
     () =>
@@ -215,6 +218,40 @@ export default function PenjualanClient() {
     }
   };
 
+  const handleFeeImport = async (feeUpdates) => {
+    setIsFeeImporting(true);
+    let successCount = 0;
+    let failCount = 0;
+    const updatesById = new Map(feeUpdates.map((u) => [u.saleId, u.fee_mp]));
+
+    for (const { saleId, fee_mp } of feeUpdates) {
+      const res = await updateRow("sales", saleId, { fee_mp });
+      if (!res.error) {
+        successCount++;
+      } else {
+        failCount++;
+        updatesById.delete(saleId);
+      }
+    }
+
+    setSales((prev) =>
+      prev.map((s) => (updatesById.has(s.id) ? { ...s, fee_mp: updatesById.get(s.id) } : s))
+    );
+    invalidateCache();
+    setIsFeeImporting(false);
+    setFeeImportOpen(false);
+
+    if (failCount === 0) {
+      gooeyToast.success({ title: `${successCount} fee MP berhasil diupdate` });
+    } else {
+      toast({
+        title: `${successCount} fee diupdate, ${failCount} gagal ke server`,
+        description: "Coba refresh halaman untuk cek ulang yang gagal.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleDelete = (sale) => {
     setDetailSale(null);
     setConfirmDelete(sale);
@@ -260,6 +297,14 @@ export default function PenjualanClient() {
             >
               <Upload className="h-4 w-4" />
               Import
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => setFeeImportOpen(true)}
+              className="flex-1 sm:flex-none"
+            >
+              <Tag className="h-4 w-4" />
+              Import Fee
             </Button>
             <Button
               variant="primary"
@@ -493,6 +538,15 @@ export default function PenjualanClient() {
         stocks={stocks}
         marketplaces={marketplaces}
         existingSales={sales}
+      />
+
+      {/* Fee MP import dialog */}
+      <FeeImportDialog
+        open={feeImportOpen}
+        onOpenChange={setFeeImportOpen}
+        onImport={handleFeeImport}
+        isImporting={isFeeImporting}
+        sales={sales}
       />
 
       {/* Detail modal */}
