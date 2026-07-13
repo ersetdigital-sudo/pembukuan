@@ -16,7 +16,7 @@ import { formatRupiah, formatDate } from "@/lib/utils/format";
 import { MARKETPLACES as DEFAULT_MARKETPLACES } from "@/lib/constants";
 
 // Kolom template sesuai export marketplace (Tanggal, Nama Produk, Kategori,
-// Jumlah, Harga Satuan, Total, Marketplace, Nama Customer)
+// Jumlah, Harga Satuan, Total, Fee MP, Marketplace, Nama Customer)
 const TEMPLATE_HEADERS = [
   "Tanggal",
   "Nama Produk",
@@ -24,13 +24,14 @@ const TEMPLATE_HEADERS = [
   "Jumlah",
   "Harga Satuan",
   "Total",
+  "Fee MP",
   "Marketplace",
   "Nama Customer",
 ];
 
 const TEMPLATE_SAMPLE_ROWS = [
-  ["11/07/2026", "Elementor Pro", "Plugin", "1", "48500", "48500", "Shopee", "Rafly Rizaldy"],
-  ["10/07/2026", "Mikhmon rosv6 1tahun", "Jasa", "1", "88200", "88200", "Shopee", "Bara Rumah"],
+  ["11/07/2026", "Elementor Pro", "Plugin", "1", "48500", "48500", "8448", "Shopee", "Rafly Rizaldy"],
+  ["10/07/2026", "Mikhmon rosv6 1tahun", "Jasa", "1", "88200", "88200", "14701", "Shopee", "Bara Rumah"],
 ];
 
 /** Build a case-insensitive lookup map name -> stock row. */
@@ -55,7 +56,7 @@ function parseRows(rows, stocks, marketplaces, existingKeys) {
   const seenInFile = new Set();
 
   return dataRows.map((cols, idx) => {
-    const [tglRaw, namaRaw, katRaw, qtyRaw, satuanRaw, totalRaw, mpRaw, custRaw] = cols;
+    const [tglRaw, namaRaw, katRaw, qtyRaw, satuanRaw, totalRaw, feeRaw, mpRaw, custRaw] = cols;
 
     const tanggal = parseFlexibleDate(tglRaw);
     const nama_produk = (namaRaw || "").trim();
@@ -64,6 +65,7 @@ function parseRows(rows, stocks, marketplaces, existingKeys) {
     const totalParsed = parseLooseNumber(totalRaw);
     const total = totalParsed > 0 ? totalParsed : harga_satuan * qty;
     const harga_jual = qty > 0 ? Math.round(total / qty) : harga_satuan;
+    const fee_mp = parseLooseNumber(feeRaw);
     const marketplace = (mpRaw || "").trim();
     const nama_pembeli = (custRaw || "").trim();
 
@@ -103,6 +105,7 @@ function parseRows(rows, stocks, marketplaces, existingKeys) {
       qty,
       harga_jual,
       harga_beli,
+      fee_mp,
       total,
       isDuplicate,
       errors,
@@ -171,7 +174,7 @@ export default function PenjualanImportDialog({
         tanggal: r.tanggal,
         nama_pembeli: r.nama_pembeli,
         marketplace: r.marketplace,
-        fee_mp: 0,
+        fee_mp: r.fee_mp,
         produk: [
           {
             nama_produk: r.nama_produk,
@@ -202,9 +205,11 @@ export default function PenjualanImportDialog({
               </p>
               <p className="text-xs text-ash mt-0.5">
                 Kolom: {TEMPLATE_HEADERS.join(", ")}. Tanggal format DD/MM/YYYY.
-                Kalau punya file Excel, buka lalu <strong>Save As → CSV</strong> sebelum upload.
-                Transaksi yang tanggal, customer, produk, qty & totalnya sama persis dengan
-                data yang sudah ada otomatis ditolak (anti duplikat).
+                Kolom <strong>Fee MP</strong> otomatis masuk sebagai biaya marketplace dan
+                mengurangi profit transaksi tersebut. Kalau punya file Excel, buka lalu{" "}
+                <strong>Save As → CSV</strong> sebelum upload. Transaksi yang tanggal, customer,
+                produk, qty & totalnya sama persis dengan data yang sudah ada otomatis ditolak
+                (anti duplikat).
               </p>
               <Button
                 type="button"
@@ -274,6 +279,7 @@ export default function PenjualanImportDialog({
                       <th className="text-left px-3 py-2 font-semibold text-ash uppercase tracking-wider text-[10px]">Produk</th>
                       <th className="text-left px-3 py-2 font-semibold text-ash uppercase tracking-wider text-[10px]">Customer</th>
                       <th className="text-right px-3 py-2 font-semibold text-ash uppercase tracking-wider text-[10px]">Total</th>
+                      <th className="text-right px-3 py-2 font-semibold text-ash uppercase tracking-wider text-[10px]">Fee MP</th>
                       <th className="text-left px-3 py-2 font-semibold text-ash uppercase tracking-wider text-[10px]">Status</th>
                     </tr>
                   </thead>
@@ -289,6 +295,9 @@ export default function PenjualanImportDialog({
                         </td>
                         <td className="px-3 py-2 text-ash truncate max-w-[120px]">{r.nama_pembeli || "-"}</td>
                         <td className="px-3 py-2 text-right text-ink">{formatRupiah(r.total)}</td>
+                        <td className="px-3 py-2 text-right text-info">
+                          {r.fee_mp ? formatRupiah(r.fee_mp) : "-"}
+                        </td>
                         <td className="px-3 py-2">
                           {r.valid ? (
                             r.warnings.length > 0 ? (
