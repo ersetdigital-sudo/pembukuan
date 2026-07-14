@@ -87,12 +87,39 @@ function todayISO() {
   return new Date().toISOString().split("T")[0];
 }
 
-function normalizeDate(raw) {
-  if (!raw) return todayISO();
-  // Accept plain ISO directly, otherwise try the flexible DD/MM/YYYY parser.
-  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
+/**
+ * Parses a `tanggal` field with two distinct outcomes: "not provided"
+ * defaults to today with no error; "provided but malformed" returns an
+ * error instead of silently defaulting to today. Silently falling back on
+ * a bad date is dangerous here: it can create a sale under the wrong date,
+ * or — worse — make a PATCH name-based lookup silently search "today"
+ * instead of the date the caller actually meant, matching nothing or
+ * matching a different sale entirely.
+ */
+function parseDateField(raw) {
+  if (raw === undefined || raw === null || raw === "") {
+    return { value: todayISO(), error: null };
+  }
+  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return { value: raw, error: null };
   const parsed = parseFlexibleDate(raw);
-  return parsed || todayISO();
+  if (!parsed) {
+    return { value: null, error: `Invalid tanggal "${raw}" — use DD/MM/YYYY or YYYY-MM-DD` };
+  }
+  return { value: parsed, error: null };
+}
+
+const MAX_INVOICE_LENGTH = 100;
+
+function validateInvoiceFormat(value, fieldName = "invoice") {
+  if (value.length > MAX_INVOICE_LENGTH) {
+    return `\`${fieldName}\` too long (max ${MAX_INVOICE_LENGTH} characters)`;
+  }
+  return null;
+}
+
+/** Clamp a parsed number to be non-negative — defends against OCR/typo garbage like "-500". */
+function nonNegative(n) {
+  return Math.max(0, n);
 }
 
 /** Shared auth check. Returns a Response to short-circuit with, or null if OK. */
@@ -208,9 +235,44 @@ export async function POST(request) {
     return badRequest("Missing required fields", { missing });
   }
 
+  const invoiceTrimmed = String(invoice).trim();
+  const invoiceLenErr = validateInvoiceFormat(invoiceTrimmed);
+  if (invoiceLenErr) {
+    return badRequest(invoiceLenErr);
+  }
+
+  const { value: tanggal, error: dateErr } = parseDateField(tanggalRaw);
+  if (dateErr) {
+    return badRequest(dateErr);
+  }
+
   const supabase = getServerSupabase();
   if (!supabase) {
     return Response.json({ error: "Supabase not configured on server" }, { status: 503 });
+  }
+
+  // Anti-duplicate guard: reject outright if a sale with this invoice
+  // already exists. Without this, a retried/duplicate POST (e.g. Hermes
+  // re-sending after a timeout, or the same CSV row processed twice) would
+  // silently create a second sale row sharing the same invoice number.
+  // Callers that actually want to edit an existing sale should use PATCH.
+  const { data: dupe, error: dupeErr } = await supabase
+    .from("sales")
+    .select("id")
+    .eq("invoice", invoiceTrimmed)
+    .limit(1)
+    .maybeSingle();
+  if (dupeErr) {
+    return Response.json({ error: "Failed to check for duplicate invoice", details: dupeErr.message }, { status: 500 });
+  }
+  if (dupe) {
+    return Response.json(
+      {
+        error: `A sale with invoice "${invoiceTrimmed}" already exists. Use PATCH to edit it instead of POST.`,
+        existingSaleId: dupe.id,
+      },
+      { status: 409 }
+    );
   }
 
   const { produk, notFound, error: lookupErr } = await resolveProdukPrices(supabase, produkRaw);
@@ -221,8 +283,7 @@ export async function POST(request) {
     return badRequest("Produk tidak ditemukan di data Produk", { notFound });
   }
 
-  const tanggal = normalizeDate(tanggalRaw);
-  const fee_mp = parseLooseNumber(feeRaw);
+  const fee_mp = nonNegative(parseLooseNumber(feeRaw));
   const first = produk[0];
 
   const newSale = {
@@ -232,7 +293,7 @@ export async function POST(request) {
     no_hp: (no_hp || "").trim(),
     username_domain: (username_domain || "").trim(),
     marketplace: marketplace.trim(),
-    invoice: (invoice || "").trim(),
+    invoice: invoiceTrimmed,
     fee_mp,
     produk,
     // Legacy-compat flat fields (first product), same convention used
@@ -247,8 +308,19 @@ export async function POST(request) {
     created_date: new Date().toISOString(),
   };
 
+  // Insert with a final DB-level unique check via .select() — if a race
+  // condition let two concurrent requests both pass the pre-check above,
+  // this catches a Postgres unique-violation error (23505) if one exists;
+  // otherwise it's still safe because the pre-check covers the common case
+  // (sequential retries, which is what Hermes actually does).
   const { data, error } = await supabase.from("sales").insert(newSale).select().single();
   if (error) {
+    if (error.code === "23505") {
+      return Response.json(
+        { error: `A sale with invoice "${invoiceTrimmed}" already exists (race condition detected).` },
+        { status: 409 }
+      );
+    }
     return Response.json({ error: "Failed to insert sale", details: error.message }, { status: 500 });
   }
 
@@ -328,8 +400,14 @@ export async function PATCH(request) {
     existing = data;
   } else {
     // Fallback lookup when invoice isn't known: tanggal + nama_pembeli
-    // (case-insensitive), optionally narrowed by nama_produk.
-    const tanggal = normalizeDate(tanggalRaw);
+    // (case-insensitive), optionally narrowed by nama_produk. Use the
+    // strict date parser here — a malformed tanggal must error out, not
+    // silently search under today's date and return the wrong sale (or
+    // none at all) without any indication something was off.
+    const { value: tanggal, error: dateErr } = parseDateField(tanggalRaw);
+    if (dateErr) {
+      return badRequest(dateErr);
+    }
     const { data: matches, error: findErr } = await supabase
       .from("sales")
       .select("*")
@@ -367,18 +445,29 @@ export async function PATCH(request) {
   }
 
   // Build a partial update — only fields actually present in the request body change.
+  // Note: when using name-based lookup (else branch above), tanggalRaw was
+  // already validated via parseDateField before the lookup ran, so it's
+  // safe to reparse here (same value, no new failure mode introduced).
   const patch = {};
-  if (tanggalRaw !== undefined) patch.tanggal = normalizeDate(tanggalRaw);
+  if (tanggalRaw !== undefined) {
+    const { value: patchTanggal, error: patchDateErr } = parseDateField(tanggalRaw);
+    if (patchDateErr) return badRequest(patchDateErr);
+    patch.tanggal = patchTanggal;
+  }
   if (nama_pembeli !== undefined) patch.nama_pembeli = String(nama_pembeli).trim();
   if (no_hp !== undefined) patch.no_hp = String(no_hp).trim();
   if (username_domain !== undefined) patch.username_domain = String(username_domain).trim();
   if (marketplace !== undefined) patch.marketplace = String(marketplace).trim();
-  if (feeRaw !== undefined) patch.fee_mp = parseLooseNumber(feeRaw);
+  if (feeRaw !== undefined) patch.fee_mp = nonNegative(parseLooseNumber(feeRaw));
 
   if (newInvoiceRaw !== undefined) {
     const newInvoice = String(newInvoiceRaw).trim();
     if (!newInvoice) {
       return badRequest("`new_invoice` cannot be empty");
+    }
+    const newInvoiceLenErr = validateInvoiceFormat(newInvoice, "new_invoice");
+    if (newInvoiceLenErr) {
+      return badRequest(newInvoiceLenErr);
     }
     if (newInvoice !== existing.invoice) {
       // Guard against collisions: two sales can't share the same invoice,
@@ -474,7 +563,11 @@ export async function GET(request) {
 
   let query = supabase.from("sales").select("*").order("created_date", { ascending: false }).limit(20);
   if (namaPembeli) query = query.ilike("nama_pembeli", `%${namaPembeli}%`);
-  if (tanggalRaw) query = query.eq("tanggal", normalizeDate(tanggalRaw));
+  if (tanggalRaw) {
+    const { value: searchTanggal, error: dateErr } = parseDateField(tanggalRaw);
+    if (dateErr) return badRequest(dateErr);
+    query = query.eq("tanggal", searchTanggal);
+  }
   if (marketplaceQ) query = query.ilike("marketplace", `%${marketplaceQ}%`);
   if (invoiceQ) query = query.eq("invoice", invoiceQ.trim());
 
