@@ -31,25 +31,42 @@
  * }
  *
  * ── PATCH — edit an existing sale ─────────────────────────────────────
- * Find the sale by `invoice` (the marketplace order number — Hermes doesn't
- * know our internal row id, only what's visible on the screenshot) and
- * update whichever fields are sent. Everything except `invoice` is optional;
- * only the fields you include get changed.
+ * Find the sale EITHER by `invoice`, OR by `tanggal` + `nama_pembeli`
+ * (+ optional `nama_produk` to disambiguate) when the invoice isn't known
+ * (e.g. updating straight from a CSV that only has date/name/product).
  * {
- *   "invoice": "260713JRFHDAPJ",           // required — identifies which sale to edit
- *   "nama_pembeli": "...",                 // optional
- *   "no_hp": "...",                        // optional
- *   "username_domain": "...",              // optional
- *   "marketplace": "...",                  // optional
- *   "fee_mp": 20000,                       // optional
- *   "produk": [ { "nama_produk": "...", "qty": 2, "harga_jual_aktual": 47195 } ]  // optional — replaces the whole product list
+ *   "invoice": "260713JRFHDAPJ",           // option A — identifies the sale directly
+ *   // OR, if invoice is unknown:
+ *   "tanggal": "13/07/2026",               // option B — combine with nama_pembeli
+ *   "nama_pembeli": "Rais Jaka Purnama",   //   (required together with tanggal for option B)
+ *   "nama_produk": "Elementor Pro",        //   optional, narrows down if ambiguous
+ *
+ *   // fields to change (everything below is optional; only included fields change):
+ *   "no_hp": "...",
+ *   "username_domain": "...",
+ *   "marketplace": "...",
+ *   "fee_mp": 20000,
+ *   "produk": [ { "nama_produk": "...", "qty": 2, "harga_jual_aktual": 47195 } ]  // replaces the whole product list
  * }
+ *
+ * If the tanggal+nama_pembeli combo matches more than one sale and
+ * nama_produk doesn't narrow it down to exactly one, the response is 409
+ * with a `candidates` list (invoice + produk per candidate) instead of
+ * guessing which one to update.
  *
  * Price: harga_beli (modal) is ALWAYS looked up from the `stocks` table by
  * nama_produk. harga_jual defaults to the catalog price too, but can be
  * overridden per item via `harga_jual_aktual` — useful when the marketplace
  * applied a discount/voucher so the customer paid less than the catalog
  * price, keeping profit calculations accurate.
+ *
+ * ── GET — search sales (find the invoice, then PATCH) ────────────────
+ * Query params (at least one required): nama_pembeli, tanggal, marketplace,
+ * invoice. Partial, case-insensitive match on nama_pembeli/marketplace;
+ * exact match on tanggal (DD/MM/YYYY or YYYY-MM-DD) and invoice.
+ *   GET /api/sales?nama_pembeli=Rais&tanggal=13/07/2026
+ * Returns up to 20 matches: { results: [{ id, tanggal, invoice, nama_pembeli,
+ * no_hp, username_domain, marketplace, fee_mp, produk }, ...] }
  */
 import { getServerSupabase } from "@/lib/supabase/serverClient";
 import { parseFlexibleDate, parseLooseNumber } from "@/lib/utils/csv";
@@ -234,6 +251,21 @@ export async function POST(request) {
   return Response.json({ success: true, sale: data }, { status: 201 });
 }
 
+/** Format a sale row into a compact shape for search results / ambiguity listings. */
+function summarizeSale(sale) {
+  return {
+    id: sale.id,
+    tanggal: sale.tanggal,
+    invoice: sale.invoice,
+    nama_pembeli: sale.nama_pembeli,
+    no_hp: sale.no_hp,
+    username_domain: sale.username_domain,
+    marketplace: sale.marketplace,
+    fee_mp: sale.fee_mp,
+    produk: sale.produk,
+  };
+}
+
 export async function PATCH(request) {
   const authError = checkAuth(request);
   if (authError) return authError;
@@ -249,6 +281,7 @@ export async function PATCH(request) {
     invoice,
     tanggal: tanggalRaw,
     nama_pembeli,
+    nama_produk: namaProdukFilter,
     no_hp,
     username_domain,
     marketplace,
@@ -256,8 +289,13 @@ export async function PATCH(request) {
     produk: produkRaw,
   } = body || {};
 
-  if (!invoice || !String(invoice).trim()) {
-    return badRequest("`invoice` is required to identify which sale to edit");
+  const hasInvoice = invoice && String(invoice).trim();
+  const hasNameLookup = tanggalRaw && nama_pembeli && String(nama_pembeli).trim();
+
+  if (!hasInvoice && !hasNameLookup) {
+    return badRequest(
+      "Provide either `invoice`, or `tanggal` + `nama_pembeli` (optionally with `nama_produk`), to identify which sale to edit"
+    );
   }
 
   const supabase = getServerSupabase();
@@ -265,20 +303,62 @@ export async function PATCH(request) {
     return Response.json({ error: "Supabase not configured on server" }, { status: 503 });
   }
 
-  // Find the sale by invoice (the marketplace order number visible on the
-  // screenshot) rather than our internal row id, which the caller never sees.
-  const { data: existing, error: findErr } = await supabase
-    .from("sales")
-    .select("*")
-    .eq("invoice", invoice.trim())
-    .limit(1)
-    .maybeSingle();
+  let existing;
 
-  if (findErr) {
-    return Response.json({ error: "Failed to look up sale", details: findErr.message }, { status: 500 });
-  }
-  if (!existing) {
-    return Response.json({ error: `No sale found with invoice "${invoice}"` }, { status: 404 });
+  if (hasInvoice) {
+    // Find the sale by invoice (the marketplace order number visible on the
+    // screenshot) rather than our internal row id, which the caller never sees.
+    const { data, error: findErr } = await supabase
+      .from("sales")
+      .select("*")
+      .eq("invoice", invoice.trim())
+      .limit(1)
+      .maybeSingle();
+    if (findErr) {
+      return Response.json({ error: "Failed to look up sale", details: findErr.message }, { status: 500 });
+    }
+    if (!data) {
+      return Response.json({ error: `No sale found with invoice "${invoice}"` }, { status: 404 });
+    }
+    existing = data;
+  } else {
+    // Fallback lookup when invoice isn't known: tanggal + nama_pembeli
+    // (case-insensitive), optionally narrowed by nama_produk.
+    const tanggal = normalizeDate(tanggalRaw);
+    const { data: matches, error: findErr } = await supabase
+      .from("sales")
+      .select("*")
+      .eq("tanggal", tanggal)
+      .ilike("nama_pembeli", nama_pembeli.trim());
+    if (findErr) {
+      return Response.json({ error: "Failed to look up sale", details: findErr.message }, { status: 500 });
+    }
+
+    let candidates = matches || [];
+    if (namaProdukFilter) {
+      const needle = String(namaProdukFilter).trim().toLowerCase();
+      candidates = candidates.filter((s) =>
+        (s.produk || []).some((p) => (p.nama_produk || "").toLowerCase().includes(needle)) ||
+        (s.nama_produk || "").toLowerCase().includes(needle)
+      );
+    }
+
+    if (candidates.length === 0) {
+      return Response.json(
+        { error: `No sale found for "${nama_pembeli}" on ${tanggal}` },
+        { status: 404 }
+      );
+    }
+    if (candidates.length > 1) {
+      return Response.json(
+        {
+          error: "Multiple sales match — include `nama_produk` or use `invoice` to pick one",
+          candidates: candidates.map(summarizeSale),
+        },
+        { status: 409 }
+      );
+    }
+    existing = candidates[0];
   }
 
   // Build a partial update — only fields actually present in the request body change.
@@ -339,7 +419,42 @@ export async function PATCH(request) {
   return Response.json({ success: true, sale: data }, { status: 200 });
 }
 
+export async function GET(request) {
+  const authError = checkAuth(request);
+  if (authError) return authError;
+
+  const { searchParams } = new URL(request.url);
+  const namaPembeli = searchParams.get("nama_pembeli");
+  const tanggalRaw = searchParams.get("tanggal");
+  const marketplaceQ = searchParams.get("marketplace");
+  const invoiceQ = searchParams.get("invoice");
+
+  if (!namaPembeli && !tanggalRaw && !marketplaceQ && !invoiceQ) {
+    return badRequest(
+      "Provide at least one query param: nama_pembeli, tanggal, marketplace, or invoice"
+    );
+  }
+
+  const supabase = getServerSupabase();
+  if (!supabase) {
+    return Response.json({ error: "Supabase not configured on server" }, { status: 503 });
+  }
+
+  let query = supabase.from("sales").select("*").order("created_date", { ascending: false }).limit(20);
+  if (namaPembeli) query = query.ilike("nama_pembeli", `%${namaPembeli}%`);
+  if (tanggalRaw) query = query.eq("tanggal", normalizeDate(tanggalRaw));
+  if (marketplaceQ) query = query.ilike("marketplace", `%${marketplaceQ}%`);
+  if (invoiceQ) query = query.eq("invoice", invoiceQ.trim());
+
+  const { data, error } = await query;
+  if (error) {
+    return Response.json({ error: "Search failed", details: error.message }, { status: 500 });
+  }
+
+  return Response.json({ results: (data || []).map(summarizeSale) }, { status: 200 });
+}
+
 /** Reject other methods explicitly instead of falling through to a generic 404. */
-export async function GET() {
-  return Response.json({ error: "Method not allowed. Use POST or PATCH." }, { status: 405 });
+export async function DELETE() {
+  return Response.json({ error: "Method not allowed. Use POST, PATCH, or GET." }, { status: 405 });
 }
