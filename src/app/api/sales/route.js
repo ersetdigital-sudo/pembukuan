@@ -42,6 +42,10 @@
  *   "nama_produk": "Elementor Pro",        //   optional, narrows down if ambiguous
  *
  *   // fields to change (everything below is optional; only included fields change):
+ *   "new_invoice": "2607098BWVP1DY",       // optional — RENAMES the invoice (e.g. replacing a
+ *                                         //   placeholder created via POST with the real
+ *                                         //   marketplace order number from a CSV). Rejected
+ *                                         //   with 409 if another sale already has this invoice.
  *   "no_hp": "...",
  *   "username_domain": "...",
  *   "marketplace": "...",
@@ -279,6 +283,7 @@ export async function PATCH(request) {
 
   const {
     invoice,
+    new_invoice: newInvoiceRaw,
     tanggal: tanggalRaw,
     nama_pembeli,
     nama_produk: namaProdukFilter,
@@ -369,6 +374,33 @@ export async function PATCH(request) {
   if (username_domain !== undefined) patch.username_domain = String(username_domain).trim();
   if (marketplace !== undefined) patch.marketplace = String(marketplace).trim();
   if (feeRaw !== undefined) patch.fee_mp = parseLooseNumber(feeRaw);
+
+  if (newInvoiceRaw !== undefined) {
+    const newInvoice = String(newInvoiceRaw).trim();
+    if (!newInvoice) {
+      return badRequest("`new_invoice` cannot be empty");
+    }
+    if (newInvoice !== existing.invoice) {
+      // Guard against collisions: two sales can't share the same invoice,
+      // since invoice is how PATCH/GET look sales up elsewhere.
+      const { data: clash, error: clashErr } = await supabase
+        .from("sales")
+        .select("id")
+        .eq("invoice", newInvoice)
+        .limit(1)
+        .maybeSingle();
+      if (clashErr) {
+        return Response.json({ error: "Failed to check invoice uniqueness", details: clashErr.message }, { status: 500 });
+      }
+      if (clash) {
+        return Response.json(
+          { error: `Invoice "${newInvoice}" is already used by another sale` },
+          { status: 409 }
+        );
+      }
+      patch.invoice = newInvoice;
+    }
+  }
 
   if (produkRaw !== undefined) {
     if (!Array.isArray(produkRaw) || produkRaw.length === 0) {
