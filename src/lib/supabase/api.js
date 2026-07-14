@@ -17,25 +17,56 @@ export async function fetchTable(table) {
   return data || [];
 }
 
+/** Wrap a Supabase call with a timeout so the UI never hangs forever. */
+async function withTimeout(promise, ms = 15000) {
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new Error("Request timed out, coba lagi")), ms);
+  });
+  try {
+    return await Promise.race([promise, timeout]);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 /** Insert a row and return the inserted record. */
 export async function insertRow(table, row) {
   if (!supabase) return { data: null, error: new Error("Supabase not configured") };
-  const { data, error } = await supabase.from(table).insert(row).select().single();
-  return { data, error };
+  try {
+    const { data, error } = await withTimeout(
+      supabase.from(table).insert(row).select().single()
+    );
+    return { data, error };
+  } catch (err) {
+    return { data: null, error: err };
+  }
 }
 
 /** Update a row by id. */
 export async function updateRow(table, id, row) {
   if (!supabase) return { data: null, error: new Error("Supabase not configured") };
-  const { data, error } = await supabase.from(table).update(row).eq("id", id).select().single();
-  return { data, error };
+  try {
+    const { data, error } = await withTimeout(
+      supabase.from(table).update(row).eq("id", id).select().single()
+    );
+    return { data, error };
+  } catch (err) {
+    return { data: null, error: err };
+  }
 }
 
 /** Delete a row by id. */
 export async function deleteRow(table, id) {
   if (!supabase) return { error: new Error("Supabase not configured") };
-  const { error } = await supabase.from(table).delete().eq("id", id);
-  return { error };
+  try {
+    const { error } = await withTimeout(
+      supabase.from(table).delete().eq("id", id)
+    );
+    return { error };
+  } catch (err) {
+    return { error: err };
+  }
 }
 
 /** Fetch all tables the app needs. */

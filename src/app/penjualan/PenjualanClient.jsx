@@ -118,61 +118,64 @@ export default function PenjualanClient() {
 
   const handleSave = async (data) => {
     setIsSaving(true);
-    let error = null;
-
-    if (editData) {
-      const res = await updateRow("sales", editData.id, data);
-      error = res.error;
-      if (!error && res.data) {
-        // Langsung pakai row hasil update dari Supabase (tanpa fetch ulang)
-        setSales((prev) =>
-          prev.map((s) => (s.id === editData.id ? res.data : s))
-        );
-        gooeyToast.success({ title: `Transaksi ${editData.invoice} berhasil diperbarui` });
+    try {
+      if (editData) {
+        const res = await updateRow("sales", editData.id, data);
+        const error = res.error;
+        if (!error && res.data) {
+          setSales((prev) =>
+            prev.map((s) => (s.id === editData.id ? res.data : s))
+          );
+          gooeyToast.success({ title: `Transaksi ${editData.invoice} berhasil diperbarui` });
+          invalidateCache();
+        } else {
+          setSales((prev) =>
+            prev.map((s) =>
+              s.id === editData.id
+                ? { ...s, ...data, id: editData.id, invoice: s.invoice }
+                : s
+            )
+          );
+          toast({
+            title: "Gagal memperbarui di server",
+            description: error?.message || "Terjadi kesalahan",
+            variant: "destructive",
+          });
+        }
       } else {
-        // Fallback ke optimistic kalau server gagal
-        setSales((prev) =>
-          prev.map((s) =>
-            s.id === editData.id
-              ? { ...s, ...data, id: editData.id, invoice: s.invoice }
-              : s
-          )
-        );
-        toast({
-          title: "Gagal memperbarui di server",
-          description: error?.message || "Terjadi kesalahan",
-          variant: "destructive",
-        });
+        const newSale = {
+          id: `sale-${Date.now()}`,
+          invoice: data.invoice || nextInvoice(),
+          created_date: new Date().toISOString(),
+          ...data,
+        };
+        const res = await insertRow("sales", newSale);
+        const error = res.error;
+        if (!error && res.data) {
+          setSales((prev) => [res.data, ...prev]);
+          gooeyToast.success({ title: `Transaksi ${newSale.invoice} berhasil ditambahkan` });
+          invalidateCache();
+        } else {
+          setSales((prev) => [newSale, ...prev]);
+          toast({
+            title: "Gagal menambahkan ke server",
+            description: error?.message || "Terjadi kesalahan",
+            variant: "destructive",
+          });
+        }
       }
-    } else {
-      const newSale = {
-        id: `sale-${Date.now()}`,
-        invoice: data.invoice || nextInvoice(),
-        created_date: new Date().toISOString(),
-        ...data,
-      };
-      const res = await insertRow("sales", newSale);
-      error = res.error;
-      if (!error && res.data) {
-        setSales((prev) => [res.data, ...prev]);
-        gooeyToast.success({ title: `Transaksi ${newSale.invoice} berhasil ditambahkan` });
-      } else {
-        setSales((prev) => [newSale, ...prev]);
-        toast({
-          title: "Gagal menambahkan ke server",
-          description: error?.message || "Terjadi kesalahan",
-          variant: "destructive",
-        });
-      }
+    } catch (err) {
+      toast({
+        title: "Terjadi kesalahan tak terduga",
+        description: err?.message || "Coba lagi",
+        variant: "destructive",
+      });
+    } finally {
+      // Selalu hentikan spinner dan tutup dialog, apapun yang terjadi
+      setIsSaving(false);
+      setDialogOpen(false);
+      setEditData(null);
     }
-
-    if (!error) {
-      invalidateCache();
-    }
-
-    setIsSaving(false);
-    setDialogOpen(false);
-    setEditData(null);
   };
 
   const handleImport = async (importedSales) => {
