@@ -10,7 +10,7 @@ import {
   DialogFooter,
 } from "@/components/ui/Dialog";
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
+import { Input, Textarea } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import {
   Select,
@@ -30,6 +30,7 @@ const defaultForm = {
   marketplace: "",
   invoice: "",
   fee_mp: 0,
+  catatan: "",
 };
 
 const defaultItem = {
@@ -96,6 +97,7 @@ export default function SaleFormDialog({
         invoice: normalized.invoice || "",
         masa_aktif: normalized.masa_aktif || "",
         fee_mp: normalized.fee_mp || 0,
+        catatan: normalized.catatan || "",
       });
       setItems(
         normalized.produk.map((p) => ({
@@ -167,6 +169,7 @@ export default function SaleFormDialog({
     onSave({
       ...form,
       fee_mp: Number(form.fee_mp) || 0,
+      catatan: form.catatan?.trim() || "",
       produk,
       // Legacy compat "" pakai produk pertama
       nama_produk: produk[0]?.nama_produk || "",
@@ -397,6 +400,17 @@ export default function SaleFormDialog({
               value={`Rp ${totalHargaJual.toLocaleString("id-ID")}`}
               readOnly
               className="bg-primary/5 font-bold text-primary border-primary/40"
+            />
+          </div>
+
+          {/* Catatan */}
+          <div className="space-y-1.5">
+            <Label>Catatan</Label>
+            <Textarea
+              value={form.catatan}
+              onChange={(e) => setField("catatan", e.target.value)}
+              placeholder="Catatan tambahan untuk transaksi ini (opsional)..."
+              rows={3}
             />
           </div>
         </form>

@@ -18,6 +18,7 @@ import {
   CheckCircle2,
   Sparkles,
   Receipt,
+  StickyNote,
 } from "lucide-react";
 import {
   Dialog,
@@ -278,6 +279,16 @@ export default function SaleDetailModal({
               ))}
             </div>
           </div>
+
+          {/* Catatan */}
+          {sale.catatan && (
+            <div className="rounded-xl border border-hairline bg-surface-card px-4 py-3">
+              <SectionTitle icon={StickyNote}>Catatan</SectionTitle>
+              <p className="text-xs text-ink mt-1 whitespace-pre-wrap break-words">
+                {sale.catatan}
+              </p>
+            </div>
+          )}
 
           {/* Ringkasan finansial */}
           <div className="rounded-xl border border-hairline bg-surface-card px-4 py-1">
