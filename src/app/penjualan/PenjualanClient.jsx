@@ -83,6 +83,7 @@ export default function PenjualanClient() {
     const q = query.trim().toLowerCase();
     return sorted.filter((s) => {
       if (s.nama_pembeli?.toLowerCase().includes(q)) return true;
+      if (s.username_domain?.toLowerCase().includes(q)) return true;
       const produk = getSaleProducts(s);
       return produk.some((p) => p.nama_produk?.toLowerCase().includes(q));
     });
@@ -365,7 +366,7 @@ export default function PenjualanClient() {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Cari pembeli atau produk..."
+            placeholder="Cari pembeli, domain, atau produk..."
             className="w-full md:max-w-sm pl-9 pr-4 py-2.5 rounded-full border border-hairline bg-secondary text-body-sm text-ink placeholder:text-stone focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
           />
         </div>
