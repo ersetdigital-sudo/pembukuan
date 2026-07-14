@@ -71,72 +71,20 @@
  *   GET /api/sales?nama_pembeli=Rais&tanggal=13/07/2026
  * Returns up to 20 matches: { results: [{ id, tanggal, invoice, nama_pembeli,
  * no_hp, username_domain, marketplace, fee_mp, produk }, ...] }
+ *
+ * ── Need aggregated totals instead of raw rows? ───────────────────────
+ * See GET /api/sales/summary (separate route) for a daily/range recap —
+ * total omzet, total fee, best-selling product, per-marketplace breakdown.
  */
 import { getServerSupabase } from "@/lib/supabase/serverClient";
-import { parseFlexibleDate, parseLooseNumber } from "@/lib/utils/csv";
-
-function unauthorized(message = "Unauthorized") {
-  return Response.json({ error: message }, { status: 401 });
-}
-
-function badRequest(message, details) {
-  return Response.json({ error: message, details }, { status: 400 });
-}
-
-function todayISO() {
-  return new Date().toISOString().split("T")[0];
-}
-
-/**
- * Parses a `tanggal` field with two distinct outcomes: "not provided"
- * defaults to today with no error; "provided but malformed" returns an
- * error instead of silently defaulting to today. Silently falling back on
- * a bad date is dangerous here: it can create a sale under the wrong date,
- * or — worse — make a PATCH name-based lookup silently search "today"
- * instead of the date the caller actually meant, matching nothing or
- * matching a different sale entirely.
- */
-function parseDateField(raw) {
-  if (raw === undefined || raw === null || raw === "") {
-    return { value: todayISO(), error: null };
-  }
-  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return { value: raw, error: null };
-  const parsed = parseFlexibleDate(raw);
-  if (!parsed) {
-    return { value: null, error: `Invalid tanggal "${raw}" — use DD/MM/YYYY or YYYY-MM-DD` };
-  }
-  return { value: parsed, error: null };
-}
-
-const MAX_INVOICE_LENGTH = 100;
-
-function validateInvoiceFormat(value, fieldName = "invoice") {
-  if (value.length > MAX_INVOICE_LENGTH) {
-    return `\`${fieldName}\` too long (max ${MAX_INVOICE_LENGTH} characters)`;
-  }
-  return null;
-}
-
-/** Clamp a parsed number to be non-negative — defends against OCR/typo garbage like "-500". */
-function nonNegative(n) {
-  return Math.max(0, n);
-}
-
-/** Shared auth check. Returns a Response to short-circuit with, or null if OK. */
-function checkAuth(request) {
-  const apiKey = process.env.AGENT_API_KEY;
-  if (!apiKey) {
-    // Fail closed: if no key is configured, nobody can use this endpoint.
-    return Response.json(
-      { error: "Endpoint not configured. Set AGENT_API_KEY in environment." },
-      { status: 503 }
-    );
-  }
-  const authHeader = request.headers.get("authorization") || "";
-  const token = authHeader.replace(/^Bearer\s+/i, "").trim();
-  if (!token || token !== apiKey) return unauthorized();
-  return null;
-}
+import { parseLooseNumber } from "@/lib/utils/csv";
+import {
+  badRequest,
+  checkAuth,
+  nonNegative,
+  parseDateField,
+  validateInvoiceFormat,
+} from "@/lib/api/salesApiUtils";
 
 /**
  * Resolve a `produk` array (from the request) against the `stocks` catalog.
