@@ -18,7 +18,15 @@
  *   "invoice": "260713JRFHDAPJ",           // required (marketplace order number)
  *   "fee_mp": 14701,                       // optional, Fee MP for this transaction
  *   "produk": [                            // required, at least 1 item, each needs nama_produk + qty
- *     { "nama_produk": "Elementor Pro", "qty": 1, "masa_aktif": "1 Tahun" }  // masa_aktif optional
+ *     {
+ *       "nama_produk": "Elementor Pro",
+ *       "qty": 1,
+ *       "masa_aktif": "1 Tahun",          // optional
+ *       "harga_jual_aktual": 47195        // optional — actual price paid (e.g. after
+ *                                         //   marketplace discount). Omit to use the
+ *                                         //   catalog price. harga_beli (modal) is
+ *                                         //   ALWAYS from the catalog, never overridable.
+ *     }
  *   ]
  * }
  *
@@ -34,12 +42,14 @@
  *   "username_domain": "...",              // optional
  *   "marketplace": "...",                  // optional
  *   "fee_mp": 20000,                       // optional
- *   "produk": [ { "nama_produk": "...", "qty": 2 } ]  // optional — replaces the whole product list
+ *   "produk": [ { "nama_produk": "...", "qty": 2, "harga_jual_aktual": 47195 } ]  // optional — replaces the whole product list
  * }
  *
- * Price (harga_jual / harga_beli) is ALWAYS looked up from the `stocks`
- * table by nama_produk — the caller never sends a price, same rule as the
- * CSV import feature, so numbers can't drift from the product catalog.
+ * Price: harga_beli (modal) is ALWAYS looked up from the `stocks` table by
+ * nama_produk. harga_jual defaults to the catalog price too, but can be
+ * overridden per item via `harga_jual_aktual` — useful when the marketplace
+ * applied a discount/voucher so the customer paid less than the catalog
+ * price, keeping profit calculations accurate.
  */
 import { getServerSupabase } from "@/lib/supabase/serverClient";
 import { parseFlexibleDate, parseLooseNumber } from "@/lib/utils/csv";
@@ -84,6 +94,13 @@ function checkAuth(request) {
  * Resolve a `produk` array (from the request) against the `stocks` catalog.
  * Returns { produk, notFound } — notFound lists any nama_produk not in the
  * catalog, in which case `produk` entries for those items are null.
+ *
+ * harga_beli (modal) ALWAYS comes from the catalog — it doesn't change just
+ * because the marketplace ran a discount. harga_jual, however, may be
+ * overridden per item via `harga_jual_aktual` when the marketplace applied
+ * a discount/voucher, so profit stays accurate against what was actually
+ * paid (e.g. Shopee showing "Rp 47.195" instead of the catalog's Rp 48.500).
+ * If omitted, harga_jual falls back to the catalog price as before.
  */
 async function resolveProdukPrices(supabase, produkRaw) {
   const { data: stocks, error: stockErr } = await supabase
@@ -107,12 +124,19 @@ async function resolveProdukPrices(supabase, produkRaw) {
       notFound.push(nama_produk);
       return null;
     }
+    // Optional per-item override for the actual sale price (e.g. after a
+    // marketplace discount). harga_beli is never overridable — modal cost
+    // is unaffected by the marketplace's price the customer saw.
+    const hasOverride = p.harga_jual_aktual != null && String(p.harga_jual_aktual).trim() !== "";
+    const harga_jual = hasOverride
+      ? parseLooseNumber(p.harga_jual_aktual)
+      : match.harga_jual || 0;
     return {
       nama_produk: match.nama_produk,
       kategori_produk: match.kategori || "",
       masa_aktif,
       qty,
-      harga_jual: match.harga_jual || 0,
+      harga_jual,
       harga_beli: match.harga_beli || 0,
     };
   });
