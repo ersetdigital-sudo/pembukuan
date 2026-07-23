@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS stocks (
 
 -- 2. Sales (Penjualan)
 -- produk stored as JSONB so getSaleProducts() works without refactor
+-- invoice has UNIQUE constraint to prevent duplicate entries
 CREATE TABLE IF NOT EXISTS sales (
   id TEXT PRIMARY KEY,
   tanggal DATE,
@@ -23,7 +24,7 @@ CREATE TABLE IF NOT EXISTS sales (
   username_domain TEXT,
   no_hp TEXT,
   marketplace TEXT,
-  invoice TEXT,
+  invoice TEXT UNIQUE,
   fee_mp INTEGER DEFAULT 0,
   nama_produk TEXT,
   kategori_produk TEXT,

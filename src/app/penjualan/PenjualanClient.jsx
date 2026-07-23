@@ -159,6 +159,22 @@ export default function PenjualanClient() {
           });
         }
       } else {
+        const invoiceValue = data.invoice?.trim() || nextInvoice();
+
+        // Anti-duplicate: tolak jika invoice sudah ada di data lokal
+        const duplicateInvoice = sales.find(
+          (s) => s.invoice?.trim().toLowerCase() === invoiceValue.toLowerCase()
+        );
+        if (duplicateInvoice) {
+          toast({
+            title: "Invoice sudah ada",
+            description: `Invoice "${invoiceValue}" sudah digunakan oleh transaksi lain. Gunakan invoice yang berbeda.`,
+            variant: "destructive",
+          });
+          setIsSaving(false);
+          return;
+        }
+
         const newSale = {
           id: `sale-${Date.now()}`,
           tanggal: data.tanggal,
@@ -166,7 +182,7 @@ export default function PenjualanClient() {
           username_domain: data.username_domain,
           no_hp: data.no_hp,
           marketplace: data.marketplace,
-          invoice: data.invoice?.trim() || nextInvoice(),
+          invoice: invoiceValue,
           fee_mp: Number(data.fee_mp) || 0,
           nama_produk: data.nama_produk,
           kategori_produk: data.kategori_produk,
@@ -183,6 +199,13 @@ export default function PenjualanClient() {
         if (!error && res.data) {
           setSales((prev) => [res.data, ...prev]);
           gooeyToast.success({ title: `Transaksi ${newSale.invoice} berhasil ditambahkan` });
+        } else if (error?.code === "23505" || error?.message?.includes("duplicate")) {
+          // Unique constraint violation — invoice sudah ada di database
+          toast({
+            title: "Invoice sudah ada",
+            description: `Invoice "${invoiceValue}" sudah digunakan oleh transaksi lain di database.`,
+            variant: "destructive",
+          });
         } else {
           setSales((prev) => [newSale, ...prev]);
           toast({
@@ -239,6 +262,9 @@ export default function PenjualanClient() {
       if (!res.error) {
         newSales.push(res.data || newSale);
         successCount++;
+      } else if (res.error?.code === "23505" || res.error?.message?.includes("duplicate")) {
+        // Invoice duplikat — skip, jangan tambahkan ke local state
+        failCount++;
       } else {
         newSales.push(newSale);
         failCount++;
