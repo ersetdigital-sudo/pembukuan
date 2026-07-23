@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Loader2, Sparkles, Plus, Trash2 } from "lucide-react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { Loader2, Sparkles, Plus, Trash2, CheckCircle2, AlertCircle } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/Select";
 import { MARKETPLACES as DEFAULT_MARKETPLACES } from "@/lib/constants";
+import { supabase } from "@/lib/supabase/client";
 
 const defaultForm = {
   tanggal: new Date().toISOString().split("T")[0],
@@ -85,6 +86,10 @@ export default function SaleFormDialog({
   const [items, setItems] = useState([{ ...defaultItem }]);
   const [parsedFlash, setParsedFlash] = useState(false);
 
+  // Invoice duplicate check state
+  const [invoiceCheckStatus, setInvoiceCheckStatus] = useState("idle"); // idle | checking | duplicate | valid
+  const invoiceDebounceRef = useRef(null);
+
   useEffect(() => {
     if (editData) {
       const normalized = normalizeSale(editData);
@@ -116,6 +121,74 @@ export default function SaleFormDialog({
       setItems([{ ...defaultItem }]);
     }
   }, [editData, open]);
+
+  // Real-time invoice duplicate check with debounce
+  const checkInvoiceDuplicate = useCallback(async (invoiceValue) => {
+    if (!invoiceValue || !invoiceValue.trim()) {
+      setInvoiceCheckStatus("idle");
+      return;
+    }
+
+    // Skip check if editing and invoice hasn't changed
+    if (editData && invoiceValue.trim() === editData.invoice?.trim()) {
+      setInvoiceCheckStatus("idle");
+      return;
+    }
+
+    setInvoiceCheckStatus("checking");
+
+    if (!supabase) {
+      // No Supabase configured, skip check
+      setInvoiceCheckStatus("idle");
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from("sales")
+        .select("id")
+        .eq("invoice", invoiceValue.trim())
+        .limit(1)
+        .maybeSingle();
+
+      if (error) {
+        console.error("[InvoiceCheck] Error:", error.message);
+        setInvoiceCheckStatus("idle");
+        return;
+      }
+
+      setInvoiceCheckStatus(data ? "duplicate" : "valid");
+    } catch (err) {
+      console.error("[InvoiceCheck] Exception:", err);
+      setInvoiceCheckStatus("idle");
+    }
+  }, [editData]);
+
+  // Debounced effect for invoice field
+  useEffect(() => {
+    if (invoiceDebounceRef.current) {
+      clearTimeout(invoiceDebounceRef.current);
+    }
+
+    const invoice = form.invoice?.trim();
+
+    if (!invoice) {
+      setInvoiceCheckStatus("idle");
+      return;
+    }
+
+    setInvoiceCheckStatus("checking");
+
+    invoiceDebounceRef.current = setTimeout(() => {
+      checkInvoiceDuplicate(invoice);
+    }, 500);
+
+    return () => {
+      if (invoiceDebounceRef.current) {
+        clearTimeout(invoiceDebounceRef.current);
+      }
+    };
+  }, [form.invoice, checkInvoiceDuplicate]);
 
   const setField = (key, val) => setForm((prev) => ({ ...prev, [key]: val }));
   const setItem = (idx, key, val) =>
@@ -180,7 +253,11 @@ export default function SaleFormDialog({
     });
   };
 
-  const isValid = form.marketplace && items.every((it) => it.nama_produk);
+  const isValid =
+    form.marketplace &&
+    items.every((it) => it.nama_produk) &&
+    invoiceCheckStatus !== "duplicate" &&
+    invoiceCheckStatus !== "checking";
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -260,10 +337,44 @@ export default function SaleFormDialog({
             </div>
             <div className="space-y-1.5">
               <Label>Invoice</Label>
-              <Input
-                value={form.invoice}
-                onChange={(e) => setField("invoice", e.target.value)}
-              />
+              <div className="relative">
+                <Input
+                  value={form.invoice}
+                  onChange={(e) => setField("invoice", e.target.value)}
+                  className={
+                    invoiceCheckStatus === "duplicate"
+                      ? "border-danger pr-10 focus-visible:ring-danger/30"
+                      : invoiceCheckStatus === "valid"
+                      ? "border-success pr-10 focus-visible:ring-success/30"
+                      : "pr-10"
+                  }
+                />
+                {/* Status indicator di ujung kanan input */}
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                  {invoiceCheckStatus === "checking" && (
+                    <Loader2 className="h-4 w-4 animate-spin text-ash" />
+                  )}
+                  {invoiceCheckStatus === "valid" && (
+                    <CheckCircle2 className="h-4 w-4 text-success" />
+                  )}
+                  {invoiceCheckStatus === "duplicate" && (
+                    <AlertCircle className="h-4 w-4 text-danger" />
+                  )}
+                </div>
+              </div>
+              {/* Pesan error/success di bawah input */}
+              {invoiceCheckStatus === "duplicate" && (
+                <p className="text-[11px] text-danger flex items-center gap-1 mt-1">
+                  <AlertCircle className="h-3 w-3" />
+                  Invoice sudah terdaftar di database
+                </p>
+              )}
+              {invoiceCheckStatus === "valid" && (
+                <p className="text-[11px] text-success flex items-center gap-1 mt-1">
+                  <CheckCircle2 className="h-3 w-3" />
+                  Invoice tersedia
+                </p>
+              )}
             </div>
             <div className="space-y-1.5">
               <Label>Masa Aktif</Label>
