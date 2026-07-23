@@ -14,6 +14,7 @@ export async function fetchTable(table) {
     console.warn(`[Supabase] fetch ${table} error:`, error.message);
     return getMockData()[table];
   }
+  console.log(`[Supabase] fetch ${table}: ${data?.length || 0} rows`);
   return data || [];
 }
 
@@ -37,8 +38,15 @@ export async function insertRow(table, row) {
     const { data, error } = await withTimeout(
       supabase.from(table).insert(row).select().single()
     );
+    if (error) {
+      console.error(`[Supabase] INSERT ${table} error:`, JSON.stringify(error, null, 2));
+      console.error(`[Supabase] INSERT ${table} row:`, JSON.stringify(row, null, 2));
+    } else {
+      console.log(`[Supabase] INSERT ${table} success:`, data?.id);
+    }
     return { data, error };
   } catch (err) {
+    console.error(`[Supabase] INSERT ${table} exception:`, err);
     return { data: null, error: err };
   }
 }

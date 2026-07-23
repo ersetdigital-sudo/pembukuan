@@ -144,17 +144,16 @@ export default function PenjualanClient() {
         }
       } else {
         const newSale = {
-          id: `sale-${Date.now()}`,
-          invoice: data.invoice || nextInvoice(),
-          created_date: new Date().toISOString(),
           ...data,
+          id: `sale-${Date.now()}`,
+          invoice: data.invoice?.trim() || nextInvoice(),
+          created_date: new Date().toISOString(),
         };
         const res = await insertRow("sales", newSale);
         const error = res.error;
         if (!error && res.data) {
           setSales((prev) => [res.data, ...prev]);
           gooeyToast.success({ title: `Transaksi ${newSale.invoice} berhasil ditambahkan` });
-          invalidateCache();
         } else {
           setSales((prev) => [newSale, ...prev]);
           toast({
@@ -163,6 +162,7 @@ export default function PenjualanClient() {
             variant: "destructive",
           });
         }
+        invalidateCache();
       }
     } catch (err) {
       toast({
