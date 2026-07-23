@@ -120,7 +120,23 @@ export default function PenjualanClient() {
     setIsSaving(true);
     try {
       if (editData) {
-        const res = await updateRow("sales", editData.id, data);
+        const updateData = {
+          tanggal: data.tanggal,
+          nama_pembeli: data.nama_pembeli,
+          username_domain: data.username_domain,
+          no_hp: data.no_hp,
+          marketplace: data.marketplace,
+          invoice: data.invoice?.trim(),
+          fee_mp: Number(data.fee_mp) || 0,
+          nama_produk: data.nama_produk,
+          kategori_produk: data.kategori_produk,
+          masa_aktif: data.masa_aktif,
+          qty: data.qty,
+          harga_jual: data.harga_jual,
+          harga_beli: data.harga_beli,
+          produk: data.produk,
+        };
+        const res = await updateRow("sales", editData.id, updateData);
         const error = res.error;
         if (!error && res.data) {
           setSales((prev) =>
@@ -132,7 +148,7 @@ export default function PenjualanClient() {
           setSales((prev) =>
             prev.map((s) =>
               s.id === editData.id
-                ? { ...s, ...data, id: editData.id, invoice: s.invoice }
+                ? { ...s, ...updateData, id: editData.id, invoice: s.invoice }
                 : s
             )
           );
@@ -144,9 +160,22 @@ export default function PenjualanClient() {
         }
       } else {
         const newSale = {
-          ...data,
           id: `sale-${Date.now()}`,
+          tanggal: data.tanggal,
+          nama_pembeli: data.nama_pembeli,
+          username_domain: data.username_domain,
+          no_hp: data.no_hp,
+          marketplace: data.marketplace,
           invoice: data.invoice?.trim() || nextInvoice(),
+          fee_mp: Number(data.fee_mp) || 0,
+          nama_produk: data.nama_produk,
+          kategori_produk: data.kategori_produk,
+          masa_aktif: data.masa_aktif,
+          qty: data.qty,
+          harga_jual: data.harga_jual,
+          harga_beli: data.harga_beli,
+          produk: data.produk,
+          created_by: "demo@oosshop.id",
           created_date: new Date().toISOString(),
         };
         const res = await insertRow("sales", newSale);

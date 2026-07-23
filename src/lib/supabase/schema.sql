@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS sales (
   harga_jual INTEGER DEFAULT 0,
   harga_beli INTEGER DEFAULT 0,
   produk JSONB DEFAULT '[]',
+  catatan TEXT DEFAULT '',
   created_by TEXT DEFAULT 'demo@oosshop.id',
   created_date TIMESTAMPTZ
 );
